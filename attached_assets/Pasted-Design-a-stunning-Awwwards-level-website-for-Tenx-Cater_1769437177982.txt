@@ -1,0 +1,47 @@
+Design a stunning, Awwwards-level website for Tenx Catering, a premium catering company (not a platform or marketplace).
+
+Tenx Catering provides high-end catering for private events, corporate functions, weddings, and VIP occasions, with online ordering, secure payments, and event booking built directly into the website.
+
+Style & Mood:
+Luxury, elegant, modern, and warm.
+Cinematic food photography with shallow depth of field.
+Soft dark backgrounds with gold, champagne, or ivory accents.
+Organic curves mixed with a clean, refined grid.
+Premium hospitality feel inspired by Michelin-star restaurants and luxury events.
+
+Animation & Interaction:
+Smooth scroll-based animations (parallax, fade, reveal, scale).
+Hero section with subtle animated food steam or floating particles.
+Micro-interactions on hover (buttons, menu cards, images).
+Elegant easing between sections (no hard cuts).
+Button hover effects with soft glow or gradient shift.
+Subtle animated counters for events served, clients, and experience.
+
+Hero Section:
+Full-screen cinematic hero with food imagery and soft motion overlay.
+Headline: “Tenx Catering — Crafted for Unforgettable Moments”
+Subtext: Private Events • Corporate Catering • VIP Experiences
+Primary CTAs: Order Catering / Request a Quote
+
+Key Sections:
+• Catering Services (Corporate, Private Events, Weddings, VIP)
+• How It Works (Choose service → Select menu → Pick date & location → Secure online payment)
+• Signature Menus with pricing tiers and add-to-order interactions
+• VIP Catering Experience with dark, luxurious visual language
+• Meet Our Chefs with portraits, specialties, and hover reveals
+• Completed Events gallery with event tags
+• Trusted by Companies & Clients (logos and testimonials)
+
+Product & Trust Signals:
+Secure online payments, digital invoices, order confirmation, mobile-first design, PWA-ready.
+
+Typography:
+Elegant modern serif or display font for headings.
+Clean sans-serif for body text.
+Strong hierarchy with large, confident headlines.
+
+Overall Quality:
+Fully custom, non-template design.
+Awwwards / Site of the Day level.
+Luxury hospitality brand with cinematic storytelling.
+Designed for smooth future motion implementation (GSAP / Framer Motion).

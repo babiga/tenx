@@ -1,0 +1,124 @@
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { loginSchema } from "@/lib/validations/auth";
+import { verifyPassword } from "@/lib/auth";
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+
+    // Validate request body
+    const result = loginSchema.safeParse(body);
+    if (!result.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Invalid input",
+          details: result.error.flatten(),
+        },
+        { status: 400 },
+      );
+    }
+
+    const { email, password } = result.data;
+
+    // Check DashboardUser first
+    const dashboardUser = await prisma.dashboardUser.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        password: true,
+        role: true,
+        isActive: true,
+        isVerified: true,
+      },
+    });
+
+    if (dashboardUser) {
+      if (!dashboardUser.isActive) {
+        return NextResponse.json(
+          { success: false, error: "Account is deactivated" },
+          { status: 403 },
+        );
+      }
+
+      const isValidPassword = await verifyPassword(
+        password,
+        dashboardUser.password,
+      );
+      if (!isValidPassword) {
+        return NextResponse.json(
+          { success: false, error: "Invalid email or password" },
+          { status: 401 },
+        );
+      }
+
+      // Update lastLoginAt
+      await prisma.dashboardUser.update({
+        where: { id: dashboardUser.id },
+        data: { lastLoginAt: new Date() },
+      });
+
+      const { password: _, ...userWithoutPassword } = dashboardUser;
+      return NextResponse.json({
+        success: true,
+        user: userWithoutPassword,
+        userType: "dashboard",
+      });
+    }
+
+    // Check regular User
+    const user = await prisma.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        password: true,
+        phone: true,
+        userType: true,
+      },
+    });
+
+    if (user) {
+      if (!user.password) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Please use social login or set a password",
+          },
+          { status: 401 },
+        );
+      }
+
+      const isValidPassword = await verifyPassword(password, user.password);
+      if (!isValidPassword) {
+        return NextResponse.json(
+          { success: false, error: "Invalid email or password" },
+          { status: 401 },
+        );
+      }
+
+      const { password: _, ...userWithoutPassword } = user;
+      return NextResponse.json({
+        success: true,
+        user: userWithoutPassword,
+        userType: "customer",
+      });
+    }
+
+    // No user found
+    return NextResponse.json(
+      { success: false, error: "Invalid email or password" },
+      { status: 401 },
+    );
+  } catch (error) {
+    console.error("Login error:", error);
+    return NextResponse.json(
+      { success: false, error: "Internal server error" },
+      { status: 500 },
+    );
+  }
+}

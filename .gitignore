@@ -7,3 +7,8 @@ dist
 .next
 next-env.d.ts
 out
+/generated/prisma
+
+# Environment
+.env
+.env.local

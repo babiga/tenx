@@ -1,4 +1,61 @@
 {
+    "Auth": {
+        "login": {
+            "title": "Тавтай морил",
+            "subtitle": "Хоолны аяллаа үргэлжлүүлэхийн тулд нэвтрэнэ үү",
+            "email": "Имэйл хаяг",
+            "emailPlaceholder": "Имэйл хаягаа оруулна уу",
+            "password": "Нууц үг",
+            "passwordPlaceholder": "Нууц үгээ оруулна уу",
+            "forgotPassword": "Нууц үгээ мартсан?",
+            "submit": "Нэвтрэх",
+            "noAccount": "Бүртгэл байхгүй юу?",
+            "signUp": "Бүртгүүлэх"
+        },
+        "signup": {
+            "title": "Tenx Catering-д нэгдэх",
+            "subtitle": "Бүртгэлээ үүсгээд онцгой хоолны туршлагыг мэдрээрэй",
+            "fullName": "Бүтэн нэр",
+            "fullNamePlaceholder": "Бүтэн нэрээ оруулна уу",
+            "email": "Имэйл хаяг",
+            "emailPlaceholder": "Имэйл хаягаа оруулна уу",
+            "phone": "Утасны дугаар",
+            "phonePlaceholder": "+976 XXXX XXXX",
+            "password": "Нууц үг",
+            "passwordPlaceholder": "Нууц үг үүсгэнэ үү",
+            "confirmPassword": "Нууц үг баталгаажуулах",
+            "confirmPasswordPlaceholder": "Нууц үгээ дахин оруулна уу",
+            "userType": "Хэрэглэгчийн төрөл",
+            "userTypePlaceholder": "Төрөл сонгоно уу",
+            "userTypes": {
+                "individual": "Хувь хүн",
+                "company": "Компани"
+            },
+            "acceptTerms": "Би",
+            "termsOfService": "Үйлчилгээний нөхцөл",
+            "and": "болон",
+            "privacyPolicy": "Нууцлалын бодлого",
+            "submit": "Бүртгэл үүсгэх",
+            "hasAccount": "Бүртгэлтэй юу?",
+            "signIn": "Нэвтрэх"
+        },
+        "validation": {
+            "emailRequired": "Имэйл хаяг шаардлагатай",
+            "emailInvalid": "Зөв имэйл хаяг оруулна уу",
+            "passwordRequired": "Нууц үг шаардлагатай",
+            "passwordMin": "Нууц үг хамгийн багадаа 8 тэмдэгт байх ёстой",
+            "passwordUppercase": "Нууц үг дор хаяж нэг том үсэг агуулсан байх ёстой",
+            "passwordLowercase": "Нууц үг дор хаяж нэг жижиг үсэг агуулсан байх ёстой",
+            "passwordNumber": "Нууц үг дор хаяж нэг тоо агуулсан байх ёстой",
+            "passwordMismatch": "Нууц үг таарахгүй байна",
+            "nameRequired": "Бүтэн нэр шаардлагатай",
+            "nameMin": "Нэр хамгийн багадаа 2 тэмдэгт байх ёстой",
+            "phoneRequired": "Утасны дугаар шаардлагатай",
+            "phoneInvalid": "Зөв утасны дугаар оруулна уу",
+            "userTypeRequired": "Хэрэглэгчийн төрөл сонгоно уу",
+            "termsRequired": "Та үйлчилгээний нөхцөлийг зөвшөөрөх ёстой"
+        }
+    },
     "Navbar": {
         "services": "Бидний үйлчилгээ",
         "howItWorks": "Хэрхэн ажилладаг вэ",

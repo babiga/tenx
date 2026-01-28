@@ -1,4 +1,61 @@
 {
+    "Auth": {
+        "login": {
+            "title": "Welcome Back",
+            "subtitle": "Sign in to continue your culinary journey",
+            "email": "Email Address",
+            "emailPlaceholder": "Enter your email",
+            "password": "Password",
+            "passwordPlaceholder": "Enter your password",
+            "forgotPassword": "Forgot password?",
+            "submit": "Sign In",
+            "noAccount": "Don't have an account?",
+            "signUp": "Sign up"
+        },
+        "signup": {
+            "title": "Join Tenx Catering",
+            "subtitle": "Create your account and discover exceptional culinary experiences",
+            "fullName": "Full Name",
+            "fullNamePlaceholder": "Enter your full name",
+            "email": "Email Address",
+            "emailPlaceholder": "Enter your email",
+            "phone": "Phone Number",
+            "phonePlaceholder": "+976 XXXX XXXX",
+            "password": "Password",
+            "passwordPlaceholder": "Create a password",
+            "confirmPassword": "Confirm Password",
+            "confirmPasswordPlaceholder": "Confirm your password",
+            "userType": "Account Type",
+            "userTypePlaceholder": "Select account type",
+            "userTypes": {
+                "individual": "Individual",
+                "company": "Company"
+            },
+            "acceptTerms": "I accept the",
+            "termsOfService": "Terms of Service",
+            "and": "and",
+            "privacyPolicy": "Privacy Policy",
+            "submit": "Create Account",
+            "hasAccount": "Already have an account?",
+            "signIn": "Sign in"
+        },
+        "validation": {
+            "emailRequired": "Email is required",
+            "emailInvalid": "Please enter a valid email address",
+            "passwordRequired": "Password is required",
+            "passwordMin": "Password must be at least 8 characters",
+            "passwordUppercase": "Password must contain at least one uppercase letter",
+            "passwordLowercase": "Password must contain at least one lowercase letter",
+            "passwordNumber": "Password must contain at least one number",
+            "passwordMismatch": "Passwords do not match",
+            "nameRequired": "Full name is required",
+            "nameMin": "Name must be at least 2 characters",
+            "phoneRequired": "Phone number is required",
+            "phoneInvalid": "Please enter a valid phone number",
+            "userTypeRequired": "Please select an account type",
+            "termsRequired": "You must accept the terms and conditions"
+        }
+    },
     "Navbar": {
         "services": "Services",
         "howItWorks": "How It Works",

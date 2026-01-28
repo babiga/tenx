@@ -3,35 +3,33 @@
 import { motion } from "framer-motion";
 import { ChefHat, Utensils, Star, Trophy, ArrowRight, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
-const services = [
+const serviceData = [
   {
-    title: "Компанийн Кейтеринг",
-    description: "Бизнес үдийн хоол, удирдах зөвлөлийн хурал, оффисын арга хэмжээг дээд зэрэглэлийн цэсээр баяжуулна.",
+    key: "corporate",
     icon: Utensils,
     image: "https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=2070&auto=format&fit=crop"
   },
   {
-    title: "Хувийн Арга Хэмжээ",
-    description: "Таны хувийн сонирхол, алсын хараанд нийцүүлэн бэлтгэсэн дотны хүмүүсийн оройн зоог болон томоохон баяр ёслолууд.",
+    key: "private",
     icon: Star,
     image: "https://images.unsplash.com/photo-1530062845289-9109b2c9c868?q=80&w=2072&auto=format&fit=crop"
   },
   {
-    title: "Хурим",
-    description: "Таны онцгой өдөрт зориулсан коктейлийн цагаас эхлээд эцсийн хундага өргөх хүртэлх цаг хугацаагүй хоолны амт.",
+    key: "weddings",
     icon: Heart,
     image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop"
   },
   {
-    title: "VIP Үйлчилгээ",
-    description: "Тусгайлан бэлтгэсэн цэс, ховор орц найрлага, дэлхийн түвшний үйлчилгээ бүхий хосгүй тансаг байдал.",
+    key: "vip",
     icon: Trophy,
     image: "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=2074&auto=format&fit=crop"
   }
 ];
 
 export default function Services() {
+  const t = useTranslations("Services");
   return (
     <section id="services" className="py-24 bg-background relative overflow-hidden">
       <div className="container mx-auto px-6">
@@ -41,16 +39,16 @@ export default function Services() {
           viewport={{ once: true }}
           className="text-center mb-20"
         >
-          <h2 className="text-4xl md:text-5xl font-serif mb-4">Бидний Үйлчилгээ</h2>
+          <h2 className="text-4xl md:text-5xl font-serif mb-4">{t("title")}</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Дотны хүмүүсийн цугларалтаас эхлээд томоохон компанийн арга хэмжээ хүртэл Tenx Catering бүх зүйлд шилдэг нь байх болно.
+            {t("description")}
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {services.map((service, index) => (
+          {serviceData.map((service, index) => (
             <motion.div
-              key={service.title}
+              key={service.key}
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
@@ -60,18 +58,18 @@ export default function Services() {
               <div className="aspect-video relative overflow-hidden">
                 <img
                   src={service.image}
-                  alt={service.title}
+                  alt={t(`${service.key}.title`)}
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
                 />
                 <div className="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-colors" />
                 <div className="absolute inset-0 p-8 flex flex-col justify-end">
                   <service.icon className="w-10 h-10 text-primary mb-4" />
-                  <h3 className="text-2xl font-serif text-white mb-2">{service.title}</h3>
+                  <h3 className="text-2xl font-serif text-white mb-2">{t(`${service.key}.title`)}</h3>
                   <p className="text-white/70 text-sm max-w-sm mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    {service.description}
+                    {t(`${service.key}.description`)}
                   </p>
                   <Button variant="link" className="text-primary p-0 w-fit group/btn">
-                    Дэлгэрэнгүй үзэх <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                    {t("exploreMore")} <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                   </Button>
                 </div>
               </div>

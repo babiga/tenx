@@ -2,8 +2,10 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 export default function Hero() {
+  const t = useTranslations("Hero");
   return (
     <section className="relative h-screen w-full overflow-hidden flex items-center justify-center bg-background">
       <div className="absolute inset-0 z-0">
@@ -35,7 +37,7 @@ export default function Hero() {
           transition={{ duration: 1, delay: 0.2 }}
         >
           <h2 className="text-primary tracking-[0.2em] text-sm uppercase mb-4 font-medium">
-            Хувийн арга хэмжээ • Компанийн кейтеринг • VIP туршлага
+            {t("tagline")}
           </h2>
         </motion.div>
 
@@ -45,8 +47,8 @@ export default function Hero() {
           transition={{ duration: 1, delay: 0.4 }}
           className="text-5xl md:text-7xl lg:text-8xl font-serif text-white mb-6 leading-tight"
         >
-          Tenx Catering — <br />
-          <span className="italic font-light text-foreground/90 text-4xl md:text-6xl lg:text-7xl">Мартагдашгүй агшныг бүтээлцэнэ</span>
+          {t("title1")} <br />
+          <span className="italic font-light text-foreground/90 text-4xl md:text-6xl lg:text-7xl">{t("title2")}</span>
         </motion.h1>
 
         <motion.div
@@ -59,14 +61,14 @@ export default function Hero() {
             size="lg"
             className="bg-primary text-black hover:bg-white hover:text-black text-lg px-8 py-6 rounded-none transition-all duration-300 btn-glow"
           >
-            Кейтеринг захиалах
+            {t("bookCatering")}
           </Button>
           <Button
             size="lg"
             variant="outline"
             className="border-white/30 text-white hover:border-primary hover:text-primary hover:bg-transparent text-lg px-8 py-6 rounded-none backdrop-blur-sm transition-all duration-300"
           >
-            Үнийн санал авах
+            {t("requestQuote")}
           </Button>
         </motion.div>
       </div>
@@ -77,7 +79,7 @@ export default function Hero() {
         transition={{ delay: 1.5, duration: 1 }}
         className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
-        <span className="text-xs tracking-widest text-white/50 uppercase">Scroll</span>
+        <span className="text-xs tracking-widest text-white/50 uppercase">{t("scroll")}</span>
         <div className="w-[1px] h-12 bg-gradient-to-b from-primary to-transparent" />
       </motion.div>
     </section>

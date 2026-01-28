@@ -3,8 +3,10 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function VIPSection() {
+  const t = useTranslations("VIP");
   return (
     <section id="vip" className="py-32 bg-background relative overflow-hidden">
       {/* Decorative Background Elements */}
@@ -21,17 +23,17 @@ export default function VIPSection() {
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 border border-primary/30 rounded-full mb-6">
               <Star className="w-3 h-3 text-primary fill-primary" />
-              <span className="text-xs uppercase tracking-widest text-primary">Онцгой эрх</span>
+              <span className="text-xs uppercase tracking-widest text-primary">{t("exclusiveAccess")}</span>
             </div>
             <h2 className="text-5xl md:text-6xl font-serif mb-6 leading-tight">
-              VIP <br /> <span className="text-primary italic">Туршлага</span>
+              {t("title")} <br /> <span className="text-primary italic">{t("italic")}</span>
             </h2>
             <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
-              Ер бусын зүйл шаардсан мөчүүдэд зориулав. Манай VIP үйлчилгээ нь Мишлен зэрэглэлийн тогооч нар, тусгайлан бэлтгэсэн цэс, таны хамгийн чухал арга хэмжээнд зориулсан дээд зэрэглэлийн үйлчилгээг санал болгодог.
+              {t("description")}
             </p>
 
             <ul className="space-y-4 mb-10">
-              {["Мишлен зэрэглэлийн туршлагатай тогооч нар", "Ховор орц найрлагын нийлүүлэлт", "Сомелье дарсны хослол", "Арга хэмжээний иж бүрэн засалт"].map((item) => (
+              {(t.raw("items") as string[]).map((item) => (
                 <li key={item} className="flex items-center gap-3 text-foreground/80">
                   <div className="w-1.5 h-1.5 rounded-full bg-primary" />
                   {item}
@@ -40,7 +42,7 @@ export default function VIPSection() {
             </ul>
 
             <Button className="bg-white text-black hover:bg-primary hover:text-black text-lg px-8 py-6 rounded-none transition-all">
-              VIP эрх хүсэх
+              {t("requestAccess")}
             </Button>
           </motion.div>
 
@@ -53,12 +55,12 @@ export default function VIPSection() {
             <div className="relative aspect-[4/5] bg-card border border-white/5 p-2 rotate-3 hover:rotate-0 transition-transform duration-700 ease-out shadow-2xl">
               <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 z-10" />
               <div className="absolute bottom-8 left-8 z-20">
-                <p className="font-serif text-3xl text-white mb-1">Тогооч Жан-Пьер</p>
-                <p className="text-primary text-sm uppercase tracking-widest">3 Мишлен Одот</p>
+                <p className="font-serif text-3xl text-white mb-1">{t("chefName")}</p>
+                <p className="text-primary text-sm uppercase tracking-widest">{t("chefRole")}</p>
               </div>
-              <img 
-                src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=2074&auto=format&fit=crop" 
-                alt="VIP Dish" 
+              <img
+                src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=2074&auto=format&fit=crop"
+                alt="VIP Dish"
                 className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
               />
             </div>

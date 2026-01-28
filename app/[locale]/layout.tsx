@@ -2,6 +2,10 @@ import type { Metadata } from 'next'
 import { Playfair_Display, Montserrat, Inter } from 'next/font/google'
 import './globals.css'
 import { Providers } from './providers'
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages, setRequestLocale } from 'next-intl/server';
+import { routing } from '@/i18n/routing';
+import { notFound } from 'next/navigation';
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -21,6 +25,10 @@ const inter = Inter({
   display: 'swap',
 })
 
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 export const metadata: Metadata = {
   title: 'Tenx Catering | Crafted for Unforgettable Moments',
   description: 'Premium high-end catering for private events, corporate functions, and VIP occasions.',
@@ -36,17 +44,35 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
+
+  // Ensure that the incoming `locale` is valid
+  if (!routing.locales.includes(locale as any)) {
+    notFound();
+  }
+
+  // Enable static rendering
+  setRequestLocale(locale);
+
+  // Providing all messages to the client
+  // side is the easiest way to get started
+  const messages = await getMessages();
+
   return (
-    <html lang="mn">
+    <html lang={locale}>
       <body className={`${playfair.variable} ${montserrat.variable} ${inter.variable}`}>
-        <Providers>
-          {children}
-        </Providers>
+        <NextIntlClientProvider messages={messages}>
+          <Providers>
+            {children}
+          </Providers>
+        </NextIntlClientProvider>
       </body>
     </html>
   )

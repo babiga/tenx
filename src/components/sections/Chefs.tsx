@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const chefs = [
   {
@@ -35,23 +36,24 @@ const chefs = [
 ];
 
 export default function Chefs() {
+  const t = useTranslations("Chefs");
   return (
     <section id="chefs" className="py-24 bg-background border-t border-white/5">
       <div className="container mx-auto px-6">
         <div className="flex justify-between items-end mb-16">
           <div>
             <h2 className="text-4xl md:text-5xl font-serif mb-2">
-              Хоолны Урлагийн Мастерууд
+              {t("title")}
             </h2>
             <p className="text-muted-foreground">
-              Танд зориулсан амтны мастерууд.
+              {t("description")}
             </p>
           </div>
           <a
             href="#"
             className="hidden md:block text-primary hover:text-white transition-colors underline decoration-primary/30 underline-offset-8"
           >
-            Бүх тогооч нарыг харах
+            {t("viewAll")}
           </a>
         </div>
 
@@ -84,7 +86,7 @@ export default function Chefs() {
                     ))}
                   </div>
                   <span className="text-xs text-white/70">
-                    ({chef.reviews} сэтгэгдэл)
+                    ({chef.reviews} {t("reviews")})
                   </span>
                 </div>
 
@@ -97,7 +99,7 @@ export default function Chefs() {
 
                 <div className="h-0 group-hover:h-auto overflow-hidden transition-all duration-500">
                   <p className="text-sm text-white/80 border-l-2 border-primary pl-3">
-                    Чилэглэл: {chef.specialty}
+                    {t("specialty")}: {chef.specialty}
                   </p>
                 </div>
               </div>
@@ -110,7 +112,7 @@ export default function Chefs() {
             href="#"
             className="text-primary hover:text-white transition-colors underline decoration-primary/30 underline-offset-8"
           >
-            Бүх тогооч нарыг харах
+            {t("viewAll")}
           </a>
         </div>
       </div>

@@ -1,0 +1,156 @@
+{
+    "Navbar": {
+        "services": "Services",
+        "howItWorks": "How It Works",
+        "vip": "VIP Experience",
+        "chefs": "Our Chefs",
+        "events": "Events",
+        "bookNow": "Book Now"
+    },
+    "Footer": {
+        "description": "Where luxury catering meets world-class culinary artistry.",
+        "company": "Company",
+        "services": "Services",
+        "newsletter": "Newsletter",
+        "aboutUs": "About Us",
+        "careers": "Careers",
+        "journal": "Journal",
+        "contact": "Contact",
+        "privateChefs": "Private Chefs",
+        "weddingCatering": "Wedding Catering",
+        "corporateEvents": "Corporate Events",
+        "culinaryMasterclasses": "Culinary Masterclasses",
+        "newsletterDesc": "Receive curated menus and exclusive offers.",
+        "emailPlaceholder": "Email Address",
+        "join": "Join",
+        "allRightsReserved": "© 2024 Tenx Catering. All rights reserved.",
+        "privacyPolicy": "Privacy Policy",
+        "termsOfService": "Terms of Service",
+        "sitemap": "Sitemap"
+    },
+    "Hero": {
+        "tagline": "Private Events • Corporate Catering • VIP Experiences",
+        "title1": "Tenx Catering —",
+        "title2": "Crafting Unforgettable Culinary Moments",
+        "bookCatering": "Book Catering",
+        "requestQuote": "Request a Quote",
+        "scroll": "Scroll"
+    },
+    "Services": {
+        "title": "Our Services",
+        "description": "From intimate gatherings to grand corporate galas, Tenx Catering delivers excellence in every detail.",
+        "corporate": {
+            "title": "Corporate Catering",
+            "description": "Elevating business luncheons, board meetings, and executive events with a premium culinary touch."
+        },
+        "private": {
+            "title": "Private Occasions",
+            "description": "From intimate dinner parties to grand celebrations, tailored to your unique vision and taste."
+        },
+        "weddings": {
+            "title": "Weddings",
+            "description": "Timeless flavors for your special day, from the first cocktail to the final toast."
+        },
+        "vip": {
+            "title": "VIP Premiere",
+            "description": "Unparalleled luxury featuring bespoke menus, rare ingredients, and world-class service."
+        },
+        "exploreMore": "Explore More"
+    },
+    "HowItWorks": {
+        "title": "The Journey to Excellence",
+        "description": "A seamless path from curated selection to unforgettable celebration.",
+        "step1": {
+            "title": "Service Selection",
+            "description": "Choose from our Luxury, Premium, or Standard tiers to perfectly match your event's needs."
+        },
+        "step2": {
+            "title": "Reserve Your Date",
+            "description": "Select your preferred date and venue. We handle every logistical detail from there."
+        },
+        "step3": {
+            "title": "Curate Your Menu",
+            "description": "Partner with our chefs to finalize a menu that will enchant your guests."
+        },
+        "step4": {
+            "title": "Secure Your Event",
+            "description": "Finalize your agreement and secure your booking through our seamless digital process."
+        }
+    },
+    "SignatureMenus": {
+        "title": "Signature Menus",
+        "description": "A culinary odyssey curated for every occasion.",
+        "downloadMenu": "Download Full Menu",
+        "perGuest": "/ guest",
+        "addToBooking": "Add to Booking",
+        "luxuryTier": "Luxury",
+        "premiumTier": "Premium",
+        "standardTier": "Standard",
+        "menu1": {
+            "title": "Signature Luxury Menu",
+            "items": [
+                "Aged Wagyu Tartare",
+                "Butter-Poached Lobster",
+                "Black Truffle Risotto",
+                "Artisan Dessert Trio"
+            ]
+        },
+        "menu2": {
+            "title": "Celebration Premium Menu",
+            "items": [
+                "Artisan Cheese Selection",
+                "Seared Mediterranean Bass",
+                "Slow-Roasted Herb Lamb",
+                "Seasonal Fruit Galette"
+            ]
+        },
+        "menu3": {
+            "title": "Business Elite Menu",
+            "items": [
+                "Gourmet Pressed Sandwiches",
+                "Garden-Fresh Microgreens",
+                "Charcuterie Selection",
+                "Petite Fours"
+            ]
+        }
+    },
+    "VIP": {
+        "exclusiveAccess": "Exclusive Access",
+        "title": "The VIP",
+        "italic": "Premiere",
+        "description": "Designed for moments that demand the extraordinary. Our VIP service offers Michelin-star caliber chefs, bespoke menu curation, and white-glove service for your most significant occasions.",
+        "items": [
+            "Michelin-star culinary expertise",
+            "Exclusive sourcing of rare ingredients",
+            "Professional Sommelier pairings",
+            "Full-scale event production"
+        ],
+        "requestAccess": "Request VIP Access",
+        "chefName": "Chef Jean-Pierre",
+        "chefRole": "3 Michelin Stars"
+    },
+    "Chefs": {
+        "title": "Masters of the Kitchen",
+        "description": "Meet the artisans behind your next unforgettable meal.",
+        "viewAll": "Meet All Our Chefs",
+        "reviews": "reviews",
+        "specialty": "Specialty"
+    },
+    "Events": {
+        "title": "Unforgettable Occasions",
+        "description": "Recent highlights from the world of Tenx Catering.",
+        "guests": "Guests",
+        "types": {
+            "Wedding": "Wedding",
+            "Corporate": "Corporate",
+            "Private": "Private",
+            "Social": "Social"
+        }
+    },
+    "Home": {
+        "ctaTitle": "Elevate Your Next Occasion Above the Ordinary",
+        "ctaDescription": "Experience the Tenx Catering distinction. Our team of world-class chefs and event specialists are ready to transform your vision into an unforgettable reality.",
+        "startJourney": "Start My Journey",
+        "consultation": "Private Consultation"
+    }
+}

@@ -1,52 +1,54 @@
-import type { Metadata } from 'next'
-import { Playfair_Display, Montserrat, Inter } from 'next/font/google'
-import './globals.css'
-import { Providers } from './providers'
-import { NextIntlClientProvider } from 'next-intl';
-import { getMessages, setRequestLocale } from 'next-intl/server';
-import { routing } from '@/i18n/routing';
-import { notFound } from 'next/navigation';
+import type { Metadata } from "next";
+import { Playfair_Display, Montserrat, Inter } from "next/font/google";
+import "../globals.css";
+import { Providers } from "../providers";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, setRequestLocale } from "next-intl/server";
+import { routing } from "@/i18n/routing";
+import { notFound } from "next/navigation";
 
 const playfair = Playfair_Display({
-  subsets: ['latin'],
-  variable: '--font-serif',
-  display: 'swap',
-})
+  subsets: ["latin"],
+  variable: "--font-serif",
+  display: "swap",
+});
 
 const montserrat = Montserrat({
-  subsets: ['latin'],
-  variable: '--font-sans',
-  display: 'swap',
-})
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
 
 const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-mono',
-  display: 'swap',
-})
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
 export const metadata: Metadata = {
-  title: 'Tenx Catering | Crafted for Unforgettable Moments',
-  description: 'Premium high-end catering for private events, corporate functions, and VIP occasions.',
+  title: "Tenx Catering | Crafted for Unforgettable Moments",
+  description:
+    "Premium high-end catering for private events, corporate functions, and VIP occasions.",
   openGraph: {
-    title: 'Tenx Catering | Crafted for Unforgettable Moments',
-    description: 'Premium high-end catering for private events, corporate functions, and VIP occasions.',
-    type: 'website',
+    title: "Tenx Catering | Crafted for Unforgettable Moments",
+    description:
+      "Premium high-end catering for private events, corporate functions, and VIP occasions.",
+    type: "website",
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'Tenx Catering',
-    description: 'Premium luxury catering services.',
+    card: "summary_large_image",
+    title: "Tenx Catering",
+    description: "Premium luxury catering services.",
   },
-}
+};
 
 export default async function RootLayout({
   children,
-  params
+  params,
 }: {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
@@ -67,13 +69,14 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
-      <body className={`${playfair.variable} ${montserrat.variable} ${inter.variable}`}>
+      <body
+        className={`${playfair.variable} ${montserrat.variable} ${inter.variable}`}
+        id="landing-body"
+      >
         <NextIntlClientProvider messages={messages}>
-          <Providers>
-            {children}
-          </Providers>
+          <Providers>{children}</Providers>
         </NextIntlClientProvider>
       </body>
     </html>
-  )
+  );
 }

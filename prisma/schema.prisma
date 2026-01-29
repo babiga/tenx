@@ -120,10 +120,13 @@ model User {
   id               String   @id @default(cuid())
   email            String   @unique
   name             String
+  firstName        String?
+  lastName         String?
   phone            String?
   address          String?
   userType         UserType @default(INDIVIDUAL)
   organizationName String?
+  companyLegalNo   String?
   googleId         String?  @unique
   avatar           String?
   password         String?

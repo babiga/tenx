@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { loginSchema } from "@/lib/validations/auth";
-import { verifyPassword } from "@/lib/auth";
+import { verifyPassword, createSession, setSessionCookie } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
@@ -61,6 +61,14 @@ export async function POST(request: NextRequest) {
         data: { lastLoginAt: new Date() },
       });
 
+      // Create and set session cookie
+      const token = await createSession({
+        userId: dashboardUser.id,
+        userType: "dashboard",
+        role: dashboardUser.role,
+      });
+      await setSessionCookie(token);
+
       const { password: _, ...userWithoutPassword } = dashboardUser;
       return NextResponse.json({
         success: true,
@@ -100,6 +108,13 @@ export async function POST(request: NextRequest) {
           { status: 401 },
         );
       }
+
+      // Create and set session cookie
+      const token = await createSession({
+        userId: user.id,
+        userType: "customer",
+      });
+      await setSessionCookie(token);
 
       const { password: _, ...userWithoutPassword } = user;
       return NextResponse.json({

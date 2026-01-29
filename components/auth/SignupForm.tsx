@@ -1,0 +1,586 @@
+"use client";
+
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
+import { Link, useRouter } from "@/i18n/routing";
+
+import {
+  individualSignupSchema,
+  companySignupSchema,
+  type IndividualSignupFormData,
+  type CompanySignupFormData,
+} from "@/lib/validations/auth";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  AuthCard,
+  AuthCardHeader,
+  AuthCardTitle,
+  AuthCardDescription,
+  AuthCardContent,
+  AuthCardFooter,
+} from "@/components/auth/AuthCard";
+import { PasswordInput } from "@/components/auth/PasswordInput";
+
+type UserType = "individual" | "company";
+
+export function SignupForm() {
+  const t = useTranslations("Auth.signup");
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState<UserType>("individual");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
+  // Individual form
+  const individualForm = useForm<IndividualSignupFormData>({
+    resolver: zodResolver(individualSignupSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      password: "",
+      confirmPassword: "",
+      acceptTerms: false,
+    },
+  });
+
+  // Company form
+  const companyForm = useForm<CompanySignupFormData>({
+    resolver: zodResolver(companySignupSchema),
+    defaultValues: {
+      companyName: "",
+      companyLegalNo: "",
+      email: "",
+      phone: "",
+      password: "",
+      confirmPassword: "",
+      acceptTerms: false,
+    },
+  });
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value as UserType);
+    setError(null);
+  };
+
+  async function onIndividualSubmit(data: IndividualSignupFormData) {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userType: "INDIVIDUAL",
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          phone: data.phone,
+          password: data.password,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        if (result.error === "EMAIL_EXISTS") {
+          setError(t("errors.emailExists"));
+        } else {
+          setError(t("errors.serverError"));
+        }
+        return;
+      }
+
+      setSuccess(true);
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
+    } catch {
+      setError(t("errors.serverError"));
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function onCompanySubmit(data: CompanySignupFormData) {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userType: "CORPORATE",
+          companyName: data.companyName,
+          companyLegalNo: data.companyLegalNo,
+          email: data.email,
+          phone: data.phone,
+          password: data.password,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        if (result.error === "EMAIL_EXISTS") {
+          setError(t("errors.emailExists"));
+        } else {
+          setError(t("errors.serverError"));
+        }
+        return;
+      }
+
+      setSuccess(true);
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
+    } catch {
+      setError(t("errors.serverError"));
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const inputClassName =
+    "h-10 bg-background/50 border-white/10 focus:border-primary focus-visible:ring-primary/50";
+
+  if (success) {
+    return (
+      <AuthCard className="max-w-lg">
+        <AuthCardContent>
+          <div className="text-center py-8">
+            <div className="text-green-500 text-lg font-medium">
+              {t("success")}
+            </div>
+          </div>
+        </AuthCardContent>
+      </AuthCard>
+    );
+  }
+
+  return (
+    <AuthCard className="max-w-lg">
+      <AuthCardHeader>
+        <AuthCardTitle>{t("title")}</AuthCardTitle>
+        <AuthCardDescription>{t("subtitle")}</AuthCardDescription>
+      </AuthCardHeader>
+
+      <AuthCardContent>
+        <Tabs
+          value={activeTab}
+          onValueChange={handleTabChange}
+          className="w-full"
+        >
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="individual">{t("tabs.individual")}</TabsTrigger>
+            <TabsTrigger value="company">{t("tabs.company")}</TabsTrigger>
+          </TabsList>
+
+          {error && (
+            <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-md text-destructive text-sm">
+              {error}
+            </div>
+          )}
+
+          {/* Individual Tab */}
+          <TabsContent value="individual">
+            <Form {...individualForm}>
+              <form
+                onSubmit={individualForm.handleSubmit(onIndividualSubmit)}
+                className="space-y-4"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={individualForm.control}
+                    name="firstName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-foreground/80">
+                          {t("firstName")}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            placeholder={t("firstNamePlaceholder")}
+                            className={inputClassName}
+                            disabled={isLoading}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={individualForm.control}
+                    name="lastName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-foreground/80">
+                          {t("lastName")}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            placeholder={t("lastNamePlaceholder")}
+                            className={inputClassName}
+                            disabled={isLoading}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={individualForm.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-foreground/80">
+                          {t("email")}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder={t("emailPlaceholder")}
+                            className={inputClassName}
+                            disabled={isLoading}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={individualForm.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-foreground/80">
+                          {t("phone")}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="tel"
+                            placeholder={t("phonePlaceholder")}
+                            className={inputClassName}
+                            disabled={isLoading}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={individualForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-foreground/80">
+                          {t("password")}
+                        </FormLabel>
+                        <FormControl>
+                          <PasswordInput
+                            placeholder={t("passwordPlaceholder")}
+                            className="border-white/10 focus:border-primary focus-visible:ring-primary/50"
+                            disabled={isLoading}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={individualForm.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-foreground/80">
+                          {t("confirmPassword")}
+                        </FormLabel>
+                        <FormControl>
+                          <PasswordInput
+                            placeholder={t("confirmPasswordPlaceholder")}
+                            className="border-white/10 focus:border-primary focus-visible:ring-primary/50"
+                            disabled={isLoading}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <FormField
+                  control={individualForm.control}
+                  name="acceptTerms"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 pt-2">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          disabled={isLoading}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel className="text-sm text-muted-foreground font-normal cursor-pointer">
+                          {t("acceptTerms")}{" "}
+                          <Link
+                            href="/terms"
+                            className="text-primary hover:text-primary/80 transition-colors"
+                          >
+                            {t("termsOfService")}
+                          </Link>{" "}
+                          {t("and")}{" "}
+                          <Link
+                            href="/privacy"
+                            className="text-primary hover:text-primary/80 transition-colors"
+                          >
+                            {t("privacyPolicy")}
+                          </Link>
+                        </FormLabel>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full h-11 bg-primary text-black hover:bg-primary/90 rounded-none font-medium transition-all duration-300 btn-glow mt-2"
+                >
+                  {isLoading ? t("submitting") : t("submit")}
+                </Button>
+              </form>
+            </Form>
+          </TabsContent>
+
+          {/* Company Tab */}
+          <TabsContent value="company">
+            <Form {...companyForm}>
+              <form
+                onSubmit={companyForm.handleSubmit(onCompanySubmit)}
+                className="space-y-4"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={companyForm.control}
+                    name="companyName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-foreground/80">
+                          {t("companyName")}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            placeholder={t("companyNamePlaceholder")}
+                            className={inputClassName}
+                            disabled={isLoading}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={companyForm.control}
+                    name="companyLegalNo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-foreground/80">
+                          {t("companyLegalNo")}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            placeholder={t("companyLegalNoPlaceholder")}
+                            className={inputClassName}
+                            disabled={isLoading}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={companyForm.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-foreground/80">
+                          {t("email")}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder={t("emailPlaceholder")}
+                            className={inputClassName}
+                            disabled={isLoading}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={companyForm.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-foreground/80">
+                          {t("phone")}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="tel"
+                            placeholder={t("phonePlaceholder")}
+                            className={inputClassName}
+                            disabled={isLoading}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={companyForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-foreground/80">
+                          {t("password")}
+                        </FormLabel>
+                        <FormControl>
+                          <PasswordInput
+                            placeholder={t("passwordPlaceholder")}
+                            className="border-white/10 focus:border-primary focus-visible:ring-primary/50"
+                            disabled={isLoading}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={companyForm.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-foreground/80">
+                          {t("confirmPassword")}
+                        </FormLabel>
+                        <FormControl>
+                          <PasswordInput
+                            placeholder={t("confirmPasswordPlaceholder")}
+                            className="border-white/10 focus:border-primary focus-visible:ring-primary/50"
+                            disabled={isLoading}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <FormField
+                  control={companyForm.control}
+                  name="acceptTerms"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 pt-2">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          disabled={isLoading}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel className="text-sm text-muted-foreground font-normal cursor-pointer">
+                          {t("acceptTerms")}{" "}
+                          <Link
+                            href="/terms"
+                            className="text-primary hover:text-primary/80 transition-colors"
+                          >
+                            {t("termsOfService")}
+                          </Link>{" "}
+                          {t("and")}{" "}
+                          <Link
+                            href="/privacy"
+                            className="text-primary hover:text-primary/80 transition-colors"
+                          >
+                            {t("privacyPolicy")}
+                          </Link>
+                        </FormLabel>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full h-11 bg-primary text-black hover:bg-primary/90 rounded-none font-medium transition-all duration-300 btn-glow mt-2"
+                >
+                  {isLoading ? t("submitting") : t("submit")}
+                </Button>
+              </form>
+            </Form>
+          </TabsContent>
+        </Tabs>
+      </AuthCardContent>
+
+      <AuthCardFooter>
+        <span>{t("hasAccount")} </span>
+        <Link
+          href="/login"
+          className="text-primary hover:text-primary/80 transition-colors font-medium"
+        >
+          {t("signIn")}
+        </Link>
+      </AuthCardFooter>
+    </AuthCard>
+  );
+}

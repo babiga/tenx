@@ -15,8 +15,18 @@
         "signup": {
             "title": "Join Tenx Catering",
             "subtitle": "Create your account and discover exceptional culinary experiences",
-            "fullName": "Full Name",
-            "fullNamePlaceholder": "Enter your full name",
+            "tabs": {
+                "individual": "Individual",
+                "company": "Company"
+            },
+            "firstName": "First Name",
+            "firstNamePlaceholder": "Enter your first name",
+            "lastName": "Last Name",
+            "lastNamePlaceholder": "Enter your last name",
+            "companyName": "Company Name",
+            "companyNamePlaceholder": "Enter company name",
+            "companyLegalNo": "Registration No.",
+            "companyLegalNoPlaceholder": "Enter registration number",
             "email": "Email Address",
             "emailPlaceholder": "Enter your email",
             "phone": "Phone Number",
@@ -25,19 +35,19 @@
             "passwordPlaceholder": "Create a password",
             "confirmPassword": "Confirm Password",
             "confirmPasswordPlaceholder": "Confirm your password",
-            "userType": "Account Type",
-            "userTypePlaceholder": "Select account type",
-            "userTypes": {
-                "individual": "Individual",
-                "company": "Company"
-            },
             "acceptTerms": "I accept the",
             "termsOfService": "Terms of Service",
             "and": "and",
             "privacyPolicy": "Privacy Policy",
             "submit": "Create Account",
+            "submitting": "Creating Account...",
             "hasAccount": "Already have an account?",
-            "signIn": "Sign in"
+            "signIn": "Sign in",
+            "success": "Account created successfully! Redirecting to login...",
+            "errors": {
+                "emailExists": "An account with this email already exists",
+                "serverError": "Something went wrong. Please try again."
+            }
         },
         "validation": {
             "emailRequired": "Email is required",
@@ -209,5 +219,105 @@
         "ctaDescription": "Experience the Tenx Catering distinction. Our team of world-class chefs and event specialists are ready to transform your vision into an unforgettable reality.",
         "startJourney": "Start My Journey",
         "consultation": "Private Consultation"
+    },
+    "Users": {
+        "title": "Users Management",
+        "description": "Manage customers and dashboard users",
+        "tabs": {
+            "customers": "Customers",
+            "dashboardUsers": "Dashboard Users"
+        },
+        "search": {
+            "customers": "Search customers...",
+            "dashboardUsers": "Search dashboard users..."
+        },
+        "filters": {
+            "all": "All",
+            "individual": "Individual",
+            "corporate": "Corporate",
+            "admin": "Admin",
+            "chef": "Chef",
+            "company": "Company"
+        },
+        "status": {
+            "active": "Active",
+            "inactive": "Inactive",
+            "verified": "Verified",
+            "unverified": "Unverified"
+        },
+        "actions": {
+            "view": "View",
+            "edit": "Edit",
+            "delete": "Delete",
+            "activate": "Activate",
+            "deactivate": "Deactivate",
+            "verify": "Verify",
+            "unverify": "Unverify",
+            "addUser": "Add User"
+        },
+        "columns": {
+            "name": "Name",
+            "email": "Email",
+            "phone": "Phone",
+            "type": "Type",
+            "role": "Role",
+            "status": "Status",
+            "verified": "Verified",
+            "organization": "Organization",
+            "lastLogin": "Last Login",
+            "created": "Created",
+            "joined": "Joined"
+        },
+        "sheets": {
+            "viewCustomer": "Customer Details",
+            "editCustomer": "Edit Customer",
+            "viewDashboardUser": "User Details",
+            "editDashboardUser": "Edit Dashboard User",
+            "createDashboardUser": "Create Dashboard User",
+            "createDescription": "Create a new admin, chef, or company account",
+            "editDescription": "Update user information",
+            "viewDescription": "View user information"
+        },
+        "form": {
+            "name": "Name",
+            "namePlaceholder": "Full name",
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "email": "Email",
+            "emailPlaceholder": "email@example.com",
+            "phone": "Phone",
+            "phonePlaceholder": "+976 99999999",
+            "phoneOptional": "Phone (Optional)",
+            "address": "Address",
+            "addressPlaceholder": "Enter address",
+            "password": "Password",
+            "passwordPlaceholder": "Enter password",
+            "confirmPassword": "Confirm Password",
+            "confirmPasswordPlaceholder": "Confirm password",
+            "role": "Role",
+            "rolePlaceholder": "Select a role"
+        },
+        "messages": {
+            "customerUpdated": "Customer updated successfully",
+            "dashboardUserCreated": "Dashboard user created successfully",
+            "dashboardUserUpdated": "Dashboard user updated successfully",
+            "userDeleted": "User deleted successfully",
+            "userActivated": "User activated successfully",
+            "userDeactivated": "User deactivated successfully",
+            "userVerified": "User verified successfully",
+            "userUnverified": "User unverified successfully",
+            "failedToLoad": "Failed to load users",
+            "failedToUpdate": "Failed to update user",
+            "failedToCreate": "Failed to create user",
+            "failedToDelete": "Failed to delete user"
+        },
+        "delete": {
+            "title": "Delete User",
+            "confirmMessage": "Are you sure you want to delete",
+            "warning": "This action cannot be undone.",
+            "customerWarning": "Warning: This will also delete all associated bookings and reviews.",
+            "cancel": "Cancel",
+            "confirm": "Delete"
+        }
     }
 }

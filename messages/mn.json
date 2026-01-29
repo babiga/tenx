@@ -15,8 +15,18 @@
         "signup": {
             "title": "Tenx Catering-д нэгдэх",
             "subtitle": "Бүртгэлээ үүсгээд онцгой хоолны туршлагыг мэдрээрэй",
-            "fullName": "Бүтэн нэр",
-            "fullNamePlaceholder": "Бүтэн нэрээ оруулна уу",
+            "tabs": {
+                "individual": "Хувь хүн",
+                "company": "Компани"
+            },
+            "firstName": "Нэр",
+            "firstNamePlaceholder": "Нэрээ оруулна уу",
+            "lastName": "Овог",
+            "lastNamePlaceholder": "Овогоо оруулна уу",
+            "companyName": "Компанийн нэр",
+            "companyNamePlaceholder": "Компанийн нэрийг оруулна уу",
+            "companyLegalNo": "Регистрийн дугаар",
+            "companyLegalNoPlaceholder": "Регистрийн дугаараа оруулна уу",
             "email": "Имэйл хаяг",
             "emailPlaceholder": "Имэйл хаягаа оруулна уу",
             "phone": "Утасны дугаар",
@@ -25,19 +35,19 @@
             "passwordPlaceholder": "Нууц үг үүсгэнэ үү",
             "confirmPassword": "Нууц үг баталгаажуулах",
             "confirmPasswordPlaceholder": "Нууц үгээ дахин оруулна уу",
-            "userType": "Хэрэглэгчийн төрөл",
-            "userTypePlaceholder": "Төрөл сонгоно уу",
-            "userTypes": {
-                "individual": "Хувь хүн",
-                "company": "Компани"
-            },
             "acceptTerms": "Би",
             "termsOfService": "Үйлчилгээний нөхцөл",
             "and": "болон",
             "privacyPolicy": "Нууцлалын бодлого",
             "submit": "Бүртгэл үүсгэх",
+            "submitting": "Бүртгэл үүсгэж байна...",
             "hasAccount": "Бүртгэлтэй юу?",
-            "signIn": "Нэвтрэх"
+            "signIn": "Нэвтрэх",
+            "success": "Бүртгэл амжилттай үүслээ! Нэвтрэх хуудас руу шилжиж байна...",
+            "errors": {
+                "emailExists": "Энэ имэйл хаягаар бүртгэл аль хэдийн үүссэн байна",
+                "serverError": "Алдаа гарлаа. Дахин оролдоно уу."
+            }
         },
         "validation": {
             "emailRequired": "Имэйл хаяг шаардлагатай",
@@ -209,5 +219,105 @@
         "ctaDescription": "Tenx Catering-ийн ялгааг мэдэр. Манай дэлхийн түвшний тогооч нар болон арга хэмжээний мэргэжилтнүүдийн баг таны алсын харааг мартагдашгүй бодит байдал болгон хувиргахад бэлэн байна.",
         "startJourney": "Захиалга эхлүүлэх",
         "consultation": "Зөвлөгөө авах"
+    },
+    "Users": {
+        "title": "Хэрэглэгчийн Удирдлага",
+        "description": "Үйлчлүүлэгчид болон dashboard хэрэглэгчдийг удирдах",
+        "tabs": {
+            "customers": "Үйлчлүүлэгчид",
+            "dashboardUsers": "Dashboard Хэрэглэгчид"
+        },
+        "search": {
+            "customers": "Үйлчлүүлэгч хайх...",
+            "dashboardUsers": "Dashboard хэрэглэгч хайх..."
+        },
+        "filters": {
+            "all": "Бүгд",
+            "individual": "Хувь хүн",
+            "corporate": "Компани",
+            "admin": "Админ",
+            "chef": "Тогооч",
+            "company": "Компани"
+        },
+        "status": {
+            "active": "Идэвхтэй",
+            "inactive": "Идэвхгүй",
+            "verified": "Баталгаажсан",
+            "unverified": "Баталгаажаагүй"
+        },
+        "actions": {
+            "view": "Харах",
+            "edit": "Засах",
+            "delete": "Устгах",
+            "activate": "Идэвхжүүлэх",
+            "deactivate": "Идэвхгүй болгох",
+            "verify": "Баталгаажуулах",
+            "unverify": "Баталгаа цуцлах",
+            "addUser": "Хэрэглэгч нэмэх"
+        },
+        "columns": {
+            "name": "Нэр",
+            "email": "Имэйл",
+            "phone": "Утас",
+            "type": "Төрөл",
+            "role": "Эрх",
+            "status": "Төлөв",
+            "verified": "Баталгаажсан",
+            "organization": "Байгууллага",
+            "lastLogin": "Сүүлд нэвтэрсэн",
+            "created": "Үүсгэсэн",
+            "joined": "Нэгдсэн"
+        },
+        "sheets": {
+            "viewCustomer": "Үйлчлүүлэгчийн мэдээлэл",
+            "editCustomer": "Үйлчлүүлэгч засах",
+            "viewDashboardUser": "Хэрэглэгчийн мэдээлэл",
+            "editDashboardUser": "Dashboard хэрэглэгч засах",
+            "createDashboardUser": "Dashboard хэрэглэгч үүсгэх",
+            "createDescription": "Шинэ админ, тогооч, эсвэл компанийн бүртгэл үүсгэх",
+            "editDescription": "Хэрэглэгчийн мэдээлэл шинэчлэх",
+            "viewDescription": "Хэрэглэгчийн мэдээлэл харах"
+        },
+        "form": {
+            "name": "Нэр",
+            "namePlaceholder": "Бүтэн нэр",
+            "firstName": "Нэр",
+            "lastName": "Овог",
+            "email": "Имэйл",
+            "emailPlaceholder": "email@example.com",
+            "phone": "Утас",
+            "phonePlaceholder": "+976 99999999",
+            "phoneOptional": "Утас (Заавал биш)",
+            "address": "Хаяг",
+            "addressPlaceholder": "Хаягаа оруулна уу",
+            "password": "Нууц үг",
+            "passwordPlaceholder": "Нууц үгээ оруулна уу",
+            "confirmPassword": "Нууц үг баталгаажуулах",
+            "confirmPasswordPlaceholder": "Нууц үгээ дахин оруулна уу",
+            "role": "Эрх",
+            "rolePlaceholder": "Эрх сонгох"
+        },
+        "messages": {
+            "customerUpdated": "Үйлчлүүлэгч амжилттай шинэчлэгдлээ",
+            "dashboardUserCreated": "Dashboard хэрэглэгч амжилттай үүсгэгдлээ",
+            "dashboardUserUpdated": "Dashboard хэрэглэгч амжилттай шинэчлэгдлээ",
+            "userDeleted": "Хэрэглэгч амжилттай устгагдлаа",
+            "userActivated": "Хэрэглэгч амжилттай идэвхжүүлэгдлээ",
+            "userDeactivated": "Хэрэглэгч амжилттай идэвхгүй болгогдлоо",
+            "userVerified": "Хэрэглэгч амжилттай баталгаажлаа",
+            "userUnverified": "Хэрэглэгчийн баталгаа цуцлагдлаа",
+            "failedToLoad": "Хэрэглэгчдийг ачаалж чадсангүй",
+            "failedToUpdate": "Хэрэглэгчийг шинэчилж чадсангүй",
+            "failedToCreate": "Хэрэглэгч үүсгэж чадсангүй",
+            "failedToDelete": "Хэрэглэгчийг устгаж чадсангүй"
+        },
+        "delete": {
+            "title": "Хэрэглэгч устгах",
+            "confirmMessage": "Та устгахдаа итгэлтэй байна уу",
+            "warning": "Энэ үйлдлийг буцаах боломжгүй.",
+            "customerWarning": "Анхааруулга: Энэ нь холбогдох бүх захиалга болон сэтгэгдлийг устгана.",
+            "cancel": "Цуцлах",
+            "confirm": "Устгах"
+        }
     }
 }

@@ -4,6 +4,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { getCurrentUserWithProfile } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 export default async function DashboardLayout({
   children,
@@ -13,7 +14,10 @@ export default async function DashboardLayout({
   const user = await getCurrentUserWithProfile();
 
   if (!user || user.type !== "admin") {
-    redirect("/mn/login");
+    const cookieStore = await cookies();
+    const lastLocale = cookieStore.get("lastLocale")?.value;
+    const locale = lastLocale && ["en", "mn"].includes(lastLocale) ? lastLocale : "en";
+    redirect(`/${locale}/login`);
   }
 
   return (

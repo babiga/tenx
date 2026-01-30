@@ -13,7 +13,7 @@ import Footer from "@/components/layout/Footer";
 export default function Home() {
   const t = useTranslations("Home");
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+    <div className="min-h-screen text-foreground overflow-x-hidden">
       <Navbar />
       <Hero />
       <Services />
@@ -39,7 +39,7 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="py-20 bg-background border-t border-white/5 overflow-hidden">
+      <div className="py-20 border-t border-white/5 overflow-hidden">
         <div className="container mx-auto px-6">
           <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-30 grayscale hover:grayscale-0 transition-all duration-700">
             <span className="text-2xl font-serif font-bold tracking-[0.3em]">VOGUE</span>

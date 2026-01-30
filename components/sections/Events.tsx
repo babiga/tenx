@@ -44,7 +44,7 @@ const events = [
 export default function Events() {
   const t = useTranslations("Events");
   return (
-    <section id="events" className="py-24 bg-background">
+    <section id="events" className="py-24">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl mb-4">{t("title")}</h2>

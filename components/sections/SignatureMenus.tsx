@@ -14,7 +14,7 @@ const menuData = [
 export default function SignatureMenus() {
   const t = useTranslations("SignatureMenus");
   return (
-    <section id="menus" className="py-24 bg-background border-t border-white/5">
+    <section id="menus" className="py-24 border-t border-white/5">
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-center mb-16 gap-4">
           <div className="text-center md:text-left">

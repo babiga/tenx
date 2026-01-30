@@ -14,7 +14,7 @@ const stepData = [
 export default function HowItWorks() {
   const t = useTranslations("HowItWorks");
   return (
-    <section id="how-it-works" className="py-24 bg-background relative border-t border-white/5">
+    <section id="how-it-works" className="py-24 relative border-t border-white/5">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

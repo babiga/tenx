@@ -38,7 +38,7 @@ const chefs = [
 export default function Chefs() {
   const t = useTranslations("Chefs");
   return (
-    <section id="chefs" className="py-24 bg-background border-t border-white/5">
+    <section id="chefs" className="py-24 border-t border-white/5">
       <div className="container mx-auto px-6">
         <div className="flex justify-between items-end mb-16">
           <div>

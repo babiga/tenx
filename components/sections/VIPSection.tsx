@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 export default function VIPSection() {
   const t = useTranslations("VIP");
   return (
-    <section id="vip" className="py-32 bg-background relative overflow-hidden">
+    <section id="vip" className="py-32 relative overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-primary/5 to-transparent pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-primary/5 blur-[100px] pointer-events-none" />

@@ -31,7 +31,7 @@ const serviceData = [
 export default function Services() {
   const t = useTranslations("Services");
   return (
-    <section id="services" className="py-24 bg-background relative overflow-hidden">
+    <section id="services" className="py-24 relative overflow-hidden">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

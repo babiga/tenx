@@ -1,89 +1,81 @@
 import { z } from "zod";
 
 // Login schema
-export const loginSchema = z.object({
-  email: z
-    .string()
-    .min(1, "Email is required")
-    .email("Please enter a valid email address"),
-  password: z
-    .string()
-    .min(1, "Password is required")
-    .min(8, "Password must be at least 8 characters"),
-});
+export const getLoginSchema = (t: any) =>
+  z.object({
+    email: z.string().min(1, t("emailRequired")).email(t("emailInvalid")),
+    password: z.string().min(1, t("passwordRequired")).min(8, t("passwordMin")),
+  });
 
 // Base password schema for reuse
-const passwordSchema = z
-  .string()
-  .min(1, "Password is required")
-  .min(8, "Password must be at least 8 characters")
-  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-  .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-  .regex(/[0-9]/, "Password must contain at least one number");
+const getPasswordSchema = (t: any) =>
+  z
+    .string()
+    .min(1, t("passwordRequired"))
+    .min(8, t("passwordMin"))
+    .regex(/[A-Z]/, t("passwordUppercase"))
+    .regex(/[a-z]/, t("passwordLowercase"))
+    .regex(/[0-9]/, t("passwordNumber"));
 
 // Individual signup schema (client-side)
-export const individualSignupSchema = z
-  .object({
-    firstName: z
-      .string()
-      .min(1, "First name is required")
-      .min(2, "First name must be at least 2 characters")
-      .max(50, "First name must be less than 50 characters"),
-    lastName: z
-      .string()
-      .min(1, "Last name is required")
-      .min(2, "Last name must be at least 2 characters")
-      .max(50, "Last name must be less than 50 characters"),
-    email: z
-      .string()
-      .min(1, "Email is required")
-      .email("Please enter a valid email address"),
-    phone: z
-      .string()
-      .min(1, "Phone number is required")
-      .regex(/^[+]?[0-9]{8,15}$/, "Please enter a valid phone number"),
-    password: passwordSchema,
-    confirmPassword: z.string().min(1, "Please confirm your password"),
-    acceptTerms: z
-      .boolean()
-      .refine((val) => val === true, "You must accept the terms and conditions"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
+export const getIndividualSignupSchema = (t: any) =>
+  z
+    .object({
+      firstName: z
+        .string()
+        .min(1, t("firstNameRequired"))
+        .min(2, t("firstNameMin"))
+        .max(50),
+      lastName: z
+        .string()
+        .min(1, t("lastNameRequired"))
+        .min(2, t("lastNameMin"))
+        .max(50),
+      email: z.string().min(1, t("emailRequired")).email(t("emailInvalid")),
+      phone: z
+        .string()
+        .min(1, t("phoneRequired"))
+        .regex(/^[+]?[0-9]{8,15}$/, t("phoneInvalid")),
+      password: getPasswordSchema(t),
+      confirmPassword: z.string().min(1, t("confirmPasswordRequired")),
+      acceptTerms: z
+        .boolean()
+        .refine((val) => val === true, t("termsRequired")),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t("passwordMismatch"),
+      path: ["confirmPassword"],
+    });
 
 // Company signup schema (client-side)
-export const companySignupSchema = z
-  .object({
-    companyName: z
-      .string()
-      .min(1, "Company name is required")
-      .min(2, "Company name must be at least 2 characters")
-      .max(100, "Company name must be less than 100 characters"),
-    companyLegalNo: z
-      .string()
-      .min(1, "Company registration number is required")
-      .min(5, "Registration number must be at least 5 characters")
-      .max(20, "Registration number must be less than 20 characters"),
-    email: z
-      .string()
-      .min(1, "Email is required")
-      .email("Please enter a valid email address"),
-    phone: z
-      .string()
-      .min(1, "Phone number is required")
-      .regex(/^[+]?[0-9]{8,15}$/, "Please enter a valid phone number"),
-    password: passwordSchema,
-    confirmPassword: z.string().min(1, "Please confirm your password"),
-    acceptTerms: z
-      .boolean()
-      .refine((val) => val === true, "You must accept the terms and conditions"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
+export const getCompanySignupSchema = (t: any) =>
+  z
+    .object({
+      companyName: z
+        .string()
+        .min(1, t("companyNameRequired"))
+        .min(2, t("companyNameMin"))
+        .max(100),
+      companyLegalNo: z
+        .string()
+        .min(1, t("companyLegalNoRequired"))
+        .min(5, t("companyLegalNoMin"))
+        .max(20),
+      email: z.string().min(1, t("emailRequired")).email(t("emailInvalid")),
+      phone: z
+        .string()
+        .min(1, t("phoneRequired"))
+        .regex(/^[+]?[0-9]{8,15}$/, t("phoneInvalid")),
+      password: getPasswordSchema(t),
+      confirmPassword: z.string().min(1, t("confirmPasswordRequired")),
+      acceptTerms: z
+        .boolean()
+        .refine((val) => val === true, t("termsRequired")),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t("passwordMismatch"),
+      path: ["confirmPassword"],
+    });
 
 // API signup schema (server-side) - discriminated union
 export const signupApiSchema = z.discriminatedUnion("userType", [
@@ -92,20 +84,49 @@ export const signupApiSchema = z.discriminatedUnion("userType", [
     firstName: z.string().min(1).min(2).max(50),
     lastName: z.string().min(1).min(2).max(50),
     email: z.string().min(1).email(),
-    phone: z.string().min(1).regex(/^[+]?[0-9]{8,15}$/),
-    password: passwordSchema,
+    phone: z
+      .string()
+      .min(1)
+      .regex(/^[+]?[0-9]{8,15}$/),
+    password: z.string().min(1).min(8),
   }),
   z.object({
     userType: z.literal("CORPORATE"),
     companyName: z.string().min(1).min(2).max(100),
     companyLegalNo: z.string().min(1).min(5).max(20),
     email: z.string().min(1).email(),
-    phone: z.string().min(1).regex(/^[+]?[0-9]{8,15}$/),
-    password: passwordSchema,
+    phone: z
+      .string()
+      .min(1)
+      .regex(/^[+]?[0-9]{8,15}$/),
+    password: z.string().min(1).min(8),
   }),
 ]);
 
 // Type exports
+export const loginSchema = z.object({
+  email: z.string(),
+  password: z.string(),
+});
+export const individualSignupSchema = z.object({
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string(),
+  phone: z.string(),
+  password: z.string(),
+  confirmPassword: z.string(),
+  acceptTerms: z.boolean(),
+});
+export const companySignupSchema = z.object({
+  companyName: z.string(),
+  companyLegalNo: z.string(),
+  email: z.string(),
+  phone: z.string(),
+  password: z.string(),
+  confirmPassword: z.string(),
+  acceptTerms: z.boolean(),
+});
+
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type IndividualSignupFormData = z.infer<typeof individualSignupSchema>;
 export type CompanySignupFormData = z.infer<typeof companySignupSchema>;

@@ -1,4 +1,4 @@
-import { setRequestLocale } from "next-intl/server";
+import { setRequestLocale, getTranslations } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 
@@ -20,6 +20,7 @@ export default async function AuthLayout({
   }
 
   setRequestLocale(locale);
+  const t = await getTranslations("Auth.branding");
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -39,21 +40,27 @@ export default async function AuthLayout({
         <div className="relative z-10 flex flex-col justify-between p-12 w-full">
           {/* Logo */}
           <div>
-            <h2 className="text-2xl font-serif text-foreground">
+            <h2 className="text-xl font-semibold text-foreground">
               Tenx <span className="text-primary">Catering</span>
             </h2>
           </div>
 
           {/* Tagline */}
           <div className="max-w-md">
-            <h1 className="text-4xl xl:text-5xl font-serif text-foreground leading-tight mb-4">
-              Crafting{" "}
-              <span className="italic text-primary">Unforgettable</span>
-              <br />
-              Culinary Moments
+            <h1 className="text-3xl xl:text-4xl font-semibold text-foreground leading-tight mb-4">
+              {locale === "en" ? (
+                <>
+                  Crafting{" "}
+                  <span className="italic text-primary">Unforgettable</span>
+                  <br />
+                  Culinary Moments
+                </>
+              ) : (
+                t("title")
+              )}
             </h1>
             <p className="text-muted-foreground text-lg">
-              Where luxury catering meets world-class culinary artistry.
+              {t("description")}
             </p>
           </div>
 
@@ -61,7 +68,7 @@ export default async function AuthLayout({
           <div className="flex items-center gap-4">
             <div className="w-12 h-[1px] bg-primary" />
             <span className="text-xs tracking-[0.3em] text-muted-foreground uppercase">
-              Since 2024
+              {locale === "en" ? `${t("since")} 2024` : `2024 ${t("since")}`}
             </span>
           </div>
         </div>
@@ -83,7 +90,7 @@ export default async function AuthLayout({
         </div>
 
         {/* Form content */}
-        <div className="relative z-10 w-full max-w-md">{children}</div>
+        <div className="relative z-10 w-full max-w-xl flex items-center justify-center">{children}</div>
       </div>
     </div>
   );

@@ -1,5 +1,10 @@
 {
     "Auth": {
+        "branding": {
+            "title": "Crafting Unforgettable Culinary Moments",
+            "description": "Where luxury catering meets world-class culinary artistry.",
+            "since": "Since"
+        },
         "login": {
             "title": "Welcome Back",
             "subtitle": "Sign in to continue your culinary journey",
@@ -9,6 +14,7 @@
             "passwordPlaceholder": "Enter your password",
             "forgotPassword": "Forgot password?",
             "submit": "Sign In",
+            "submitting": "Signing In...",
             "noAccount": "Don't have an account?",
             "signUp": "Sign up"
         },
@@ -59,11 +65,19 @@
             "passwordNumber": "Password must contain at least one number",
             "passwordMismatch": "Passwords do not match",
             "nameRequired": "Full name is required",
-            "nameMin": "Name must be at least 2 characters",
+            "firstNameRequired": "First name is required",
+            "firstNameMin": "First name must be at least 2 characters",
+            "lastNameRequired": "Last name is required",
+            "lastNameMin": "Last name must be at least 2 characters",
+            "companyNameRequired": "Company name is required",
+            "companyNameMin": "Company name must be at least 2 characters",
+            "companyLegalNoRequired": "Company registration number is required",
+            "companyLegalNoMin": "Registration number must be at least 5 characters",
             "phoneRequired": "Phone number is required",
             "phoneInvalid": "Please enter a valid phone number",
             "userTypeRequired": "Please select an account type",
-            "termsRequired": "You must accept the terms and conditions"
+            "termsRequired": "You must accept the terms and conditions",
+            "confirmPasswordRequired": "Please confirm your password"
         }
     },
     "Navbar": {

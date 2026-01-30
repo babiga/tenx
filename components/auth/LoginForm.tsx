@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/routing";
 
-import { loginSchema, type LoginFormData } from "@/lib/validations/auth";
+import { getLoginSchema, type LoginFormData } from "@/lib/validations/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -33,8 +33,9 @@ export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const vt = useTranslations("Auth.validation");
   const form = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(getLoginSchema(vt)),
     defaultValues: {
       email: "",
       password: "",
@@ -74,16 +75,20 @@ export function LoginForm() {
 
   return (
     <AuthCard>
-      <AuthCardHeader>
-        <AuthCardTitle>{t("title")}</AuthCardTitle>
-        <AuthCardDescription>{t("subtitle")}</AuthCardDescription>
-      </AuthCardHeader>
+      <div className="mb-10 text-left">
+        <h1 className="text-3xl md:text-4xl font-semibold text-foreground mb-4">
+          {t("title")}
+        </h1>
+        <p className="text-muted-foreground text-lg max-w-lg">
+          {t("subtitle")}
+        </p>
+      </div>
 
-      <AuthCardContent>
+      <div className="mt-8">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {error && (
-              <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-md text-destructive text-sm">
+              <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-md text-destructive text-sm">
                 {error}
               </div>
             )}
@@ -92,15 +97,15 @@ export function LoginForm() {
               control={form.control}
               name="email"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-foreground/80">
+                <FormItem className="space-y-2">
+                  <FormLabel className="text-sm font-medium text-foreground/70 tracking-wide">
                     {t("email")}
                   </FormLabel>
                   <FormControl>
                     <Input
                       type="email"
                       placeholder={t("emailPlaceholder")}
-                      className="h-10 bg-background/50 border-white/10 focus:border-primary focus-visible:ring-primary/50"
+                      className="h-12 bg-background/50 border-white/10 focus:border-primary focus-visible:ring-primary/50 transition-all rounded-none"
                       disabled={isLoading}
                       {...field}
                     />
@@ -114,14 +119,14 @@ export function LoginForm() {
               control={form.control}
               name="password"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <FormLabel className="text-foreground/80">
+                    <FormLabel className="text-sm font-medium text-foreground/70 tracking-wide">
                       {t("password")}
                     </FormLabel>
                     <Link
                       href="/forgot-password"
-                      className="text-xs text-primary hover:text-primary/80 transition-colors"
+                      className="text-xs text-primary hover:text-primary/80 transition-colors tracking-widest"
                     >
                       {t("forgotPassword")}
                     </Link>
@@ -129,7 +134,7 @@ export function LoginForm() {
                   <FormControl>
                     <PasswordInput
                       placeholder={t("passwordPlaceholder")}
-                      className="border-white/10 focus:border-primary focus-visible:ring-primary/50"
+                      className="h-12 bg-background/50 border-white/10 focus:border-primary focus-visible:ring-primary/50 transition-all rounded-none"
                       disabled={isLoading}
                       {...field}
                     />
@@ -142,23 +147,23 @@ export function LoginForm() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full h-11 bg-primary text-black hover:bg-primary/90 rounded-none font-medium transition-all duration-300 btn-glow"
+              className="w-full h-14 bg-primary text-black hover:bg-primary/90 rounded-none font-semibold text-base transition-all duration-300 btn-glow mt-2"
             >
               {isLoading ? t("submitting") : t("submit")}
             </Button>
           </form>
         </Form>
-      </AuthCardContent>
+      </div>
 
-      <AuthCardFooter>
-        <span>{t("noAccount")} </span>
+      <div className="mt-10 pt-6 border-t border-white/5 text-center">
+        <span className="text-muted-foreground">{t("noAccount")} </span>
         <Link
           href="/signup"
-          className="text-primary hover:text-primary/80 transition-colors font-medium"
+          className="text-primary hover:text-primary/80 transition-colors font-bold tracking-widest text-xs ml-1"
         >
           {t("signUp")}
         </Link>
-      </AuthCardFooter>
+      </div>
     </AuthCard>
   );
 }

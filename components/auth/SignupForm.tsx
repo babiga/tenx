@@ -7,8 +7,8 @@ import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/routing";
 
 import {
-  individualSignupSchema,
-  companySignupSchema,
+  getIndividualSignupSchema,
+  getCompanySignupSchema,
   type IndividualSignupFormData,
   type CompanySignupFormData,
 } from "@/lib/validations/auth";
@@ -44,9 +44,10 @@ export function SignupForm() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
+  const vt = useTranslations("Auth.validation");
   // Individual form
   const individualForm = useForm<IndividualSignupFormData>({
-    resolver: zodResolver(individualSignupSchema),
+    resolver: zodResolver(getIndividualSignupSchema(vt)),
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -60,7 +61,7 @@ export function SignupForm() {
 
   // Company form
   const companyForm = useForm<CompanySignupFormData>({
-    resolver: zodResolver(companySignupSchema),
+    resolver: zodResolver(getCompanySignupSchema(vt)),
     defaultValues: {
       companyName: "",
       companyLegalNo: "",
@@ -158,30 +159,33 @@ export function SignupForm() {
   }
 
   const inputClassName =
-    "h-10 bg-background/50 border-white/10 focus:border-primary focus-visible:ring-primary/50";
+    "h-12 bg-background/50 border-white/10 focus:border-primary focus-visible:ring-primary/50 transition-all rounded-none";
+  const labelClassName = "text-sm font-medium text-foreground/70 tracking-wide";
 
   if (success) {
     return (
-      <AuthCard className="max-w-lg">
-        <AuthCardContent>
-          <div className="text-center py-8">
-            <div className="text-green-500 text-lg font-medium">
-              {t("success")}
-            </div>
+      <AuthCard className="max-w-none">
+        <div className="text-center py-20">
+          <div className="text-green-500 text-xl font-semibold">
+            {t("success")}
           </div>
-        </AuthCardContent>
+        </div>
       </AuthCard>
     );
   }
 
   return (
-    <AuthCard className="max-w-lg">
-      <AuthCardHeader>
-        <AuthCardTitle>{t("title")}</AuthCardTitle>
-        <AuthCardDescription>{t("subtitle")}</AuthCardDescription>
-      </AuthCardHeader>
+    <AuthCard className="max-w-none">
+      <div className="mb-10 text-left">
+        <h1 className="text-3xl md:text-4xl font-semibold text-foreground mb-4">
+          {t("title")}
+        </h1>
+        <p className="text-muted-foreground text-lg max-w-lg">
+          {t("subtitle")}
+        </p>
+      </div>
 
-      <AuthCardContent>
+      <div className="mt-8">
         <Tabs
           value={activeTab}
           onValueChange={handleTabChange}
@@ -210,8 +214,8 @@ export function SignupForm() {
                     control={individualForm.control}
                     name="firstName"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-foreground/80">
+                      <FormItem className="space-y-2">
+                        <FormLabel className={labelClassName}>
                           {t("firstName")}
                         </FormLabel>
                         <FormControl>
@@ -231,8 +235,8 @@ export function SignupForm() {
                     control={individualForm.control}
                     name="lastName"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-foreground/80">
+                      <FormItem className="space-y-2">
+                        <FormLabel className={labelClassName}>
                           {t("lastName")}
                         </FormLabel>
                         <FormControl>
@@ -255,8 +259,8 @@ export function SignupForm() {
                     control={individualForm.control}
                     name="email"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-foreground/80">
+                      <FormItem className="space-y-2">
+                        <FormLabel className={labelClassName}>
                           {t("email")}
                         </FormLabel>
                         <FormControl>
@@ -276,8 +280,8 @@ export function SignupForm() {
                     control={individualForm.control}
                     name="phone"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-foreground/80">
+                      <FormItem className="space-y-2">
+                        <FormLabel className={labelClassName}>
                           {t("phone")}
                         </FormLabel>
                         <FormControl>
@@ -300,14 +304,14 @@ export function SignupForm() {
                     control={individualForm.control}
                     name="password"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-foreground/80">
+                      <FormItem className="space-y-2">
+                        <FormLabel className={labelClassName}>
                           {t("password")}
                         </FormLabel>
                         <FormControl>
                           <PasswordInput
                             placeholder={t("passwordPlaceholder")}
-                            className="border-white/10 focus:border-primary focus-visible:ring-primary/50"
+                            className={inputClassName}
                             disabled={isLoading}
                             {...field}
                           />
@@ -320,14 +324,14 @@ export function SignupForm() {
                     control={individualForm.control}
                     name="confirmPassword"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-foreground/80">
+                      <FormItem className="space-y-2">
+                        <FormLabel className={labelClassName}>
                           {t("confirmPassword")}
                         </FormLabel>
                         <FormControl>
                           <PasswordInput
                             placeholder={t("confirmPasswordPlaceholder")}
-                            className="border-white/10 focus:border-primary focus-visible:ring-primary/50"
+                            className={inputClassName}
                             disabled={isLoading}
                             {...field}
                           />
@@ -376,7 +380,7 @@ export function SignupForm() {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full h-11 bg-primary text-black hover:bg-primary/90 rounded-none font-medium transition-all duration-300 btn-glow mt-2"
+                  className="w-full h-14 bg-primary text-black hover:bg-primary/90 rounded-none font-bold text-base transition-all duration-300 btn-glow mt-6"
                 >
                   {isLoading ? t("submitting") : t("submit")}
                 </Button>
@@ -396,8 +400,8 @@ export function SignupForm() {
                     control={companyForm.control}
                     name="companyName"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-foreground/80">
+                      <FormItem className="space-y-2">
+                        <FormLabel className={labelClassName}>
                           {t("companyName")}
                         </FormLabel>
                         <FormControl>
@@ -417,8 +421,8 @@ export function SignupForm() {
                     control={companyForm.control}
                     name="companyLegalNo"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-foreground/80">
+                      <FormItem className="space-y-2">
+                        <FormLabel className={labelClassName}>
                           {t("companyLegalNo")}
                         </FormLabel>
                         <FormControl>
@@ -441,8 +445,8 @@ export function SignupForm() {
                     control={companyForm.control}
                     name="email"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-foreground/80">
+                      <FormItem className="space-y-2">
+                        <FormLabel className={labelClassName}>
                           {t("email")}
                         </FormLabel>
                         <FormControl>
@@ -462,8 +466,8 @@ export function SignupForm() {
                     control={companyForm.control}
                     name="phone"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-foreground/80">
+                      <FormItem className="space-y-2">
+                        <FormLabel className={labelClassName}>
                           {t("phone")}
                         </FormLabel>
                         <FormControl>
@@ -486,14 +490,14 @@ export function SignupForm() {
                     control={companyForm.control}
                     name="password"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-foreground/80">
+                      <FormItem className="space-y-2">
+                        <FormLabel className={labelClassName}>
                           {t("password")}
                         </FormLabel>
                         <FormControl>
                           <PasswordInput
                             placeholder={t("passwordPlaceholder")}
-                            className="border-white/10 focus:border-primary focus-visible:ring-primary/50"
+                            className={inputClassName}
                             disabled={isLoading}
                             {...field}
                           />
@@ -506,14 +510,14 @@ export function SignupForm() {
                     control={companyForm.control}
                     name="confirmPassword"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-foreground/80">
+                      <FormItem className="space-y-2">
+                        <FormLabel className={labelClassName}>
                           {t("confirmPassword")}
                         </FormLabel>
                         <FormControl>
                           <PasswordInput
                             placeholder={t("confirmPasswordPlaceholder")}
-                            className="border-white/10 focus:border-primary focus-visible:ring-primary/50"
+                            className={inputClassName}
                             disabled={isLoading}
                             {...field}
                           />
@@ -562,7 +566,7 @@ export function SignupForm() {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full h-11 bg-primary text-black hover:bg-primary/90 rounded-none font-medium transition-all duration-300 btn-glow mt-2"
+                  className="w-full h-14 bg-primary text-black hover:bg-primary/90 rounded-none font-bold text-base transition-all duration-300 btn-glow mt-6"
                 >
                   {isLoading ? t("submitting") : t("submit")}
                 </Button>
@@ -570,17 +574,17 @@ export function SignupForm() {
             </Form>
           </TabsContent>
         </Tabs>
-      </AuthCardContent>
+      </div>
 
-      <AuthCardFooter>
-        <span>{t("hasAccount")} </span>
+      <div className="mt-10 pt-6 border-t border-white/5 text-center">
+        <span className="text-muted-foreground">{t("hasAccount")} </span>
         <Link
           href="/login"
-          className="text-primary hover:text-primary/80 transition-colors font-medium"
+          className="text-primary hover:text-primary/80 transition-colors font-semibold tracking-widest text-xs ml-1"
         >
           {t("signIn")}
         </Link>
-      </AuthCardFooter>
+      </div>
     </AuthCard>
   );
 }

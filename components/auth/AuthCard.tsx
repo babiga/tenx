@@ -9,7 +9,7 @@ export function AuthCard({ className, children, ...props }: AuthCardProps) {
   return (
     <div
       className={cn(
-        "w-full max-w-md bg-card/80 backdrop-blur-md border border-white/10 p-8 md:p-10 shadow-2xl shadow-black/20 transition-colors hover:border-primary/20",
+        "w-full transition-colors max-w-md",
         className
       )}
       {...props}
@@ -46,7 +46,7 @@ export function AuthCardTitle({
 }: AuthCardTitleProps) {
   return (
     <h1
-      className={cn("text-3xl md:text-4xl font-serif text-foreground mb-2", className)}
+      className={cn("text-2xl md:text-3xl font-semibold text-foreground mb-2", className)}
       {...props}
     >
       {children}

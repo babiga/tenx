@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Montserrat, Inter } from "next/font/google";
+import { Playfair_Display, Montserrat } from "next/font/google";
 import "../globals.css";
 import { Providers } from "../providers";
 import { NextIntlClientProvider } from "next-intl";
@@ -19,11 +19,7 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  display: "swap",
-});
+
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -70,7 +66,7 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body
-        className={`${playfair.variable} ${montserrat.variable} ${inter.variable}`}
+        className={`${playfair.variable} ${montserrat.variable}`}
         id="landing-body"
       >
         <NextIntlClientProvider messages={messages}>

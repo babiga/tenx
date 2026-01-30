@@ -47,7 +47,7 @@ export default function Events() {
     <section id="events" className="py-24 bg-background">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-serif mb-4">{t("title")}</h2>
+          <h2 className="text-4xl md:text-5xl mb-4">{t("title")}</h2>
           <p className="text-muted-foreground">{t("description")}</p>
         </div>
 
@@ -76,7 +76,7 @@ export default function Events() {
                     </div>
                   </div>
                   <div className="p-6">
-                    <h3 className="text-xl font-serif text-white mb-2">{event.title}</h3>
+                    <h3 className="text-xl text-white mb-2">{event.title}</h3>
                     <p className="text-sm text-muted-foreground">{event.guests.replace('Guests', t('guests'))}</p>
                   </div>
                 </motion.div>

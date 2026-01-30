@@ -42,7 +42,7 @@ export default function Chefs() {
       <div className="container mx-auto px-6">
         <div className="flex justify-between items-end mb-16">
           <div>
-            <h2 className="text-4xl md:text-5xl font-serif mb-2">
+            <h2 className="text-4xl md:text-5xl mb-2">
               {t("title")}
             </h2>
             <p className="text-muted-foreground">
@@ -90,7 +90,7 @@ export default function Chefs() {
                   </span>
                 </div>
 
-                <h3 className="text-2xl font-serif text-white mb-1">
+                <h3 className="text-2xl text-white mb-1">
                   {chef.name}
                 </h3>
                 <p className="text-primary text-sm uppercase tracking-widest mb-4">

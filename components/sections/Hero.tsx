@@ -1,21 +1,87 @@
 'use client'
 
-import { motion } from "framer-motion";
+import { useState, useEffect, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 
+// Static hero images - replace with your actual images
+const heroImages = [
+  "/tenx-hero.png",
+  "/tenx-hero-2.jpg",
+  "/tenx-hero-3.jpg",
+];
+
+// Fisher-Yates shuffle algorithm
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 export default function Hero() {
   const t = useTranslations("Hero");
+
+  // Shuffle images on component mount
+  const shuffledImages = useMemo(() => shuffleArray(heroImages), []);
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Auto-advance images with dissolve effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % shuffledImages.length);
+    }, 5000); // Change image every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="relative h-screen w-full overflow-hidden flex items-center justify-center bg-background">
+      {/* Background Images with Dissolve Effect */}
       <div className="absolute inset-0 z-0">
-        <img
-          src="/tenx-hero.png"
-          alt="Tenx Catering"
-          className="w-full h-full object-cover opacity-60 scale-105 animate-ken-burns"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-black/30" />
+        <AnimatePresence mode="sync">
+          {shuffledImages.map((image, index) => (
+            index === currentImageIndex && (
+              <motion.img
+                key={image}
+                src={image}
+                alt={`Tenx Catering ${index + 1}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.6 }}
+                exit={{ opacity: 0 }}
+                transition={{
+                  duration: 1.5,
+                  ease: "easeInOut"
+                }}
+                className="absolute inset-0 w-full h-full object-cover scale-105"
+                style={{
+                  animation: 'ken-burns 20s ease-in-out infinite alternate'
+                }}
+              />
+            )
+          ))}
+        </AnimatePresence>
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/20" />
       </div>
+
+      {/* Image Indicator Dots - Commented out for now */}
+      {/* <div className="absolute bottom-32 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        {shuffledImages.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentImageIndex(index)}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentImageIndex
+              ? 'bg-primary w-6'
+              : 'bg-white/40 hover:bg-white/60'
+              }`}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+      </div> */}
 
       <div className="absolute inset-0 z-1 pointer-events-none">
         <motion.div
@@ -45,10 +111,10 @@ export default function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.4 }}
-          className="text-5xl md:text-7xl lg:text-8xl font-serif text-white mb-6 leading-tight"
+          className="text-5xl md:text-7xl lg:text-8xl text-white mb-6 leading-tight"
         >
           {t("title1")} <br />
-          <span className="italic font-light text-foreground/90 text-4xl md:text-6xl lg:text-7xl">{t("title2")}</span>
+          <span className="italic font-light text-foreground/90 text-4xl md:text-6xl lg:text-7xl font-serif">{t("title2")}</span>
         </motion.h1>
 
         <motion.div

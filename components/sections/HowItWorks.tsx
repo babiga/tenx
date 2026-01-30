@@ -22,7 +22,7 @@ export default function HowItWorks() {
           viewport={{ once: true }}
           className="text-center mb-20"
         >
-          <h2 className="text-4xl md:text-5xl font-serif mb-4">{t("title")}</h2>
+          <h2 className="text-4xl md:text-5xl mb-4">{t("title")}</h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
             {t("description")}
           </p>
@@ -44,7 +44,7 @@ export default function HowItWorks() {
               <div className="w-24 h-24 rounded-full bg-card border border-white/10 flex items-center justify-center mb-6 group-hover:border-primary/50 transition-colors duration-500 relative z-10 shadow-2xl">
                 <step.icon className="w-8 h-8 text-primary group-hover:scale-110 transition-transform duration-300" />
               </div>
-              <h3 className="text-xl font-serif mb-3 text-foreground">{t(`${step.key}.title`)}</h3>
+              <h3 className="text-xl mb-3 text-foreground">{t(`${step.key}.title`)}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed px-4">
                 {t(`${step.key}.description`)}
               </p>

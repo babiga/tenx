@@ -18,7 +18,7 @@ export default function SignatureMenus() {
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-center mb-16 gap-4">
           <div className="text-center md:text-left">
-            <h2 className="text-4xl md:text-5xl font-serif mb-2 text-white">{t("title")}</h2>
+            <h2 className="text-4xl md:text-5xl mb-2 text-white">{t("title")}</h2>
             <p className="text-muted-foreground">{t("description")}</p>
           </div>
           <Button className="bg-primary text-black hover:bg-white px-8 py-6 rounded-none text-lg">
@@ -37,7 +37,7 @@ export default function SignatureMenus() {
               className="p-8 bg-card border border-white/5 relative group hover:border-primary/30 transition-colors"
             >
               <span className="text-xs uppercase tracking-[0.2em] text-primary mb-4 block">{t(menu.tier)}</span>
-              <h3 className="text-2xl font-serif text-white mb-2">{t(`${menu.key}.title`)}</h3>
+              <h3 className="text-2xl text-white mb-2">{t(`${menu.key}.title`)}</h3>
               <p className="text-xl text-foreground/80 mb-8 font-light">{menu.price} <span className="text-sm">{t("perGuest")}</span></p>
 
               <ul className="space-y-4 mb-10">

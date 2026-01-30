@@ -39,7 +39,7 @@ export default function Services() {
           viewport={{ once: true }}
           className="text-center mb-20"
         >
-          <h2 className="text-4xl md:text-5xl font-serif mb-4">{t("title")}</h2>
+          <h2 className="text-4xl md:text-5xl mb-4">{t("title")}</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             {t("description")}
           </p>
@@ -64,7 +64,7 @@ export default function Services() {
                 <div className="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-colors" />
                 <div className="absolute inset-0 p-8 flex flex-col justify-end">
                   <service.icon className="w-10 h-10 text-primary mb-4" />
-                  <h3 className="text-2xl font-serif text-white mb-2">{t(`${service.key}.title`)}</h3>
+                  <h3 className="text-2xl text-white mb-2">{t(`${service.key}.title`)}</h3>
                   <p className="text-white/70 text-sm max-w-sm mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     {t(`${service.key}.description`)}
                   </p>

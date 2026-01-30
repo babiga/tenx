@@ -23,8 +23,8 @@ export default function Home() {
       <Chefs />
       <Events />
 
-      <section id="for-chefs" className="py-24 bg-primary/5 border-y border-white/5 relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.05),transparent)]" />
+      <section id="ctaSection" className="py-24 bg-white/5 border-y border-white/5 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,hsl(222,40%,25%,0.3),transparent)]" />
         <div className="container mx-auto px-6 text-center relative z-10">
           <h2 className="text-4xl md:text-5xl font-serif mb-6 text-white">{t("ctaTitle")}</h2>
           <p className="text-muted-foreground mb-10 max-w-2xl mx-auto text-lg leading-relaxed">{t("ctaDescription")}</p>

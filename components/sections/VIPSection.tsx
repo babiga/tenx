@@ -25,7 +25,7 @@ export default function VIPSection() {
               <Star className="w-3 h-3 text-primary fill-primary" />
               <span className="text-xs uppercase tracking-widest text-primary">{t("exclusiveAccess")}</span>
             </div>
-            <h2 className="text-5xl md:text-6xl font-serif mb-6 leading-tight">
+            <h2 className="text-5xl md:text-6xl mb-6 leading-tight">
               {t("title")} <br /> <span className="text-primary italic">{t("italic")}</span>
             </h2>
             <p className="text-muted-foreground text-lg mb-8 leading-relaxed">

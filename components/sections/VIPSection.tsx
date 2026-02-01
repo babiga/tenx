@@ -61,7 +61,7 @@ export default function VIPSection() {
               <img
                 src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=2074&auto=format&fit=crop"
                 alt="VIP Dish"
-                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                className="w-full h-full object-cover transition-all duration-700"
               />
             </div>
           </motion.div>

@@ -13,7 +13,7 @@ export default async function DashboardLayout({
 }) {
   const user = await getCurrentUserWithProfile();
 
-  if (!user || user.type !== "admin") {
+  if (!user) {
     const cookieStore = await cookies();
     const lastLocale = cookieStore.get("lastLocale")?.value;
     const locale = lastLocale && ["en", "mn"].includes(lastLocale) ? lastLocale : "en";

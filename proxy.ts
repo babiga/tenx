@@ -21,7 +21,7 @@ export default async function middleware(request: NextRequest) {
   if (pathname.startsWith("/dashboard")) {
     const session = await getSessionFromCookie(request);
 
-    if (!session || session.userType !== "admin") {
+    if (!session || session.userType !== "dashboard") {
       const lastLocale = getLastLocale(request);
       return NextResponse.redirect(
         new URL(`/${lastLocale}/login`, request.url),

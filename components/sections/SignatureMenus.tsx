@@ -49,7 +49,7 @@ export default function SignatureMenus() {
                 ))}
               </ul>
 
-              <Button className="w-full bg-transparent border border-white/10 hover:border-primary hover:bg-primary hover:text-black group transition-all duration-300">
+              <Button className="w-full border border-white/10 hover:border-primary hover:text-black group transition-all duration-300">
                 {t("addToBooking")} <Plus className="ml-2 w-4 h-4" />
               </Button>
             </motion.div>

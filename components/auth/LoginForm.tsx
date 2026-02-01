@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/routing";
+import { useRouter as useBaseRouter } from "next/navigation";
 
 import { getLoginSchema, type LoginFormData } from "@/lib/validations/auth";
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,7 @@ import { PasswordInput } from "@/components/auth/PasswordInput";
 export function LoginForm() {
   const t = useTranslations("Auth.login");
   const router = useRouter();
+  const baseRouter = useBaseRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -62,7 +64,7 @@ export function LoginForm() {
 
       // Redirect based on user type
       if (result.userType === "dashboard") {
-        router.push("/dashboard");
+        baseRouter.push("/dashboard");
       } else {
         router.push("/");
       }

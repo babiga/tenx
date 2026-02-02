@@ -4,7 +4,14 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Full Node.js server mode (no static export)
+  devIndicators: false,
+  reactStrictMode: false,
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.plugins = [...config.plugins, new PrismaPlugin()];
+    }
+    return config;
+  },
 };
 
 export default withNextIntl(nextConfig);

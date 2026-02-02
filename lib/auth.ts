@@ -11,7 +11,7 @@ import type {
 
 const SALT_ROUNDS = 12;
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "your-secret-key-change-in-production"
+  process.env.JWT_SECRET || "your-secret-key-change-in-production",
 );
 const SESSION_COOKIE_NAME = "session";
 const SESSION_DURATION = 7 * 24 * 60 * 60; // 7 days in seconds
@@ -22,7 +22,7 @@ export async function hashPassword(password: string): Promise<string> {
 
 export async function verifyPassword(
   password: string,
-  hash: string
+  hash: string,
 ): Promise<boolean> {
   return bcrypt.compare(password, hash);
 }
@@ -43,7 +43,9 @@ export type DashboardUserWithProfile = Omit<DashboardUser, "password"> & {
 };
 
 // Create a session token
-export async function createSession(payload: Omit<SessionPayload, "exp">): Promise<string> {
+export async function createSession(
+  payload: Omit<SessionPayload, "exp">,
+): Promise<string> {
   const token = await new SignJWT({ ...payload })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -119,6 +121,6 @@ export async function getCurrentUserWithProfile(): Promise<DashboardUserWithProf
 
   return {
     ...userWithoutPassword,
-    type: typeMap[dashboardUser.role],
+    type: typeMap[dashboardUser.role as DashboardUserRole],
   };
 }

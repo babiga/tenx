@@ -2,10 +2,9 @@
 // Separated User (customers) and DashboardUser (chefs, companies, admins)
 
 generator client {
-  provider      = "prisma-client"
+  provider      = "prisma-client-js"
   output        = "../generated/prisma"
   binaryTargets = ["native", "rhel-openssl-3.0.x"]
-  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {

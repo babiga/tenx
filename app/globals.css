@@ -3,7 +3,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@utility w-sidebar-width {
+  width: var(--sidebar-width);
+}
+
 @theme inline {
+  --spacing: 0.25rem;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -38,7 +43,7 @@
   --color-input: hsl(217 30% 20%);
   --color-ring: hsl(46 65% 52%);
 
-  --color-sidebar: hsl(222 47% 6%);
+  /* --color-sidebar: hsl(222 47% 6%); */
   --color-sidebar-foreground: hsl(210 20% 98%);
   --color-sidebar-primary: hsl(46 65% 52%);
   --color-sidebar-primary-foreground: hsl(0 0% 0%);
@@ -150,22 +155,10 @@ html {
   }
   body {
     @apply text-foreground;
-    background: 
-      radial-gradient(
-        circle at 0% 0%,
-        hsl(270 65% 18%) 0%,
-        transparent 50%
-      ),
-      radial-gradient(
-        circle at 100% 0%,
-        hsl(215 75% 18%) 0%,
-        transparent 50%
-      ),
-      radial-gradient(
-        circle at 50% 100%,
-        hsl(285 45% 12%) 0%,
-        transparent 50%
-      ),
+    background:
+      radial-gradient(circle at 0% 0%, hsl(270 65% 18%) 0%, transparent 50%),
+      radial-gradient(circle at 100% 0%, hsl(215 75% 18%) 0%, transparent 50%),
+      radial-gradient(circle at 50% 100%, hsl(285 45% 12%) 0%, transparent 50%),
       hsl(222 47% 4%);
     background-attachment: fixed;
   }

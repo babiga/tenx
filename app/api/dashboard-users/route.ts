@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     ) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -42,12 +42,20 @@ export async function GET(request: NextRequest) {
           error: "Invalid query parameters",
           details: queryResult.error.flatten(),
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    const { page, limit, search, role, isActive, isVerified, sortBy, sortOrder } =
-      queryResult.data;
+    const {
+      page,
+      limit,
+      search,
+      role,
+      isActive,
+      isVerified,
+      sortBy,
+      sortOrder,
+    } = queryResult.data;
 
     // Build where clause
     const where: Record<string, unknown> = {};
@@ -89,6 +97,13 @@ export async function GET(request: NextRequest) {
         lastLoginAt: true,
         createdAt: true,
         updatedAt: true,
+        chefProfile: {
+          select: {
+            specialty: true,
+            rating: true,
+            hourlyRate: true,
+          },
+        },
       },
       orderBy: { [sortBy]: sortOrder },
       skip: (page - 1) * limit,
@@ -109,7 +124,7 @@ export async function GET(request: NextRequest) {
     console.error("List dashboard users error:", error);
     return NextResponse.json(
       { success: false, error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -126,7 +141,7 @@ export async function POST(request: NextRequest) {
     ) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -141,7 +156,7 @@ export async function POST(request: NextRequest) {
           error: "Invalid input",
           details: result.error.flatten(),
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -155,7 +170,7 @@ export async function POST(request: NextRequest) {
     if (existingDashboardUser) {
       return NextResponse.json(
         { success: false, error: "Email already exists" },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -167,35 +182,49 @@ export async function POST(request: NextRequest) {
     if (existingCustomer) {
       return NextResponse.json(
         { success: false, error: "Email already exists" },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
     // Hash password
     const hashedPassword = await hashPassword(password);
 
-    // Create user
-    const user = await prisma.dashboardUser.create({
-      data: {
-        ...data,
-        email,
-        phone: phone || null,
-        password: hashedPassword,
-        isVerified: false,
-        isActive: true,
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        phone: true,
-        avatar: true,
-        role: true,
-        isVerified: true,
-        isActive: true,
-        createdAt: true,
-        updatedAt: true,
-      },
+    // Create user and profile in a transaction
+    const user = await prisma.$transaction(async (tx) => {
+      const newUser = await tx.dashboardUser.create({
+        data: {
+          ...data,
+          email,
+          phone: phone || null,
+          password: hashedPassword,
+          isVerified: false,
+          isActive: true,
+        },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          phone: true,
+          avatar: true,
+          role: true,
+          isVerified: true,
+          isActive: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+
+      if (data.role === "CHEF") {
+        await tx.chefProfile.create({
+          data: {
+            dashboardUserId: newUser.id,
+            specialty: (data as any).specialty || "General",
+            hourlyRate: (data as any).hourlyRate || 0,
+          },
+        });
+      }
+
+      return newUser;
     });
 
     return NextResponse.json({
@@ -207,7 +236,7 @@ export async function POST(request: NextRequest) {
     console.error("Create dashboard user error:", error);
     return NextResponse.json(
       { success: false, error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

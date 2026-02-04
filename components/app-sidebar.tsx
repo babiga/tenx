@@ -12,6 +12,7 @@ import {
   UsersIcon,
   UtensilsIcon,
   WalletIcon,
+  UserCircleIcon,
 } from "lucide-react"
 
 import { NavDocuments } from "@/components/nav-documents"
@@ -51,12 +52,22 @@ const data = {
       url: "/dashboard/jobs",
       icon: BriefcaseIcon,
     },
+    {
+      title: "Profile",
+      url: "/dashboard/profile",
+      icon: UserCircleIcon,
+    },
   ],
   navManagement: [
     {
       name: "Menus",
       url: "/dashboard/menus",
       icon: UtensilsIcon,
+    },
+    {
+      name: "Chefs",
+      url: "/dashboard/chefs",
+      icon: UsersIcon,
     },
     {
       name: "Users",
@@ -106,7 +117,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
+              className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
               <a href="#">
                 <ArrowUpCircleIcon className="h-5 w-5" />

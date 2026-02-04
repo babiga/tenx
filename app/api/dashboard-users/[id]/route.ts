@@ -6,7 +6,7 @@ import { updateDashboardUserSchema } from "@/lib/validations/users";
 // GET /api/dashboard-users/[id] - Get single dashboard user details
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     // Verify admin session
@@ -18,7 +18,7 @@ export async function GET(
     ) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -68,7 +68,7 @@ export async function GET(
     if (!user) {
       return NextResponse.json(
         { success: false, error: "Dashboard user not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -80,7 +80,7 @@ export async function GET(
     console.error("Get dashboard user error:", error);
     return NextResponse.json(
       { success: false, error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -88,7 +88,7 @@ export async function GET(
 // PATCH /api/dashboard-users/[id] - Update dashboard user information
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     // Verify admin session
@@ -100,7 +100,7 @@ export async function PATCH(
     ) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -116,7 +116,7 @@ export async function PATCH(
           error: "Invalid input",
           details: result.error.flatten(),
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -128,33 +128,51 @@ export async function PATCH(
     if (!existingUser) {
       return NextResponse.json(
         { success: false, error: "Dashboard user not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     // Clean up phone field
-    const updateData = { ...result.data };
-    if (updateData.phone === "") {
-      updateData.phone = null;
+    const { specialty, hourlyRate, ...userData } = result.data;
+    if (userData.phone === "") {
+      userData.phone = null;
     }
 
-    // Update user
-    const user = await prisma.dashboardUser.update({
-      where: { id },
-      data: updateData,
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        phone: true,
-        avatar: true,
-        role: true,
-        isVerified: true,
-        isActive: true,
-        lastLoginAt: true,
-        createdAt: true,
-        updatedAt: true,
-      },
+    // Update user and profile in a transaction
+    const user = await prisma.$transaction(async (tx) => {
+      const updatedUser = await tx.dashboardUser.update({
+        where: { id },
+        data: userData as any,
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          phone: true,
+          avatar: true,
+          role: true,
+          isVerified: true,
+          isActive: true,
+          lastLoginAt: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+
+      if (
+        updatedUser.role === "CHEF" &&
+        (specialty !== undefined || hourlyRate !== undefined)
+      ) {
+        await tx.chefProfile.update({
+          where: { dashboardUserId: id },
+          data: {
+            specialty: specialty || undefined,
+            hourlyRate:
+              hourlyRate !== undefined ? Number(hourlyRate) : undefined,
+          },
+        });
+      }
+
+      return updatedUser;
     });
 
     return NextResponse.json({
@@ -166,7 +184,7 @@ export async function PATCH(
     console.error("Update dashboard user error:", error);
     return NextResponse.json(
       { success: false, error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -174,7 +192,7 @@ export async function PATCH(
 // DELETE /api/dashboard-users/[id] - Delete a dashboard user
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     // Verify admin session
@@ -186,7 +204,7 @@ export async function DELETE(
     ) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -196,7 +214,7 @@ export async function DELETE(
     if (session.userId === id) {
       return NextResponse.json(
         { success: false, error: "Cannot delete your own account" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -208,7 +226,7 @@ export async function DELETE(
     if (!existingUser) {
       return NextResponse.json(
         { success: false, error: "Dashboard user not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -225,7 +243,7 @@ export async function DELETE(
     console.error("Delete dashboard user error:", error);
     return NextResponse.json(
       { success: false, error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

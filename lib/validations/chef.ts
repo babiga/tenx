@@ -1,0 +1,15 @@
+import { z } from "zod";
+
+export const chefProfileSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters").max(100),
+  phone: z.string(),
+  avatar: z.string(),
+  coverImage: z.string(),
+  specialty: z.string().min(2, "Specialty is required"),
+  bio: z.string().max(1000, "Bio is too long"),
+  yearsExperience: z.coerce.number().min(0).max(50),
+  hourlyRate: z.coerce.number().min(0),
+  certifications: z.array(z.string()),
+});
+
+export type ChefProfileData = z.infer<typeof chefProfileSchema>;

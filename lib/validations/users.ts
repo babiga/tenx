@@ -79,6 +79,8 @@ export const createDashboardUserApiSchema = z.object({
     .nullable()
     .or(z.literal("")),
   role: z.enum(["ADMIN", "CHEF", "COMPANY"]),
+  specialty: z.string().optional(),
+  hourlyRate: z.coerce.number().optional(),
 });
 
 // Dashboard user update schema
@@ -94,6 +96,8 @@ export const updateDashboardUserSchema = z.object({
     .optional()
     .nullable()
     .or(z.literal("")),
+  specialty: z.string().optional(),
+  hourlyRate: z.coerce.number().optional(),
 });
 
 // Status toggle schemas

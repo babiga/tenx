@@ -121,7 +121,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
             >
               <a href="#">
                 <ArrowUpCircleIcon className="h-5 w-5" />
-                <span className="text-base font-semibold">Tenx Catering</span>
+                <span className="text-base font-semibold">Mongolian National Caterer</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

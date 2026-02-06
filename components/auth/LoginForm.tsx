@@ -161,7 +161,7 @@ export function LoginForm() {
         <span className="text-muted-foreground">{t("noAccount")} </span>
         <Link
           href="/signup"
-          className="text-primary hover:text-primary/80 transition-colors font-bold tracking-widest text-xs ml-1"
+          className="text-primary hover:text-primary/80 transition-colors font-medium ml-1"
         >
           {t("signUp")}
         </Link>

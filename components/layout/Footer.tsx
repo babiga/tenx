@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           <div className="md:col-span-1">
-            <h2 className="text-3xl font-serif font-bold text-white mb-6 tracking-wide uppercase">TENX CATERING</h2>
+            <h2 className="text-3xl font-serif font-bold text-white mb-6 tracking-wide uppercase">Mongolian National Caterer</h2>
             <p className="text-muted-foreground text-sm leading-relaxed mb-6">
               {t("description")}
             </p>

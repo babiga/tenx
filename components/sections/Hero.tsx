@@ -49,7 +49,7 @@ export default function Hero() {
               <motion.img
                 key={image}
                 src={image}
-                alt={`Tenx Catering ${index + 1}`}
+                alt={`Mongolian National Caterer ${index + 1}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 0.6 }}
                 exit={{ opacity: 0 }}

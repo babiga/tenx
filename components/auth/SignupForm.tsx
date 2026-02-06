@@ -566,7 +566,7 @@ export function SignupForm() {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full h-14 bg-primary text-black hover:bg-primary/90 rounded-none font-bold text-base transition-all duration-300 btn-glow mt-6"
+                  className="w-full h-14 bg-primary text-black hover:bg-primary/90 rounded-none font-medium text-base transition-all duration-300 btn-glow mt-6"
                 >
                   {isLoading ? t("submitting") : t("submit")}
                 </Button>
@@ -580,7 +580,7 @@ export function SignupForm() {
         <span className="text-muted-foreground">{t("hasAccount")} </span>
         <Link
           href="/login"
-          className="text-primary hover:text-primary/80 transition-colors font-semibold tracking-widest text-xs ml-1"
+          className="text-primary hover:text-primary/80 transition-colors font-medium ml-1"
         >
           {t("signIn")}
         </Link>

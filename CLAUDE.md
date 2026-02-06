@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Tenx Catering is a high-end catering platform built with Next.js 16. The platform serves customers booking catering services and has a separate dashboard for chefs, companies, and admins.
+Mongolian National Caterer is a high-end catering platform built with Next.js 16. The platform serves customers booking catering services and has a separate dashboard for chefs, companies, and admins.
 
 ## Development Commands
 

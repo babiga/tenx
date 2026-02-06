@@ -33,9 +33,9 @@ export default function Navbar() {
   const navLinks = [
     { name: t("services"), href: "#services" },
     { name: t("howItWorks"), href: "#how-it-works" },
-    { name: t("vip"), href: "#vip" },
     { name: t("chefs"), href: "#chefs" },
     { name: t("events"), href: "#events" },
+    { name: t("international"), href: "#" },
   ];
 
   const handleLocaleChange = (newLocale: string) => {
@@ -48,8 +48,8 @@ export default function Navbar() {
         }`}
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <Link href="/" className="text-2xl font-serif tracking-wider font-bold text-foreground uppercase">
-          Tenx Catering
+        <Link href="/" className="md:text-xl lg:text-2xl font-serif tracking-wider font-bold text-foreground uppercase">
+          Mongolian National Caterer
         </Link>
 
         {/* Desktop Nav */}
@@ -81,9 +81,9 @@ export default function Navbar() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-black transition-all">
+          <Link href={"/login"}><Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-black transition-all">
             {t("bookNow")}
-          </Button>
+          </Button></Link>
         </div>
 
         {/* Mobile Nav */}

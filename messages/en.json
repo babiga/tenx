@@ -19,7 +19,7 @@
             "signUp": "Sign up"
         },
         "signup": {
-            "title": "Join Tenx Catering",
+            "title": "Join Mongolian National Caterer",
             "subtitle": "Create your account and discover exceptional culinary experiences",
             "tabs": {
                 "individual": "Individual",
@@ -86,7 +86,8 @@
         "vip": "VIP Experience",
         "chefs": "Our Chefs",
         "events": "Events",
-        "bookNow": "Book Now"
+        "bookNow": "Book Now",
+        "international": "International"
     },
     "Footer": {
         "description": "Where luxury catering meets world-class culinary artistry.",
@@ -104,14 +105,14 @@
         "newsletterDesc": "Receive curated menus and exclusive offers.",
         "emailPlaceholder": "Email Address",
         "join": "Join",
-        "allRightsReserved": "© Tenx Catering. All rights reserved.",
+        "allRightsReserved": "© Mongolian National Caterer. All rights reserved.",
         "privacyPolicy": "Privacy Policy",
         "termsOfService": "Terms of Service",
         "sitemap": "Sitemap"
     },
     "Hero": {
         "tagline": "Private Events • Corporate Catering • VIP Experiences",
-        "title1": "Tenx Catering —",
+        "title1": "Mongolian National Caterer —",
         "title2": "Crafting Unforgettable Culinary Moments",
         "bookCatering": "Book Catering",
         "requestQuote": "Request a Quote",
@@ -119,7 +120,7 @@
     },
     "Services": {
         "title": "Our Services",
-        "description": "From intimate gatherings to grand corporate galas, Tenx Catering delivers excellence in every detail.",
+        "description": "From intimate gatherings to grand corporate galas, Mongolian National Caterer delivers excellence in every detail.",
         "corporate": {
             "title": "Corporate Catering",
             "description": "Elevating business luncheons, board meetings, and executive events with a premium culinary touch."
@@ -219,7 +220,7 @@
     },
     "Events": {
         "title": "Unforgettable Occasions",
-        "description": "Recent highlights from the world of Tenx Catering.",
+        "description": "Recent highlights from the world of Mongolian National Caterer.",
         "guests": "Guests",
         "types": {
             "Wedding": "Wedding",
@@ -230,7 +231,7 @@
     },
     "Home": {
         "ctaTitle": "Elevate Your Next Occasion Above the Ordinary",
-        "ctaDescription": "Experience the Tenx Catering distinction. Our team of world-class chefs and event specialists are ready to transform your vision into an unforgettable reality.",
+        "ctaDescription": "Experience the Mongolian National Caterer distinction. Our team of world-class chefs and event specialists are ready to transform your vision into an unforgettable reality.",
         "startJourney": "Start My Journey",
         "consultation": "Private Consultation"
     },

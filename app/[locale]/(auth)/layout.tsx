@@ -29,7 +29,7 @@ export default async function AuthLayout({
         {/* Background image */}
         <img
           src="/hero-food.png"
-          alt="Tenx Catering"
+          alt="Mongolian National Caterer"
           className="absolute inset-0 w-full h-full object-cover opacity-70"
         />
         {/* Gradient overlay */}
@@ -41,7 +41,7 @@ export default async function AuthLayout({
           {/* Logo */}
           <div>
             <h2 className="text-xl font-semibold text-foreground">
-              Tenx <span className="text-primary">Catering</span>
+              Mongolian <span className="text-primary">National</span> Caterer
             </h2>
           </div>
 

@@ -26,18 +26,18 @@ export function generateStaticParams() {
 }
 
 export const metadata: Metadata = {
-  title: "Tenx Catering | Crafted for Unforgettable Moments",
+  title: "Mongolian National Caterer | Crafted for Unforgettable Moments",
   description:
     "Premium high-end catering for private events, corporate functions, and VIP occasions.",
   openGraph: {
-    title: "Tenx Catering | Crafted for Unforgettable Moments",
+    title: "Mongolian National Caterer | Crafted for Unforgettable Moments",
     description:
       "Premium high-end catering for private events, corporate functions, and VIP occasions.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tenx Catering",
+    title: "Mongolian National Caterer",
     description: "Premium luxury catering services.",
   },
 };

@@ -1,6 +1,6 @@
-Design a stunning, Awwwards-level website for Tenx Catering, a premium catering company (not a platform or marketplace).
+Design a stunning, Awwwards-level website for Mongolian National Caterer, a premium catering company (not a platform or marketplace).
 
-Tenx Catering provides high-end catering for private events, corporate functions, weddings, and VIP occasions, with online ordering, secure payments, and event booking built directly into the website.
+Mongolian National Caterer provides high-end catering for private events, corporate functions, weddings, and VIP occasions, with online ordering, secure payments, and event booking built directly into the website.
 
 Style & Mood:
 Luxury, elegant, modern, and warm.
@@ -19,7 +19,7 @@ Subtle animated counters for events served, clients, and experience.
 
 Hero Section:
 Full-screen cinematic hero with food imagery and soft motion overlay.
-Headline: “Tenx Catering — Crafted for Unforgettable Moments”
+Headline: “Mongolian National Caterer — Crafted for Unforgettable Moments”
 Subtext: Private Events • Corporate Catering • VIP Experiences
 Primary CTAs: Order Catering / Request a Quote
 

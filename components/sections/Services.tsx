@@ -59,7 +59,7 @@ export default function Services() {
                 <img
                   src={service.image}
                   alt={t(`${service.key}.title`)}
-                  className="w-full h-full object-cover md:grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent md:bg-black/60 md:group-hover:bg-black/40 transition-colors" />
                 <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">

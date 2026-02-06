@@ -10,8 +10,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Tenx Catering Dashboard",
-  description: "Admin dashboard for Tenx Catering",
+  title: "Mongolian National Caterer Dashboard",
+  description: "Admin dashboard for Mongolian National Caterer",
 };
 
 export default function RootLayout({

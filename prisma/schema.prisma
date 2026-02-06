@@ -1,4 +1,4 @@
-// Tenx Catering Platform - Prisma Schema
+// Mongolian National Caterer Platform - Prisma Schema
 // Separated User (customers) and DashboardUser (chefs, companies, admins)
 
 generator client {

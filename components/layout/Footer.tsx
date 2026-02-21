@@ -1,8 +1,26 @@
+import * as LucideIcons from "lucide-react";
 import { Facebook, Instagram, Twitter } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-export default function Footer() {
+interface SocialLinkType {
+  id: string;
+  icon: string | null;
+  link: string | null;
+  title: string | null;
+}
+
+export default function Footer({ socialLinks }: { socialLinks?: SocialLinkType[] }) {
   const t = useTranslations("Footer");
+
+  // Helper to safely render lucide icons
+  const renderIcon = (iconName: string | null) => {
+    if (!iconName) return <Facebook className="w-5 h-5" />;
+
+    // Default to Facebook if icon not found
+    const IconComponent = (LucideIcons as any)[iconName] || Facebook;
+    return <IconComponent className="w-5 h-5" />;
+  };
+
   return (
     <footer className="bg-black py-16 border-t border-white/10">
       <div className="container mx-auto px-6">
@@ -13,9 +31,19 @@ export default function Footer() {
               {t("description")}
             </p>
             <div className="flex gap-4">
-              <a href="#" className="text-white/60 hover:text-primary transition-colors"><Instagram className="w-5 h-5" /></a>
-              <a href="#" className="text-white/60 hover:text-primary transition-colors"><Twitter className="w-5 h-5" /></a>
-              <a href="#" className="text-white/60 hover:text-primary transition-colors"><Facebook className="w-5 h-5" /></a>
+              {socialLinks && socialLinks.length > 0 ? (
+                socialLinks.map((social) => (
+                  <a key={social.id} href={social.link || "#"} className="text-white/60 hover:text-primary transition-colors" title={social.title || ""}>
+                    {renderIcon(social.icon)}
+                  </a>
+                ))
+              ) : (
+                <>
+                  <a href="#" className="text-white/60 hover:text-primary transition-colors"><Instagram className="w-5 h-5" /></a>
+                  <a href="#" className="text-white/60 hover:text-primary transition-colors"><Twitter className="w-5 h-5" /></a>
+                  <a href="#" className="text-white/60 hover:text-primary transition-colors"><Facebook className="w-5 h-5" /></a>
+                </>
+              )}
             </div>
           </div>
 

@@ -507,3 +507,28 @@ model DashboardNotification {
 
   createdAt DateTime @default(now())
 }
+
+// ============================================
+// SITE CONTENTS
+// ============================================
+
+enum ContentType {
+  BANNER
+  SOCIAL_LINK
+  PARTNER
+}
+
+model SiteContent {
+  id        String      @id @default(cuid())
+  type      ContentType
+  title     String?
+  subtitle  String?
+  imageUrl  String?
+  link      String?
+  icon      String?
+  isActive  Boolean     @default(true)
+  sortOrder Int         @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

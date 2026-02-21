@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 
-// Static hero images - replace with your actual images
-const heroImages = [
+// Static hero images fallback
+const staticHeroImages = [
   "/tenx-hero.png",
   "/tenx-hero-2.jpg",
   "/tenx-hero-3.jpg",
@@ -22,11 +22,26 @@ function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
-export default function Hero() {
+interface BannerType {
+  id: string;
+  title: string | null;
+  subtitle: string | null;
+  imageUrl: string | null;
+}
+
+export default function Hero({ banners }: { banners?: BannerType[] }) {
   const t = useTranslations("Hero");
 
+  // Determine images to show. If DB has banners, use them. Otherwise, use static fallback.
+  const heroImages = useMemo(() => {
+    if (banners && banners.length > 0) {
+      return banners.filter((b) => b.imageUrl).map((b) => b.imageUrl as string);
+    }
+    return staticHeroImages;
+  }, [banners]);
+
   // Shuffle images on component mount
-  const shuffledImages = useMemo(() => shuffleArray(heroImages), []);
+  const shuffledImages = useMemo(() => shuffleArray(heroImages), [heroImages]);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -37,7 +52,7 @@ export default function Hero() {
     }, 5000); // Change image every 5 seconds
 
     return () => clearInterval(interval);
-  }, []);
+  }, [shuffledImages.length]);
 
   return (
     <section className="relative h-screen w-full overflow-hidden flex items-center justify-center">
@@ -47,7 +62,7 @@ export default function Hero() {
           {shuffledImages.map((image, index) => (
             index === currentImageIndex && (
               <motion.img
-                key={image}
+                key={`${image}-${index}`}
                 src={image}
                 alt={`Mongolian National Caterer ${index + 1}`}
                 initial={{ opacity: 0 }}

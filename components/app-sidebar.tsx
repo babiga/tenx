@@ -48,6 +48,11 @@ const data = {
       icon: PartyPopperIcon,
     },
     {
+      title: "Contents",
+      url: "/dashboard/contents",
+      icon: LayoutDashboardIcon,
+    },
+    {
       title: "Jobs",
       url: "/dashboard/jobs",
       icon: BriefcaseIcon,

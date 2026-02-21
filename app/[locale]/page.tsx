@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/sections/Hero";
 import Services from "@/components/sections/Services";
@@ -9,13 +9,33 @@ import VIPSection from "@/components/sections/VIPSection";
 import Chefs from "@/components/sections/Chefs";
 import Events from "@/components/sections/Events";
 import Footer from "@/components/layout/Footer";
+import { prisma } from "@/lib/prisma";
 
-export default function Home() {
-  const t = useTranslations("Home");
+export default async function Home() {
+  const t = await getTranslations("Home");
+
+  const [dbBanners, dbPartners, dbSocialLinks] = await Promise.all([
+    prisma.siteContent.findMany({ where: { type: "BANNER", isActive: true }, orderBy: { sortOrder: "asc" } }),
+    prisma.siteContent.findMany({ where: { type: "PARTNER", isActive: true }, orderBy: { sortOrder: "asc" } }),
+    prisma.siteContent.findMany({ where: { type: "SOCIAL_LINK", isActive: true }, orderBy: { sortOrder: "asc" } }),
+  ]);
+
+  const banners = dbBanners.map(b => ({
+    id: b.id, title: b.title, subtitle: b.subtitle, imageUrl: b.imageUrl
+  }));
+
+  const partners = dbPartners.map(p => ({
+    id: p.id, title: p.title, imageUrl: p.imageUrl
+  }));
+
+  const socialLinks = dbSocialLinks.map(s => ({
+    id: s.id, title: s.title, link: s.link, icon: s.icon
+  }));
+
   return (
     <div className="min-h-screen text-foreground overflow-x-hidden">
       <Navbar />
-      <Hero />
+      <Hero banners={banners} />
       <Services />
       <HowItWorks />
       <SignatureMenus />
@@ -39,19 +59,42 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="py-20 border-t border-white/5 overflow-hidden">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-30 grayscale hover:grayscale-0 transition-all duration-700">
-            <span className="text-2xl font-serif font-bold tracking-[0.3em]">VOGUE</span>
-            <span className="text-2xl font-serif font-bold tracking-[0.3em]">FORBES</span>
-            <span className="text-2xl font-serif font-bold tracking-[0.3em]">EATER</span>
-            <span className="text-2xl font-serif font-bold tracking-[0.3em]">MICHELIN</span>
-            <span className="text-2xl font-serif font-bold tracking-[0.3em]">ROBB REPORT</span>
+      {partners.length > 0 ? (
+        <div className="py-20 border-t border-white/5 overflow-hidden">
+          <div className="container mx-auto px-6">
+            <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-30 grayscale hover:grayscale-0 transition-all duration-700">
+              {partners.map((partner) => (
+                partner.imageUrl ? (
+                  <img
+                    key={partner.id}
+                    src={partner.imageUrl}
+                    alt={partner.title || "Partner"}
+                    className="h-12 object-contain"
+                  />
+                ) : (
+                  <span key={partner.id} className="text-2xl font-serif font-bold tracking-[0.3em] uppercase">
+                    {partner.title}
+                  </span>
+                )
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="py-20 border-t border-white/5 overflow-hidden">
+          <div className="container mx-auto px-6">
+            <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-30 grayscale hover:grayscale-0 transition-all duration-700">
+              <span className="text-2xl font-serif font-bold tracking-[0.3em]">VOGUE</span>
+              <span className="text-2xl font-serif font-bold tracking-[0.3em]">FORBES</span>
+              <span className="text-2xl font-serif font-bold tracking-[0.3em]">EATER</span>
+              <span className="text-2xl font-serif font-bold tracking-[0.3em]">MICHELIN</span>
+              <span className="text-2xl font-serif font-bold tracking-[0.3em]">ROBB REPORT</span>
+            </div>
+          </div>
+        </div>
+      )}
 
-      <Footer />
+      <Footer socialLinks={socialLinks} />
     </div>
   );
 }

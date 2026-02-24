@@ -160,7 +160,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { email, password, phone, ...data } = result.data;
+    const { email, password, phone, avatar, ...data } = result.data;
 
     // Check if email exists in DashboardUser
     const existingDashboardUser = await prisma.dashboardUser.findUnique({
@@ -196,6 +196,7 @@ export async function POST(request: NextRequest) {
           ...data,
           email,
           phone: phone || null,
+          avatar: avatar || null,
           password: hashedPassword,
           isVerified: false,
           isActive: true,

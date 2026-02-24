@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ImageUpload } from "@/components/ui/image-upload";
 import {
   Form,
   FormControl,
@@ -72,6 +73,7 @@ export function DashboardUserFormSheet({
       password: "",
       confirmPassword: "",
       phone: "",
+      avatar: "",
       role: "CHEF",
     },
   });
@@ -81,6 +83,7 @@ export function DashboardUserFormSheet({
     defaultValues: {
       name: "",
       phone: "",
+      avatar: "",
     },
   });
 
@@ -89,6 +92,7 @@ export function DashboardUserFormSheet({
       editForm.reset({
         name: user.name || "",
         phone: user.phone || "",
+        avatar: user.avatar || "",
       });
     }
     if (isCreate) {
@@ -98,6 +102,7 @@ export function DashboardUserFormSheet({
         password: "",
         confirmPassword: "",
         phone: "",
+        avatar: "",
         role: "CHEF",
       });
     }
@@ -233,6 +238,25 @@ export function DashboardUserFormSheet({
 
               <FormField
                 control={createForm.control}
+                name="avatar"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Avatar (Optional)</FormLabel>
+                    <FormControl>
+                      <ImageUpload
+                        value={field.value || null}
+                        onChange={field.onChange}
+                        onRemove={() => field.onChange("")}
+                        disabled={isPending}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={createForm.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
@@ -350,6 +374,25 @@ export function DashboardUserFormSheet({
                     <FormLabel>Name</FormLabel>
                     <FormControl>
                       <Input placeholder="Full name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={editForm.control}
+                name="avatar"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Avatar (Optional)</FormLabel>
+                    <FormControl>
+                      <ImageUpload
+                        value={field.value || null}
+                        onChange={field.onChange}
+                        onRemove={() => field.onChange("")}
+                        disabled={isPending}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

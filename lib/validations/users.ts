@@ -58,6 +58,7 @@ export const createDashboardUserSchema = z
       .optional()
       .nullable()
       .or(z.literal("")),
+    avatar: z.string().optional().nullable().or(z.literal("")),
     role: z.enum(["ADMIN", "CHEF", "COMPANY"], {
       required_error: "Please select a role",
     }),
@@ -78,6 +79,7 @@ export const createDashboardUserApiSchema = z.object({
     .optional()
     .nullable()
     .or(z.literal("")),
+  avatar: z.string().optional().nullable().or(z.literal("")),
   role: z.enum(["ADMIN", "CHEF", "COMPANY"]),
   specialty: z.string().optional(),
   hourlyRate: z.coerce.number().optional(),
@@ -96,6 +98,7 @@ export const updateDashboardUserSchema = z.object({
     .optional()
     .nullable()
     .or(z.literal("")),
+  avatar: z.string().optional().nullable().or(z.literal("")),
   specialty: z.string().optional(),
   hourlyRate: z.coerce.number().optional(),
 });

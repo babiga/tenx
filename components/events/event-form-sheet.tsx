@@ -5,7 +5,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { format } from "date-fns";
-import { CalendarIcon, UsersIcon } from "lucide-react";
+import {
+    CalendarIcon,
+    ImagePlusIcon,
+    Loader2Icon,
+    UsersIcon,
+    XIcon,
+} from "lucide-react";
 
 import {
     createEventSchema,
@@ -42,6 +48,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { ImageUpload } from "@/components/ui/image-upload";
 import type { EventItem } from "./events-columns";
 
 interface EventFormSheetProps {
@@ -66,6 +73,27 @@ const eventTypeColors: Record<string, string> = {
     SOCIAL: "bg-amber-500/10 text-amber-500 border-amber-500/20",
 };
 
+async function uploadImage(file: File): Promise<string> {
+    if (file.size > 5 * 1024 * 1024) {
+        throw new Error("File size must be less than 5MB");
+    }
+
+    const response = await fetch(
+        `/api/upload?filename=${encodeURIComponent(file.name)}`,
+        {
+            method: "POST",
+            body: file,
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("Upload failed");
+    }
+
+    const blob = await response.json();
+    return blob.url as string;
+}
+
 export function EventFormSheet({
     open,
     onOpenChange,
@@ -74,6 +102,8 @@ export function EventFormSheet({
     onSuccess,
 }: EventFormSheetProps) {
     const [isPending, setIsPending] = useState(false);
+    const [isUploadingGallery, setIsUploadingGallery] = useState(false);
+
     const isCreate = mode === "create";
     const isEdit = mode === "edit";
     const isView = mode === "view";
@@ -86,7 +116,8 @@ export function EventFormSheet({
             eventType: "CORPORATE",
             guestCount: 50,
             eventDate: "",
-            images: [],
+            coverImageUrl: "",
+            imageUrls: [],
             isFeatured: false,
             chefProfileId: null,
             companyProfileId: null,
@@ -101,6 +132,8 @@ export function EventFormSheet({
             eventType: "CORPORATE",
             guestCount: 50,
             eventDate: "",
+            coverImageUrl: "",
+            imageUrls: [],
             isFeatured: false,
         },
     });
@@ -115,6 +148,8 @@ export function EventFormSheet({
                 eventDate: event.eventDate
                     ? new Date(event.eventDate).toISOString().split("T")[0]
                     : "",
+                coverImageUrl: event.coverImageUrl || "",
+                imageUrls: event.imageUrls || [],
                 isFeatured: event.isFeatured,
             });
         }
@@ -125,7 +160,8 @@ export function EventFormSheet({
                 eventType: "CORPORATE",
                 guestCount: 50,
                 eventDate: "",
-                images: [],
+                coverImageUrl: "",
+                imageUrls: [],
                 isFeatured: false,
                 chefProfileId: null,
                 companyProfileId: null,
@@ -185,6 +221,29 @@ export function EventFormSheet({
             toast.error("Something went wrong");
         } finally {
             setIsPending(false);
+        }
+    }
+
+    async function handleGalleryUpload(
+        files: FileList | null,
+        onChange: (urls: string[]) => void,
+        currentUrls: string[]
+    ) {
+        if (!files?.length) return;
+
+        setIsUploadingGallery(true);
+        try {
+            const uploadedUrls = await Promise.all(
+                Array.from(files).map((file) => uploadImage(file))
+            );
+            onChange([...currentUrls, ...uploadedUrls]);
+            toast.success("Gallery images uploaded successfully");
+        } catch (error) {
+            const message =
+                error instanceof Error ? error.message : "Failed to upload images";
+            toast.error(message);
+        } finally {
+            setIsUploadingGallery(false);
         }
     }
 
@@ -287,6 +346,110 @@ export function EventFormSheet({
                 />
                 <FormField
                     control={form.control}
+                    name="coverImageUrl"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Featured Image</FormLabel>
+                            <FormControl>
+                                <ImageUpload
+                                    value={field.value ?? null}
+                                    onChange={field.onChange}
+                                    onRemove={() => field.onChange("")}
+                                    disabled={isPending || isUploadingGallery}
+                                    aspectRatio="video"
+                                />
+                            </FormControl>
+                            <FormDescription className="text-xs">
+                                This image is used as the event cover.
+                            </FormDescription>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="imageUrls"
+                    render={({ field }) => {
+                        const urls = (field.value as string[] | undefined) || [];
+                        return (
+                            <FormItem>
+                                <div className="flex items-center justify-between">
+                                    <FormLabel>Gallery Images</FormLabel>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        disabled={isPending || isUploadingGallery}
+                                        onClick={() => {
+                                            const input = document.getElementById("event-gallery-upload");
+                                            input?.click();
+                                        }}
+                                    >
+                                        {isUploadingGallery ? (
+                                            <Loader2Icon className="h-4 w-4 animate-spin" />
+                                        ) : (
+                                            <ImagePlusIcon className="h-4 w-4" />
+                                        )}
+                                        Add Images
+                                    </Button>
+                                </div>
+                                <FormControl>
+                                    <input
+                                        id="event-gallery-upload"
+                                        type="file"
+                                        accept="image/*"
+                                        multiple
+                                        className="hidden"
+                                        onChange={async (e) => {
+                                            await handleGalleryUpload(
+                                                e.target.files,
+                                                field.onChange,
+                                                urls
+                                            );
+                                            e.target.value = "";
+                                        }}
+                                        disabled={isPending || isUploadingGallery}
+                                    />
+                                </FormControl>
+                                {urls.length > 0 ? (
+                                    <div className="grid grid-cols-3 gap-2">
+                                        {urls.map((url, index) => (
+                                            <div
+                                                key={`${url}-${index}`}
+                                                className="relative aspect-square overflow-hidden rounded-md border"
+                                            >
+                                                <img
+                                                    src={url}
+                                                    alt={`Gallery image ${index + 1}`}
+                                                    className="h-full w-full object-cover"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    className="absolute right-1 top-1 rounded-full bg-destructive p-1 text-white"
+                                                    onClick={() =>
+                                                        field.onChange(
+                                                            urls.filter((_, i) => i !== index)
+                                                        )
+                                                    }
+                                                    disabled={isPending || isUploadingGallery}
+                                                >
+                                                    <XIcon className="h-3 w-3" />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="text-xs text-muted-foreground">
+                                        No gallery images uploaded yet.
+                                    </p>
+                                )}
+                                <FormMessage />
+                            </FormItem>
+                        );
+                    }}
+                />
+                <FormField
+                    control={form.control}
                     name="isFeatured"
                     render={({ field }) => (
                         <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3">
@@ -355,7 +518,7 @@ export function EventFormSheet({
                             {renderFormFields(createForm)}
                             <SheetFooter className="mt-auto pt-4">
                                 <SheetClose asChild><Button type="button" variant="outline">Cancel</Button></SheetClose>
-                                <Button type="submit" disabled={isPending}>{isPending ? "Creating..." : "Create Event"}</Button>
+                                <Button type="submit" disabled={isPending || isUploadingGallery}>{isPending ? "Creating..." : "Create Event"}</Button>
                             </SheetFooter>
                         </form>
                     </Form>
@@ -367,7 +530,7 @@ export function EventFormSheet({
                             {renderFormFields(editForm)}
                             <SheetFooter className="mt-auto pt-4">
                                 <SheetClose asChild><Button type="button" variant="outline">Cancel</Button></SheetClose>
-                                <Button type="submit" disabled={isPending}>{isPending ? "Saving..." : "Save Changes"}</Button>
+                                <Button type="submit" disabled={isPending || isUploadingGallery}>{isPending ? "Saving..." : "Save Changes"}</Button>
                             </SheetFooter>
                         </form>
                     </Form>
@@ -375,6 +538,37 @@ export function EventFormSheet({
 
                 {isView && event && (
                     <div className="flex flex-1 flex-col gap-4 py-4 text-sm">
+                        {event.coverImageUrl && (
+                            <div>
+                                <label className="text-muted-foreground">Featured Image</label>
+                                <div className="mt-1 overflow-hidden rounded-md border">
+                                    <img
+                                        src={event.coverImageUrl}
+                                        alt={`${event.title} cover`}
+                                        className="h-40 w-full object-cover"
+                                    />
+                                </div>
+                            </div>
+                        )}
+                        {event.imageUrls?.length > 0 && (
+                            <div>
+                                <label className="text-muted-foreground">Gallery</label>
+                                <div className="mt-1 grid grid-cols-3 gap-2">
+                                    {event.imageUrls.map((url, index) => (
+                                        <div
+                                            key={`${url}-${index}`}
+                                            className="aspect-square overflow-hidden rounded-md border"
+                                        >
+                                            <img
+                                                src={url}
+                                                alt={`Event gallery ${index + 1}`}
+                                                className="h-full w-full object-cover"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                         {event.description && (
                             <div>
                                 <label className="text-muted-foreground">Description</label>
@@ -401,13 +595,13 @@ export function EventFormSheet({
                             <div>
                                 <label className="text-muted-foreground">Chef</label>
                                 <p className="font-medium">
-                                    {event.chefProfile?.dashboardUser?.name || "—"}
+                                    {event.chefProfile?.dashboardUser?.name || "-"}
                                 </p>
                             </div>
                             <div>
                                 <label className="text-muted-foreground">Company</label>
                                 <p className="font-medium">
-                                    {event.companyProfile?.dashboardUser?.name || "—"}
+                                    {event.companyProfile?.dashboardUser?.name || "-"}
                                 </p>
                             </div>
                         </div>

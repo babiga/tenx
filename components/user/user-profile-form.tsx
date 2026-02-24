@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
@@ -128,12 +129,10 @@ export function UserProfileForm({ initialData }: UserProfileFormProps) {
                   </FormItem>
                 )}
               />
-              <FormItem>
-                <FormLabel>{t("fields.email")}</FormLabel>
-                <FormControl>
-                  <Input value={initialData.email} disabled />
-                </FormControl>
-              </FormItem>
+              <div className="space-y-2">
+                <Label htmlFor="email">{t("fields.email")}</Label>
+                <Input id="email" value={initialData.email} disabled readOnly />
+              </div>
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -179,40 +178,47 @@ export function UserProfileForm({ initialData }: UserProfileFormProps) {
                   <FormItem>
                     <FormLabel>{t("fields.phone")}</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder={t("placeholders.phone")}
-                        {...field}
-                      />
+                      <Input placeholder={t("placeholders.phone")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <FormItem>
-                <FormLabel>{t("fields.userType")}</FormLabel>
-                <FormControl>
-                  <Input
-                    value={t(`userType.${initialData.userType}`)}
-                    disabled
-                  />
-                </FormControl>
-              </FormItem>
+              <div className="space-y-2">
+                <Label htmlFor="user-type">{t("fields.userType")}</Label>
+                <Input
+                  id="user-type"
+                  value={t(`userType.${initialData.userType}`)}
+                  disabled
+                  readOnly
+                />
+              </div>
             </div>
 
             {initialData.userType === "CORPORATE" && (
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <FormItem>
-                  <FormLabel>{t("fields.organizationName")}</FormLabel>
-                  <FormControl>
-                    <Input value={initialData.organizationName || "-"} disabled />
-                  </FormControl>
-                </FormItem>
-                <FormItem>
-                  <FormLabel>{t("fields.companyLegalNo")}</FormLabel>
-                  <FormControl>
-                    <Input value={initialData.companyLegalNo || "-"} disabled />
-                  </FormControl>
-                </FormItem>
+                <div className="space-y-2">
+                  <Label htmlFor="organization-name">
+                    {t("fields.organizationName")}
+                  </Label>
+                  <Input
+                    id="organization-name"
+                    value={initialData.organizationName || "-"}
+                    disabled
+                    readOnly
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="company-legal-no">
+                    {t("fields.companyLegalNo")}
+                  </Label>
+                  <Input
+                    id="company-legal-no"
+                    value={initialData.companyLegalNo || "-"}
+                    disabled
+                    readOnly
+                  />
+                </div>
               </div>
             )}
 

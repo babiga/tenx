@@ -137,6 +137,9 @@ export async function PATCH(
     if (userData.phone === "") {
       userData.phone = null;
     }
+    if (userData.avatar === "") {
+      userData.avatar = null;
+    }
 
     // Update user and profile in a transaction
     const user = await prisma.$transaction(async (tx) => {

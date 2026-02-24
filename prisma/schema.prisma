@@ -303,7 +303,8 @@ model Event {
   description String?   @db.Text
   eventType   EventType
   guestCount  Int
-  images      String[]
+  coverImageUrl String?  @map("cover_image_url")
+  imageUrls     String[] @default([]) @map("image_urls")
   eventDate   DateTime?
 
   chefProfileId String?

@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { ImageUpload } from "@/components/ui/image-upload";
 import {
   Form,
   FormControl,
@@ -206,19 +207,37 @@ export function ContentFormSheet({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Image URL {type !== "BANNER" && "(Optional)"}
+                    {type === "BANNER"
+                      ? "Banner Image"
+                      : type === "PARTNER"
+                        ? "Partner Logo (Optional)"
+                        : "Image URL (Optional)"}
                   </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="https://example.com/image.jpg"
-                      {...field}
-                      value={field.value || ""}
-                    />
-                  </FormControl>
+                  {(type === "BANNER" || type === "PARTNER") ? (
+                    <FormControl>
+                      <ImageUpload
+                        value={field.value || null}
+                        onChange={field.onChange}
+                        onRemove={() => field.onChange("")}
+                        disabled={isPending}
+                        aspectRatio={type === "BANNER" ? "video" : "square"}
+                      />
+                    </FormControl>
+                  ) : (
+                    <FormControl>
+                      <Input
+                        placeholder="https://example.com/image.jpg"
+                        {...field}
+                        value={field.value || ""}
+                      />
+                    </FormControl>
+                  )}
                   <FormDescription>
                     {type === "BANNER"
-                      ? "URL for the main banner image."
-                      : "URL for the partner or social icon image."}
+                      ? "Upload the main banner image."
+                      : type === "PARTNER"
+                        ? "Upload a partner logo image."
+                        : "URL for the social icon image."}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

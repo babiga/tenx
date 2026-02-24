@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useState, useEffect } from "react";
 import { Menu } from "lucide-react";
@@ -14,11 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import BoringAvatar from "boring-avatars";
 
 const AVATAR_COLORS = ["#080F1D", "#12294F", "#31124B", "#4E215B", "#D4AF5A"];
@@ -97,11 +93,17 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-background/90 backdrop-blur-md py-4 border-b border-white/5" : "bg-transparent py-6"
-        }`}
+      className={`fixed top-0 w-full z-50 transition-all duration-500 ${
+        scrolled
+          ? "bg-background/90 backdrop-blur-md py-4 border-b border-white/5"
+          : "bg-transparent py-6"
+      }`}
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <Link href="/" className="md:text-xl lg:text-2xl font-serif tracking-wider font-bold text-foreground uppercase">
+        <Link
+          href="/"
+          className="md:text-xl lg:text-2xl font-serif tracking-wider font-bold text-foreground uppercase"
+        >
           Mongolian National Caterer
         </Link>
 
@@ -119,16 +121,29 @@ export default function Navbar() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="flex items-center gap-2 text-foreground/80 hover:text-primary">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="flex items-center gap-2 text-foreground/80 hover:text-primary"
+              >
                 <Globe className="h-4 w-4" />
                 <span className="uppercase">{locale}</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-background border-white/10">
-              <DropdownMenuItem onClick={() => handleLocaleChange('en')} className="hover:bg-primary/10 cursor-pointer">
+            <DropdownMenuContent
+              align="end"
+              className="bg-background border-white/10"
+            >
+              <DropdownMenuItem
+                onClick={() => handleLocaleChange("en")}
+                className="hover:bg-primary/10 cursor-pointer"
+              >
                 English
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleLocaleChange('mn')} className="hover:bg-primary/10 cursor-pointer">
+              <DropdownMenuItem
+                onClick={() => handleLocaleChange("mn")}
+                className="hover:bg-primary/10 cursor-pointer"
+              >
                 Монгол
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -137,11 +152,14 @@ export default function Navbar() {
           {currentUser ? (
             <button
               onClick={handleUserAvatarClick}
-              className="rounded-full transition-opacity hover:opacity-90"
+              className="rounded-full transition-opacity hover:opacity-90 cursor-pointer"
               aria-label="Open account"
             >
-              <Avatar className="h-9 w-9 border border-white/10">
-                <AvatarImage src={currentUser.avatar || undefined} alt={currentUser.name} />
+              <Avatar className="h-9 w-9 border border-white/30">
+                <AvatarImage
+                  src={currentUser.avatar || undefined}
+                  alt={currentUser.name}
+                />
                 <AvatarFallback className="bg-transparent p-0">
                   <BoringAvatar
                     size={36}
@@ -154,8 +172,11 @@ export default function Navbar() {
             </button>
           ) : (
             <Link href={"/login"}>
-              <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-black transition-all">
-                {t("bookNow")}
+              <Button
+                variant="outline"
+                className="border-primary text-primary hover:bg-primary hover:text-black transition-all"
+              >
+                {t("getStarted")}
               </Button>
             </Link>
           )}
@@ -169,7 +190,10 @@ export default function Navbar() {
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="bg-background border-l border-white/10 w-[80%]">
+            <SheetContent
+              side="right"
+              className="bg-background border-l border-white/10 w-[80%]"
+            >
               <div className="flex flex-col space-y-8 mt-12">
                 {navLinks.map((link) => (
                   <a
@@ -183,14 +207,14 @@ export default function Navbar() {
 
                 <div className="flex gap-4 pt-4 border-t border-white/5">
                   <button
-                    onClick={() => handleLocaleChange('en')}
-                    className={`text-sm uppercase tracking-widest ${locale === 'en' ? 'text-primary' : 'text-foreground/60'}`}
+                    onClick={() => handleLocaleChange("en")}
+                    className={`text-sm uppercase tracking-widest ${locale === "en" ? "text-primary" : "text-foreground/60"}`}
                   >
                     EN
                   </button>
                   <button
-                    onClick={() => handleLocaleChange('mn')}
-                    className={`text-sm uppercase tracking-widest ${locale === 'mn' ? 'text-primary' : 'text-foreground/60'}`}
+                    onClick={() => handleLocaleChange("mn")}
+                    className={`text-sm uppercase tracking-widest ${locale === "mn" ? "text-primary" : "text-foreground/60"}`}
                   >
                     MN
                   </button>
@@ -203,7 +227,10 @@ export default function Navbar() {
                     aria-label="Open account"
                   >
                     <Avatar className="h-10 w-10 border border-white/10">
-                      <AvatarImage src={currentUser.avatar || undefined} alt={currentUser.name} />
+                      <AvatarImage
+                        src={currentUser.avatar || undefined}
+                        alt={currentUser.name}
+                      />
                       <AvatarFallback className="bg-transparent p-0">
                         <BoringAvatar
                           size={40}
@@ -220,7 +247,7 @@ export default function Navbar() {
                 ) : (
                   <Link href="/login" className="w-full">
                     <Button className="bg-primary text-black hover:bg-primary/90 w-full">
-                      {t("bookNow")}
+                      {t("getStarted")}
                     </Button>
                   </Link>
                 )}

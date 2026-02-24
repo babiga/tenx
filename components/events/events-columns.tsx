@@ -21,7 +21,8 @@ export type EventItem = {
     description: string | null;
     eventType: "WEDDING" | "CORPORATE" | "PRIVATE" | "SOCIAL";
     guestCount: number;
-    images: string[];
+    coverImageUrl: string | null;
+    imageUrls: string[];
     eventDate: string | null;
     chefProfileId: string | null;
     companyProfileId: string | null;

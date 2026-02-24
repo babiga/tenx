@@ -20,7 +20,8 @@ export const createEventSchema = z.object({
     .min(1, "Guest count must be at least 1")
     .max(100000, "Guest count is too large"),
   eventDate: z.string().optional().nullable(),
-  images: z.array(z.string()).optional().default([]),
+  coverImageUrl: z.string().optional().nullable(),
+  imageUrls: z.array(z.string()).optional().default([]),
   chefProfileId: z.string().optional().nullable(),
   companyProfileId: z.string().optional().nullable(),
   isFeatured: z.boolean().optional().default(false),
@@ -45,7 +46,8 @@ export const updateEventSchema = z.object({
     .max(100000, "Guest count is too large")
     .optional(),
   eventDate: z.string().optional().nullable(),
-  images: z.array(z.string()).optional(),
+  coverImageUrl: z.string().optional().nullable(),
+  imageUrls: z.array(z.string()).optional(),
   chefProfileId: z.string().optional().nullable(),
   companyProfileId: z.string().optional().nullable(),
   isFeatured: z.boolean().optional(),

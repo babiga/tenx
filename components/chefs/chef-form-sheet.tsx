@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ImageUpload } from "@/components/ui/image-upload";
 import {
     Form,
     FormControl,
@@ -66,6 +67,7 @@ export function ChefFormSheet({
             password: "",
             confirmPassword: "",
             phone: "",
+            avatar: "",
             role: "CHEF",
         },
     });
@@ -75,6 +77,7 @@ export function ChefFormSheet({
         defaultValues: {
             name: "",
             phone: "",
+            avatar: "",
             specialty: "",
             hourlyRate: 0,
         },
@@ -85,6 +88,7 @@ export function ChefFormSheet({
             editForm.reset({
                 name: user.name || "",
                 phone: user.phone || "",
+                avatar: user.avatar || "",
                 specialty: user.chefProfile?.specialty || "",
                 hourlyRate: user.chefProfile?.hourlyRate || 0,
             });
@@ -96,6 +100,7 @@ export function ChefFormSheet({
                 password: "",
                 confirmPassword: "",
                 phone: "",
+                avatar: "",
                 role: "CHEF",
             });
         }
@@ -265,6 +270,24 @@ export function ChefFormSheet({
                                     </FormItem>
                                 )}
                             />
+                            <FormField
+                                control={createForm.control}
+                                name="avatar"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Avatar (Optional)</FormLabel>
+                                        <FormControl>
+                                            <ImageUpload
+                                                value={field.value || null}
+                                                onChange={field.onChange}
+                                                onRemove={() => field.onChange("")}
+                                                disabled={isPending}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                             <Separator />
                             <div className="grid grid-cols-2 gap-4">
                                 <FormField
@@ -319,6 +342,24 @@ export function ChefFormSheet({
                                     <FormItem>
                                         <FormLabel>Phone</FormLabel>
                                         <FormControl><Input placeholder="+976 99999999" {...field} value={field.value ?? ""} /></FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={editForm.control}
+                                name="avatar"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Avatar (Optional)</FormLabel>
+                                        <FormControl>
+                                            <ImageUpload
+                                                value={field.value || null}
+                                                onChange={field.onChange}
+                                                onRemove={() => field.onChange("")}
+                                                disabled={isPending}
+                                            />
+                                        </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}

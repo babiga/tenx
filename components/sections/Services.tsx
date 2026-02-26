@@ -4,25 +4,32 @@ import { motion } from "framer-motion";
 import { Utensils, Star, Trophy, ArrowRight, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
+
+type ServiceRoute = "corporate" | "private" | "wedding" | "vip";
 
 const serviceData = [
   {
     key: "corporate",
+    route: "corporate" as ServiceRoute,
     icon: Utensils,
     image: "https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=2070&auto=format&fit=crop"
   },
   {
     key: "private",
+    route: "private" as ServiceRoute,
     icon: Star,
     image: "https://images.unsplash.com/photo-1530062845289-9109b2c9c868?q=80&w=2072&auto=format&fit=crop"
   },
   {
     key: "weddings",
+    route: "wedding" as ServiceRoute,
     icon: Heart,
     image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop"
   },
   {
     key: "vip",
+    route: "vip" as ServiceRoute,
     icon: Trophy,
     image: "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=2074&auto=format&fit=crop"
   }
@@ -36,23 +43,46 @@ type ServiceTierType = {
   pricePerGuest: number;
 };
 
+function resolveServiceRoute(
+  name: string,
+  isVIP: boolean,
+  fallbackRoute: ServiceRoute,
+): ServiceRoute {
+  if (isVIP) return "vip";
+
+  const normalized = name.toLowerCase();
+  if (normalized.includes("wed")) return "wedding";
+  if (normalized.includes("priv")) return "private";
+  if (normalized.includes("corp") || normalized.includes("business")) return "corporate";
+  if (normalized.includes("vip")) return "vip";
+
+  return fallbackRoute;
+}
+
 export default function Services({ services }: { services?: ServiceTierType[] }) {
   const t = useTranslations("Services");
 
   const serviceCards = services && services.length > 0
-    ? services.map((service, index) => ({
-      id: service.id,
-      title: service.name,
-      description: service.description ?? "",
-      image: serviceData[index % serviceData.length].image,
-      icon: serviceData[index % serviceData.length].icon,
-    }))
+    ? services.map((service, index) => {
+      const visual = serviceData[index % serviceData.length];
+      const route = resolveServiceRoute(service.name, service.isVIP, visual.route);
+
+      return {
+        id: service.id,
+        title: service.name,
+        description: service.description ?? "",
+        image: visual.image,
+        icon: visual.icon,
+        href: `/services/${route}`,
+      };
+    })
     : serviceData.map((service) => ({
       id: service.key,
       title: t(`${service.key}.title`),
       description: t(`${service.key}.description`),
       image: service.image,
       icon: service.icon,
+      href: `/services/${service.route}`,
     }));
 
   return (
@@ -93,8 +123,10 @@ export default function Services({ services }: { services?: ServiceTierType[] })
                   <p className="text-white/80 text-sm max-w-xs mb-4 md:mb-6 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-500 translate-y-0 md:translate-y-4 md:group-hover:translate-y-0">
                     {service.description}
                   </p>
-                  <Button variant="link" className="text-primary p-0 h-auto w-fit group/btn text-sm md:text-base">
-                    {t("exploreMore")} <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                  <Button asChild variant="link" className="text-primary p-0 h-auto w-fit group/btn text-sm md:text-base">
+                    <Link href={service.href}>
+                      {t("exploreMore")} <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                    </Link>
                   </Button>
                 </div>
               </div>

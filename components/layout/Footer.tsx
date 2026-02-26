@@ -1,6 +1,7 @@
 import * as LucideIcons from "lucide-react";
 import { Facebook, Instagram, Twitter } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
 
 interface SocialLinkType {
   id: string;
@@ -60,10 +61,10 @@ export default function Footer({ socialLinks }: { socialLinks?: SocialLinkType[]
           <div>
             <h4 className="text-white font-medium mb-6 uppercase tracking-widest text-xs">{t("services")}</h4>
             <ul className="space-y-4 text-sm text-muted-foreground">
-              <li><a href="#" className="hover:text-primary transition-colors">{t("privateChefs")}</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">{t("weddingCatering")}</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">{t("corporateEvents")}</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">{t("culinaryMasterclasses")}</a></li>
+              <li><Link href="/services/private" className="hover:text-primary transition-colors">{t("privateChefs")}</Link></li>
+              <li><Link href="/services/wedding" className="hover:text-primary transition-colors">{t("weddingCatering")}</Link></li>
+              <li><Link href="/services/corporate" className="hover:text-primary transition-colors">{t("corporateEvents")}</Link></li>
+              <li><Link href="/services/vip" className="hover:text-primary transition-colors">{t("culinaryMasterclasses")}</Link></li>
             </ul>
           </div>
 

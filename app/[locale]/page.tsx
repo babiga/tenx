@@ -1,5 +1,8 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/sections/Hero";
 import Services from "@/components/sections/Services";
@@ -9,39 +12,79 @@ import VIPSection from "@/components/sections/VIPSection";
 import Chefs from "@/components/sections/Chefs";
 import Events from "@/components/sections/Events";
 import Footer from "@/components/layout/Footer";
-import { prisma } from "@/lib/prisma";
 
-export default async function Home() {
-  const t = await getTranslations("Home");
+type HomeData = {
+  banners: { id: string; title: string | null; subtitle: string | null; imageUrl: string | null }[];
+  partners: { id: string; title: string | null; imageUrl: string | null }[];
+  socialLinks: { id: string; title: string | null; link: string | null; icon: string | null }[];
+  serviceTiers: { id: string; name: string; description: string | null; isVIP: boolean; pricePerGuest: number }[];
+  menus: {
+    id: string;
+    name: string;
+    description: string | null;
+    downloadUrl: string | null;
+    serviceTier: { id: string; name: string; isVIP: boolean; pricePerGuest: number };
+    items: string[];
+  }[];
+  chefs: {
+    id: string;
+    name: string;
+    avatar: string | null;
+    specialty: string | null;
+    rating: number;
+    reviewCount: number;
+    coverImage: string | null;
+  }[];
+  events: {
+    id: string;
+    title: string;
+    eventType: "WEDDING" | "CORPORATE" | "PRIVATE" | "SOCIAL";
+    guestCount: number;
+    coverImageUrl: string | null;
+    imageUrls: string[];
+  }[];
+};
 
-  const [dbBanners, dbPartners, dbSocialLinks] = await Promise.all([
-    prisma.siteContent.findMany({ where: { type: "BANNER", isActive: true }, orderBy: { sortOrder: "asc" } }),
-    prisma.siteContent.findMany({ where: { type: "PARTNER", isActive: true }, orderBy: { sortOrder: "asc" } }),
-    prisma.siteContent.findMany({ where: { type: "SOCIAL_LINK", isActive: true }, orderBy: { sortOrder: "asc" } }),
-  ]);
+export default function Home() {
+  const t = useTranslations("Home");
+  const [homeData, setHomeData] = useState<HomeData | null>(null);
 
-  const banners = dbBanners.map(b => ({
-    id: b.id, title: b.title, subtitle: b.subtitle, imageUrl: b.imageUrl
-  }));
+  useEffect(() => {
+    let isMounted = true;
 
-  const partners = dbPartners.map(p => ({
-    id: p.id, title: p.title, imageUrl: p.imageUrl
-  }));
+    const fetchHomeData = async () => {
+      try {
+        const response = await fetch("/api/home", { cache: "no-store" });
+        if (!response.ok) return;
 
-  const socialLinks = dbSocialLinks.map(s => ({
-    id: s.id, title: s.title, link: s.link, icon: s.icon
-  }));
+        const result = await response.json();
+        if (isMounted && result.success && result.data) {
+          setHomeData(result.data);
+        }
+      } catch {
+        // Fallback rendering uses static data in sections.
+      }
+    };
+
+    fetchHomeData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const partners = homeData?.partners ?? [];
 
   return (
     <div className="min-h-screen text-foreground overflow-x-hidden">
       <Navbar />
-      <Hero banners={banners} />
-      <Services />
+      <Hero banners={homeData?.banners} />
+      <Services services={homeData?.serviceTiers} />
       <HowItWorks />
-      <SignatureMenus />
+      <SignatureMenus menus={homeData?.menus} />
       <VIPSection />
-      <Chefs />
-      <Events />
+      <Chefs chefs={homeData?.chefs} />
+      <Events events={homeData?.events} />
 
       <section id="ctaSection" className="py-24 bg-white/5 border-y border-white/5 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,hsl(222,40%,25%,0.3),transparent)]" />
@@ -94,7 +137,7 @@ export default async function Home() {
         </div>
       )}
 
-      <Footer socialLinks={socialLinks} />
+      <Footer socialLinks={homeData?.socialLinks} />
     </div>
   );
 }

@@ -216,12 +216,19 @@
         "description": "Танд зориулсан амтны мастерууд.",
         "viewAll": "Бүх тогооч нарыг харах",
         "reviews": "сэтгэгдэл",
-        "specialty": "Чилэглэл"
+        "specialty": "Мэргэшил",
+        "openDetails": "Профайл нээх",
+        "role": "Тогооч",
+        "defaultSpecialty": "Хоолны урлаг",
+        "detailDescription": "{name} нь өндөр зэрэглэлийн орц, нарийн гүйцэтгэлээр онцгой туршлагыг бүтээдэг."
     },
     "Events": {
         "title": "Мартагдашгүй Мөчүүд",
         "description": "Mongolian National Caterer-ийн бэлтгэсэн сүүлийн үеийн арга хэмжээнүүд.",
         "guests": "Зочин",
+        "openDetails": "Дэлгэрэнгүй",
+        "detailDescription": "{guests}-д зориулсан {type} төрлийн тусгай туршлага.",
+        "highlights": "Онцлох хэсгүүд",
         "types": {
             "Wedding": "Хурим",
             "Corporate": "Компанийн",

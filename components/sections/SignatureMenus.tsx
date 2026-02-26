@@ -3,6 +3,13 @@
 import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { useTranslations } from "next-intl";
 
 const menuData = [
@@ -11,8 +18,36 @@ const menuData = [
   { key: "menu3", price: "95,000₮+", tier: "standardTier" },
 ];
 
-export default function SignatureMenus() {
+type MenuType = {
+  id: string;
+  name: string;
+  description: string | null;
+  downloadUrl: string | null;
+  serviceTier: { id: string; name: string; isVIP: boolean; pricePerGuest: number };
+  items: string[];
+};
+
+export default function SignatureMenus({ menus }: { menus?: MenuType[] }) {
   const t = useTranslations("SignatureMenus");
+
+  const menuCards = menus && menus.length > 0
+    ? menus.map((menu) => ({
+      id: menu.id,
+      tier: menu.serviceTier.name,
+      title: menu.name,
+      price: new Intl.NumberFormat().format(menu.serviceTier.pricePerGuest),
+      items: menu.items,
+      downloadUrl: menu.downloadUrl,
+    }))
+    : menuData.map((menu) => ({
+      id: menu.key,
+      tier: t(menu.tier),
+      title: t(`${menu.key}.title`),
+      price: menu.price,
+      items: t.raw(`${menu.key}.items`) as string[],
+      downloadUrl: null,
+    }));
+
   return (
     <section id="menus" className="py-24 border-t border-white/5">
       <div className="container mx-auto px-6">
@@ -26,35 +61,48 @@ export default function SignatureMenus() {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {menuData.map((menu, index) => (
-            <motion.div
-              key={menu.key}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="p-8 bg-card border border-white/5 relative group hover:border-primary/30 transition-colors"
-            >
-              <span className="text-xs uppercase tracking-[0.2em] text-primary mb-4 block">{t(menu.tier)}</span>
-              <h3 className="text-2xl text-white mb-2">{t(`${menu.key}.title`)}</h3>
-              <p className="text-xl text-foreground/80 mb-8 font-light">{menu.price} <span className="text-sm">{t("perGuest")}</span></p>
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent className="-ml-4">
+            {menuCards.map((menu, index) => (
+              <CarouselItem key={menu.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="p-8 bg-card border border-white/5 relative group hover:border-primary/30 transition-colors h-full"
+                >
+                  <span className="text-xs uppercase tracking-[0.2em] text-primary mb-4 block">{menu.tier}</span>
+                  <h3 className="text-2xl text-white mb-2">{menu.title}</h3>
+                  <p className="text-xl text-foreground/80 mb-8 font-light">{menu.price} <span className="text-sm">{t("perGuest")}</span></p>
 
-              <ul className="space-y-4 mb-10">
-                {(t.raw(`${menu.key}.items`) as string[]).map((item) => (
-                  <li key={item} className="text-sm text-muted-foreground flex items-center gap-3">
-                    <div className="w-1 h-1 bg-primary rounded-full" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
+                  <ul className="space-y-4 mb-10">
+                    {menu.items.map((item) => (
+                      <li key={item} className="text-sm text-muted-foreground flex items-center gap-3">
+                        <div className="w-1 h-1 bg-primary rounded-full" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
 
-              <Button className="w-full border border-white/10 hover:border-primary hover:text-black group transition-all duration-300">
-                {t("addToBooking")} <Plus className="ml-2 w-4 h-4" />
-              </Button>
-            </motion.div>
-          ))}
-        </div>
+                  <Button className="w-full border border-white/10 hover:border-primary hover:text-black group transition-all duration-300">
+                    {t("addToBooking")} <Plus className="ml-2 w-4 h-4" />
+                  </Button>
+                </motion.div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <div className="flex justify-center gap-4 mt-10">
+            <CarouselPrevious className="static translate-y-0 hover:bg-primary hover:text-black border-white/10" />
+            <CarouselNext className="static translate-y-0 hover:bg-primary hover:text-black border-white/10" />
+          </div>
+        </Carousel>
       </div>
     </section>
   );

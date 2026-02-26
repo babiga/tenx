@@ -1,0 +1,194 @@
+"use client";
+
+import { format } from "date-fns";
+import { ColumnDef } from "@tanstack/react-table";
+import { CheckIcon, DownloadIcon, MoreHorizontalIcon, XIcon } from "lucide-react";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+export type MenuRecord = {
+  id: string;
+  name: string;
+  description: string | null;
+  serviceTierId: string;
+  downloadUrl: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  serviceTier: {
+    id: string;
+    name: string;
+    isVIP: boolean;
+  };
+  _count: {
+    items: number;
+    bookings: number;
+  };
+};
+
+interface MenusColumnsProps {
+  onView: (menu: MenuRecord) => void;
+  onEdit: (menu: MenuRecord) => void;
+  onDelete: (menu: MenuRecord) => void;
+  onToggleActive: (menu: MenuRecord) => void;
+}
+
+export function getMenusColumns({
+  onView,
+  onEdit,
+  onDelete,
+  onToggleActive,
+}: MenusColumnsProps): ColumnDef<MenuRecord>[] {
+  return [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <div className="flex items-center justify-center">
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+            aria-label="Select all"
+          />
+        </div>
+      ),
+      cell: ({ row }) => (
+        <div className="flex items-center justify-center">
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        </div>
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "name",
+      header: "Menu",
+      cell: ({ row }) => {
+        const menu = row.original;
+        return (
+          <div className="flex flex-col">
+            <Button
+              variant="link"
+              className="h-auto p-0 text-left font-medium"
+              onClick={() => onView(menu)}
+            >
+              {menu.name}
+            </Button>
+            {menu.description ? (
+              <span className="line-clamp-1 text-xs text-muted-foreground">{menu.description}</span>
+            ) : null}
+          </div>
+        );
+      },
+      enableHiding: false,
+    },
+    {
+      id: "serviceTier",
+      header: "Service Tier",
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <span className="text-sm">{row.original.serviceTier.name}</span>
+          {row.original.serviceTier.isVIP ? <Badge variant="secondary">VIP</Badge> : null}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "isActive",
+      header: "Status",
+      cell: ({ row }) =>
+        row.original.isActive ? (
+          <Badge variant="outline" className="gap-1 border-emerald-500/30 text-emerald-600">
+            <CheckIcon className="h-3 w-3" />
+            Active
+          </Badge>
+        ) : (
+          <Badge variant="outline" className="gap-1 border-muted-foreground/30 text-muted-foreground">
+            <XIcon className="h-3 w-3" />
+            Inactive
+          </Badge>
+        ),
+    },
+    {
+      id: "items",
+      header: "Items",
+      cell: ({ row }) => <span>{row.original._count.items}</span>,
+    },
+    {
+      id: "bookings",
+      header: "Bookings",
+      cell: ({ row }) => <span>{row.original._count.bookings}</span>,
+    },
+    {
+      id: "download",
+      header: "Download",
+      cell: ({ row }) =>
+        row.original.downloadUrl ? (
+          <a
+            href={row.original.downloadUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+          >
+            <DownloadIcon className="h-3.5 w-3.5" />
+            File
+          </a>
+        ) : (
+          <span className="text-xs text-muted-foreground">None</span>
+        ),
+    },
+    {
+      accessorKey: "updatedAt",
+      header: "Updated",
+      cell: ({ row }) => (
+        <span className="text-sm">{format(new Date(row.original.updatedAt), "MMM d, yyyy")}</span>
+      ),
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => {
+        const menu = row.original;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0 data-[state=open]:bg-muted">
+                <MoreHorizontalIcon className="h-4 w-4" />
+                <span className="sr-only">Open menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40">
+              <DropdownMenuItem onClick={() => onView(menu)}>View Details</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => onEdit(menu)}>Edit Menu</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => onToggleActive(menu)}>
+                {menu.isActive ? "Deactivate" : "Activate"}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => onDelete(menu)}
+                className="text-destructive focus:text-destructive"
+              >
+                Delete Menu
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
+}

@@ -105,13 +105,17 @@ export function ContentFormSheet({
   async function onSubmit(data: any) {
     setIsPending(true);
     try {
+      const payload =
+        type === "BANNER"
+          ? { ...data, title: null, subtitle: null }
+          : data;
       const url = isEdit ? `/api/contents/${content.id}` : "/api/contents";
       const method = isEdit ? "PUT" : "POST";
 
       const response = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
@@ -153,18 +157,18 @@ export function ContentFormSheet({
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-1 flex-col gap-4 py-4"
           >
-            {(type === "BANNER" || type === "PARTNER") && (
+            {type === "PARTNER" && (
               <FormField
                 control={form.control}
                 name="title"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {type === "BANNER" ? "Title" : "Name"}
+                      Name
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder={type === "BANNER" ? "Title" : "Name"}
+                        placeholder="Name"
                         {...field}
                         value={field.value || ""}
                       />
@@ -175,22 +179,16 @@ export function ContentFormSheet({
               />
             )}
 
-            {(type === "BANNER" || type === "SOCIAL_LINK") && (
+            {type === "SOCIAL_LINK" && (
               <FormField
                 control={form.control}
                 name="subtitle"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      {type === "BANNER"
-                        ? "Subtitle"
-                        : "Description (Optional)"}
-                    </FormLabel>
+                    <FormLabel>Description (Optional)</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder={
-                          type === "BANNER" ? "Subtitle" : "Description"
-                        }
+                        placeholder="Description"
                         {...field}
                         value={field.value || ""}
                       />

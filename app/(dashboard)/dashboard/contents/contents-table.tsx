@@ -112,7 +112,7 @@ export function SiteContentTable({ type }: SiteContentTableProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              {type === "BANNER" && <TableHead>Title</TableHead>}
+              {type === "BANNER" && <TableHead>Image</TableHead>}
               {type === "PARTNER" && <TableHead>Name</TableHead>}
               {type === "SOCIAL_LINK" && <TableHead>Platform</TableHead>}
 
@@ -139,7 +139,11 @@ export function SiteContentTable({ type }: SiteContentTableProps) {
               contents.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell className="font-medium">
-                    {item.title || "Untitled"}
+                    {type === "BANNER"
+                      ? item.imageUrl
+                        ? "Uploaded"
+                        : "No image"
+                      : item.title || "Untitled"}
                   </TableCell>
                   <TableCell>
                     <Badge variant={item.isActive ? "default" : "secondary"}>

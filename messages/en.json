@@ -216,12 +216,19 @@
         "description": "Meet the artisans behind your next unforgettable meal.",
         "viewAll": "Meet All Our Chefs",
         "reviews": "reviews",
-        "specialty": "Specialty"
+        "specialty": "Specialty",
+        "openDetails": "Open Profile",
+        "role": "Chef",
+        "defaultSpecialty": "Culinary Arts",
+        "detailDescription": "{name} crafts elevated experiences with precise execution and premium ingredients."
     },
     "Events": {
         "title": "Unforgettable Occasions",
         "description": "Recent highlights from the world of Mongolian National Caterer.",
         "guests": "Guests",
+        "openDetails": "View Details",
+        "detailDescription": "A {type} experience tailored for {guests}.",
+        "highlights": "Highlights",
         "types": {
             "Wedding": "Wedding",
             "Corporate": "Corporate",

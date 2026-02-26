@@ -13,7 +13,7 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { key: "profile", href: "/profile" },
-  { key: "orders" },
+  { key: "orders", href: "/orders" },
   { key: "feedbacks" },
 ];
 

@@ -383,6 +383,7 @@
         "brand": "My Account",
         "nav": {
             "profile": "Profile",
+            "booking": "Booking",
             "orders": "Orders",
             "feedbacks": "Feedbacks"
         },
@@ -440,7 +441,7 @@
     "UserOrders": {
         "page": {
             "title": "Orders",
-            "description": "Create a booking request and manage your event orders."
+            "description": "View and track your created event orders."
         },
         "form": {
             "title": "Create Order",

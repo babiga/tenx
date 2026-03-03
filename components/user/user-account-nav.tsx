@@ -7,12 +7,13 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 type NavItem = {
-  key: "profile" | "orders" | "feedbacks";
+  key: "profile" | "booking" | "orders" | "feedbacks";
   href?: string;
 };
 
 const navItems: NavItem[] = [
   { key: "profile", href: "/profile" },
+  { key: "booking", href: "/booking" },
   { key: "orders", href: "/orders" },
   { key: "feedbacks" },
 ];

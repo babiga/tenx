@@ -13,7 +13,7 @@ import {
 type BookingListItem = {
   id: string;
   bookingNumber: string;
-  serviceType: "CORPORATE" | "PRIVATE" | "WEDDING" | "VIP";
+  serviceType: "CORPORATE" | "PRIVATE" | "WEDDING" | "VIP" | "OTHER";
   status: "PENDING" | "CONFIRMED" | "DEPOSIT_PAID" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
   eventDate: string;
   eventTime: string;
@@ -36,6 +36,7 @@ const serviceTypeLabelMap: Record<BookingListItem["serviceType"], string> = {
   PRIVATE: "Private",
   WEDDING: "Wedding",
   VIP: "VIP",
+  OTHER: "Other",
 };
 
 const bookingStatusVariant: Record<BookingListItem["status"], string> = {

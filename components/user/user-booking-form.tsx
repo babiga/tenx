@@ -33,6 +33,7 @@ type ServiceTierOption = {
   name: string;
   pricePerGuest: number;
   isVIP: boolean;
+  sortOrder: number;
 };
 
 type MenuOption = {
@@ -60,6 +61,8 @@ type UserBookingFormProps = {
     address: string | null;
   };
 };
+
+type BookingServiceType = "CORPORATE" | "PRIVATE" | "WEDDING" | "VIP" | "OTHER";
 
 const validationMessages = {
   serviceTierRequired: "Please select a service tier",
@@ -109,7 +112,6 @@ export function UserBookingForm({
   const form = useForm<CreateBookingData>({
     resolver: zodResolver(getCreateBookingSchema((key) => validationMessages[key as keyof typeof validationMessages])),
     defaultValues: {
-      serviceTierId: serviceTiers[0]?.id ?? "",
       menuId: "",
       chefProfileId: "",
       serviceType: "CORPORATE",
@@ -125,16 +127,28 @@ export function UserBookingForm({
     },
   });
 
-  const selectedTierId = form.watch("serviceTierId");
+  function resolveServiceTier(serviceType: BookingServiceType) {
+    const byOrder = [...serviceTiers].sort((a, b) => a.sortOrder - b.sortOrder);
+    const vipTier = byOrder.find((tierItem) => tierItem.isVIP);
+    const nonVipTier = byOrder.find((tierItem) => !tierItem.isVIP);
+
+    if (serviceType === "VIP") {
+      return vipTier ?? byOrder[0] ?? null;
+    }
+
+    return nonVipTier ?? byOrder[0] ?? null;
+  }
+
+  const selectedServiceType = form.watch("serviceType");
+  const selectedTier = resolveServiceTier(selectedServiceType);
   const guestCount = Number(form.watch("guestCount") || 0);
-  const tier = serviceTiers.find((item) => item.id === selectedTierId) ?? null;
 
   const filteredMenus = useMemo(
-    () => menus.filter((menu) => menu.serviceTierId === selectedTierId),
-    [menus, selectedTierId],
+    () => menus.filter((menu) => !menu.serviceTierId || menu.serviceTierId === selectedTier?.id),
+    [menus, selectedTier?.id],
   );
 
-  const estimatedTotal = tier ? tier.pricePerGuest * guestCount : 0;
+  const estimatedTotal = selectedTier ? selectedTier.pricePerGuest * guestCount : 0;
 
   async function onSubmit(values: CreateBookingData) {
     setIsSubmitting(true);
@@ -143,6 +157,7 @@ export function UserBookingForm({
 
     const payload = {
       ...values,
+      serviceTierId: selectedTier?.id,
       menuId: values.menuId?.trim() ? values.menuId : null,
       chefProfileId: values.chefProfileId?.trim() ? values.chefProfileId : null,
       venueAddress: values.venueAddress?.trim() || null,
@@ -168,8 +183,9 @@ export function UserBookingForm({
       }
 
       setStatusMessage("Booking request submitted successfully.");
-  form.reset({
+      form.reset({
         ...values,
+        serviceTierId: "",
         menuId: "",
         chefProfileId: "",
         specialRequests: "",
@@ -194,16 +210,16 @@ export function UserBookingForm({
     {
       id: 1,
       title: "Service Selection",
-      description: "Choose your tier, preferred menu, and chef.",
+      description: "Choose your event type, preferred menu, and chef.",
       icon: Check,
-      fields: ["serviceTierId"],
+      fields: ["serviceType"],
     },
     {
       id: 2,
       title: "Event Details",
       description: "Set guest count, schedule, and venue details.",
       icon: Calendar,
-      fields: ["guestCount", "eventDate", "eventTime", "serviceType", "venue"],
+      fields: ["guestCount", "eventDate", "eventTime", "venue"],
     },
     {
       id: 3,
@@ -261,7 +277,7 @@ export function UserBookingForm({
     }
   }
 
-  const selectedMenu = filteredMenus.find((menu) => menu.id === form.watch("menuId"));
+  const selectedMenu = menus.find((menu) => menu.id === form.watch("menuId"));
   const selectedChef = chefs.find((chef) => chef.id === form.watch("chefProfileId"));
 
   return (
@@ -319,28 +335,25 @@ export function UserBookingForm({
               <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 <FormField
                   control={form.control}
-                  name="serviceTierId"
+                  name="serviceType"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Service Tier</FormLabel>
-                      <Select
-                        value={field.value}
-                        onValueChange={(value) => {
-                          field.onChange(value);
-                          form.setValue("menuId", "");
-                        }}
-                      >
+                      <FormLabel>Service Type</FormLabel>
+                      <Select value={field.value} onValueChange={(value: BookingServiceType) => {
+                        field.onChange(value);
+                        form.setValue("menuId", "");
+                      }}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a tier" />
+                            <SelectValue placeholder="Select service type" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {serviceTiers.map((serviceTier) => (
-                            <SelectItem key={serviceTier.id} value={serviceTier.id}>
-                              {serviceTier.name} ({formatPrice(serviceTier.pricePerGuest)} / guest)
-                            </SelectItem>
-                          ))}
+                          <SelectItem value="WEDDING">Wedding</SelectItem>
+                          <SelectItem value="CORPORATE">Corporate</SelectItem>
+                          <SelectItem value="VIP">VIP</SelectItem>
+                          <SelectItem value="PRIVATE">Private</SelectItem>
+                          <SelectItem value="OTHER">Other</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -459,30 +472,6 @@ export function UserBookingForm({
                   />
                 </div>
 
-                <FormField
-                  control={form.control}
-                  name="serviceType"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Event Type</FormLabel>
-                      <Select value={field.value} onValueChange={field.onChange}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select event type" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="CORPORATE">Corporate</SelectItem>
-                          <SelectItem value="PRIVATE">Private</SelectItem>
-                          <SelectItem value="WEDDING">Wedding</SelectItem>
-                          <SelectItem value="VIP">VIP</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <FormField
                     control={form.control}
@@ -585,12 +574,12 @@ export function UserBookingForm({
               <div className="space-y-4">
                 <div className="grid grid-cols-1 gap-3 rounded-md border bg-muted/20 p-4 text-sm md:grid-cols-2">
                   <div>
-                    <p className="text-muted-foreground">Service Tier</p>
-                    <p className="font-medium">{tier?.name ?? "Not selected"}</p>
+                    <p className="text-muted-foreground">Service Type</p>
+                    <p className="font-medium">{form.getValues("serviceType")}</p>
                   </div>
                   <div>
-                    <p className="text-muted-foreground">Event Type</p>
-                    <p className="font-medium">{form.getValues("serviceType")}</p>
+                    <p className="text-muted-foreground">Assigned Package</p>
+                    <p className="font-medium">{selectedTier?.name ?? "Auto-select unavailable"}</p>
                   </div>
                   <div>
                     <p className="text-muted-foreground">Menu</p>

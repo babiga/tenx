@@ -105,17 +105,43 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const serviceTier = await prisma.serviceTier.findUnique({
-      where: { id: data.serviceTierId },
-      select: {
-        id: true,
-        pricePerGuest: true,
-      },
-    });
+    const explicitServiceTierId = data.serviceTierId?.trim() || null;
+
+    const resolvedServiceTier = explicitServiceTierId
+      ? await prisma.serviceTier.findUnique({
+        where: { id: explicitServiceTierId },
+        select: {
+          id: true,
+          pricePerGuest: true,
+          isVIP: true,
+          sortOrder: true,
+        },
+      })
+      : await prisma.serviceTier.findFirst({
+        where: data.serviceType === "VIP" ? { isVIP: true } : { isVIP: false },
+        orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+        select: {
+          id: true,
+          pricePerGuest: true,
+          isVIP: true,
+          sortOrder: true,
+        },
+      });
+
+    const serviceTier = resolvedServiceTier
+      ?? await prisma.serviceTier.findFirst({
+        orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+        select: {
+          id: true,
+          pricePerGuest: true,
+          isVIP: true,
+          sortOrder: true,
+        },
+      });
 
     if (!serviceTier) {
       return NextResponse.json(
-        { success: false, error: "Selected service tier was not found" },
+        { success: false, error: "No service tier is configured" },
         { status: 400 },
       );
     }
@@ -137,9 +163,9 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      if (menu.serviceTierId && menu.serviceTierId !== data.serviceTierId) {
+      if (menu.serviceTierId && menu.serviceTierId !== serviceTier.id) {
         return NextResponse.json(
-          { success: false, error: "Menu does not match selected service tier" },
+          { success: false, error: "Menu does not match selected service type package" },
           { status: 400 },
         );
       }
@@ -206,7 +232,7 @@ export async function POST(request: NextRequest) {
     const booking = await prisma.booking.create({
       data: {
         customerId: session.userId,
-        serviceTierId: data.serviceTierId,
+        serviceTierId: serviceTier.id,
         menuId: data.menuId || null,
         chefProfileId: data.chefProfileId || null,
         serviceType: data.serviceType,

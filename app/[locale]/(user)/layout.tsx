@@ -25,7 +25,7 @@ export default async function UserLayout({
     <div className="min-h-screen bg-muted/20">
       <Navbar trimmed />
       <div className="pt-24">
-        <div className="mx-auto flex w-full max-w-6xl flex-col md:flex-row md:gap-8 px-4 pb-8 sm:px-6">
+        <div className="mx-auto flex w-full max-w-7xl flex-col md:flex-row md:gap-8 px-4 pb-8 sm:px-6">
           <UserAccountNav />
           <main className="w-full py-6 md:py-8">{children}</main>
         </div>

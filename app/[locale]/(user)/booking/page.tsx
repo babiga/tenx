@@ -23,6 +23,7 @@ export default async function UserBookingPage({
         name: true,
         pricePerGuest: true,
         isVIP: true,
+        sortOrder: true,
       },
     }),
     prisma.menu.findMany({

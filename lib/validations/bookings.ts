@@ -3,12 +3,13 @@ import { z } from "zod";
 type BookingValidationTranslator = (key: string) => string;
 
 const serviceTypeValues = ["CORPORATE", "PRIVATE", "WEDDING", "VIP"] as const;
+const bookingRequestServiceTypeValues = [...serviceTypeValues, "OTHER"] as const;
 
 export const createBookingApiSchema = z.object({
-  serviceTierId: z.string().min(1),
+  serviceTierId: z.string().min(1).optional(),
   menuId: z.string().nullable().optional(),
   chefProfileId: z.string().nullable().optional(),
-  serviceType: z.enum(serviceTypeValues),
+  serviceType: z.enum(bookingRequestServiceTypeValues),
   eventDate: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/),
@@ -26,10 +27,10 @@ export const createBookingApiSchema = z.object({
 
 export function getCreateBookingSchema(t: BookingValidationTranslator) {
   return z.object({
-    serviceTierId: z.string().min(1, t("serviceTierRequired")),
+    serviceTierId: z.string().optional(),
     menuId: z.string().optional(),
     chefProfileId: z.string().optional(),
-    serviceType: z.enum(serviceTypeValues, {
+    serviceType: z.enum(bookingRequestServiceTypeValues, {
       required_error: t("serviceTypeRequired"),
     }),
     eventDate: z

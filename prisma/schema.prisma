@@ -36,6 +36,7 @@ enum ServiceType {
   PRIVATE
   WEDDING
   VIP
+  OTHER
 }
 
 enum BookingStatus {
@@ -595,6 +596,22 @@ model SiteContent {
   icon      String?
   isActive  Boolean     @default(true)
   sortOrder Int         @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BankTransferSetting {
+  id                  String   @id @default(cuid())
+  key                 String   @unique @default("default")
+  bankName            String
+  accountNumber       String
+  accountHolderName   String
+  iban                String?
+  swiftCode           String?
+  branchName          String?
+  paymentInstructions String?  @db.Text
+  isActive            Boolean  @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

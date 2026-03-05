@@ -37,7 +37,7 @@ export function UserAccountNav() {
   return (
     <>
       <div className="md:hidden border-b bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/75">
-        <nav className="mx-auto w-full max-w-6xl overflow-x-auto px-4 py-3 sm:px-6">
+        <nav className="mx-auto w-full max-w-7xl overflow-x-auto px-4 py-3 sm:px-6">
           <div className="flex min-w-max items-center gap-2">
             {navItems.map((item) => {
               const isActive = item.href ? pathname === item.href : false;

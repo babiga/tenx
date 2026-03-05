@@ -11,6 +11,7 @@ export default async function UserBookingPage({
 }) {
   const { locale } = await params;
   const t = await getTranslations("UserBooking.page");
+  const ordersT = await getTranslations("UserOrders.list");
   const user = await getCurrentCustomer();
 
   if (!user) {
@@ -76,7 +77,7 @@ export default async function UserBookingPage({
         chefs={chefs.map((chef) => ({
           id: chef.id,
           name: chef.dashboardUser.name,
-          specialty: chef.specialty || "Chef",
+          specialty: chef.specialty || ordersT("chef"),
           rating: chef.rating,
         }))}
         initialCustomer={{

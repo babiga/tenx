@@ -480,15 +480,42 @@
                 "menu": "Тодорхой цэс сонгоогүй",
                 "chef": "Сонголтгүй"
             },
-            "perGuest": "/ хүн"
+            "perGuest": "/ хүн",
+            "steps": {
+                "serviceSelection": {
+                    "title": "Үйлчилгээ сонголт",
+                    "description": "Арга хэмжээний төрөл, хүссэн цэс болон тогоочоо сонгоно уу."
+                },
+                "eventDetails": {
+                    "title": "Арга хэмжээний дэлгэрэнгүй",
+                    "description": "Зочдын тоо, огноо цаг, байршлын мэдээллээ тохируулна уу."
+                },
+                "contactAndNotes": {
+                    "title": "Холбоо ба тэмдэглэл",
+                    "description": "Холбоо барих мэдээлэл болон тусгай хүсэлтээ баталгаажуулна уу."
+                },
+                "reviewAndSubmit": {
+                    "title": "Шалгах ба илгээх",
+                    "description": "Илгээхийн өмнө бүх мэдээллээ шалгана уу."
+                }
+            }
         },
         "summary": {
             "estimatedTotal": "Тооцоолсон нийт дүн",
-            "total": "Нийт"
+            "total": "Нийт",
+            "serviceType": "Үйлчилгээний төрөл",
+            "assignedPackage": "Оноогдсон багц",
+            "autoSelectUnavailable": "Автоматаар сонгох боломжгүй",
+            "guests": "Зочид",
+            "eventDateTime": "Арга хэмжээний огноо ба цаг",
+            "venue": "Байршил",
+            "contact": "Холбоо барих"
         },
         "actions": {
             "submitting": "Илгээж байна...",
-            "createBooking": "Захиалга үүсгэх"
+            "createBooking": "Захиалга үүсгэх",
+            "back": "Буцах",
+            "continue": "Үргэлжлүүлэх"
         },
         "list": {
             "title": "Миний захиалгууд",
@@ -510,7 +537,8 @@
             "CORPORATE": "Компанийн",
             "PRIVATE": "Хувийн",
             "WEDDING": "Хурим",
-            "VIP": "VIP"
+            "VIP": "VIP",
+            "OTHER": "Бусад"
         },
         "statuses": {
             "PENDING": "Хүлээгдэж байна",

@@ -18,7 +18,6 @@ type HomeData = {
   banners: { id: string; title: string | null; subtitle: string | null; imageUrl: string | null }[];
   partners: { id: string; title: string | null; imageUrl: string | null }[];
   socialLinks: { id: string; title: string | null; link: string | null; icon: string | null }[];
-  serviceTiers: { id: string; name: string; description: string | null; isVIP: boolean; pricePerGuest: number }[];
   menus: {
     id: string;
     name: string;
@@ -79,7 +78,7 @@ export default function Home() {
     <div className="min-h-screen text-foreground overflow-x-hidden">
       <Navbar />
       <Hero banners={homeData?.banners} />
-      <Services services={homeData?.serviceTiers} />
+      <Services />
       <HowItWorks />
       <SignatureMenus menus={homeData?.menus} />
       <VIPSection />

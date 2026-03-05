@@ -2,6 +2,7 @@ import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma/client";
 import bcrypt from "bcrypt";
+import { staticServiceData, type ServiceRoute } from "../lib/service-data";
 
 const connectionString = `${process.env.DATABASE_URL}`;
 const adapter = new PrismaPg({ connectionString });
@@ -251,74 +252,35 @@ async function main() {
     },
   });
 
-  const standardTier = await prisma.serviceTier.upsert({
-    where: { name: "standard" },
-    update: {
-      description: "Essential event catering package.",
-      pricePerGuest: 95000,
-      features: ["2 appetizers", "1 main course", "Standard service staff"],
-      isVIP: false,
-      sortOrder: 1,
-    },
-    create: {
-      name: "standard",
-      description: "Essential event catering package.",
-      pricePerGuest: 95000,
-      features: ["2 appetizers", "1 main course", "Standard service staff"],
-      isVIP: false,
-      sortOrder: 1,
-    },
-  });
+  const serviceTierPairs = await Promise.all(
+    staticServiceData.map(async (service) => {
+      const tier = await prisma.serviceTier.upsert({
+        where: { name: service.route },
+        update: {
+          description: service.seedTier.description,
+          pricePerGuest: service.seedTier.pricePerGuest,
+          features: service.seedTier.features,
+          isVIP: service.seedTier.isVIP,
+          sortOrder: service.seedTier.sortOrder,
+        },
+        create: {
+          name: service.route,
+          description: service.seedTier.description,
+          pricePerGuest: service.seedTier.pricePerGuest,
+          features: service.seedTier.features,
+          isVIP: service.seedTier.isVIP,
+          sortOrder: service.seedTier.sortOrder,
+        },
+      });
 
-  const premiumTier = await prisma.serviceTier.upsert({
-    where: { name: "premium" },
-    update: {
-      description: "Expanded menu and enhanced staffing.",
-      pricePerGuest: 145000,
-      features: ["3 appetizers", "2 mains", "Dessert", "Dedicated supervisor"],
-      isVIP: false,
-      sortOrder: 2,
-    },
-    create: {
-      name: "premium",
-      description: "Expanded menu and enhanced staffing.",
-      pricePerGuest: 145000,
-      features: ["3 appetizers", "2 mains", "Dessert", "Dedicated supervisor"],
-      isVIP: false,
-      sortOrder: 2,
-    },
-  });
+      return [service.route, tier] as const;
+    }),
+  );
 
-  const luxuryTier = await prisma.serviceTier.upsert({
-    where: { name: "luxury" },
-    update: {
-      description: "VIP experience with chef-led custom menu.",
-      pricePerGuest: 185000,
-      features: [
-        "Welcome drinks",
-        "4 appetizers",
-        "2 mains",
-        "Premium dessert table",
-        "Chef on-site",
-      ],
-      isVIP: true,
-      sortOrder: 3,
-    },
-    create: {
-      name: "luxury",
-      description: "VIP experience with chef-led custom menu.",
-      pricePerGuest: 185000,
-      features: [
-        "Welcome drinks",
-        "4 appetizers",
-        "2 mains",
-        "Premium dessert table",
-        "Chef on-site",
-      ],
-      isVIP: true,
-      sortOrder: 3,
-    },
-  });
+  const serviceTiersByRoute = Object.fromEntries(serviceTierPairs) as Record<
+    ServiceRoute,
+    (typeof serviceTierPairs)[number][1]
+  >;
 
   await upsertSiteContent({
     type: "BANNER",
@@ -333,7 +295,7 @@ async function main() {
     type: "BANNER",
     sortOrder: 2,
     title: "Chef-Driven Menus",
-    subtitle: "From standard to luxury service tiers.",
+    subtitle: "From corporate to VIP service tiers.",
     imageUrl: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4",
     isActive: true,
   });
@@ -375,7 +337,7 @@ async function main() {
   const standardMenu = await upsertMenu({
     name: "Standard Celebration Menu",
     description: "Balanced dishes for family and small corporate events.",
-    serviceTierId: standardTier.id,
+    serviceTierId: serviceTiersByRoute.corporate.id,
     downloadUrl: "https://example.com/menus/standard.pdf",
     isActive: true,
     items: [
@@ -409,7 +371,7 @@ async function main() {
   const premiumMenu = await upsertMenu({
     name: "Premium Signature Menu",
     description: "Elevated multi-course menu for larger occasions.",
-    serviceTierId: premiumTier.id,
+    serviceTierId: serviceTiersByRoute.private.id,
     downloadUrl: "https://example.com/menus/premium.pdf",
     isActive: true,
     items: [
@@ -443,7 +405,7 @@ async function main() {
   const luxuryMenu = await upsertMenu({
     name: "Luxury Chef's Table",
     description: "Curated VIP tasting menu with premium ingredients.",
-    serviceTierId: luxuryTier.id,
+    serviceTierId: serviceTiersByRoute.vip.id,
     downloadUrl: "https://example.com/menus/luxury.pdf",
     isActive: true,
     items: [
@@ -505,7 +467,7 @@ async function main() {
     update: {
       customerId: customer.id,
       chefProfileId: chefProfile.id,
-      serviceTierId: premiumTier.id,
+      serviceTierId: serviceTiersByRoute.private.id,
       menuId: premiumMenu.id,
       serviceType: "CORPORATE",
       eventDate: in30Days,
@@ -522,7 +484,7 @@ async function main() {
       bookingNumber: "SEED-BOOKING-001",
       customerId: customer.id,
       chefProfileId: chefProfile.id,
-      serviceTierId: premiumTier.id,
+      serviceTierId: serviceTiersByRoute.private.id,
       menuId: premiumMenu.id,
       serviceType: "CORPORATE",
       eventDate: in30Days,
@@ -856,7 +818,7 @@ async function main() {
 
   console.log("Database seeded successfully.");
   console.log(`Admin: ${admin.email}`);
-  console.log("Service tiers seeded: standard, premium, luxury");
+  console.log(`Service tiers seeded: ${staticServiceData.map((service) => service.route).join(", ")}`);
 }
 
 main()

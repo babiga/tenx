@@ -5,85 +5,25 @@ import { Utensils, Star, Trophy, ArrowRight, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
+import { staticServiceData, type ServiceRoute } from "@/lib/service-data";
 
-type ServiceRoute = "corporate" | "private" | "wedding" | "vip";
-
-const serviceData = [
-  {
-    key: "corporate",
-    route: "corporate" as ServiceRoute,
-    icon: Utensils,
-    image: "https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=2070&auto=format&fit=crop"
-  },
-  {
-    key: "private",
-    route: "private" as ServiceRoute,
-    icon: Star,
-    image: "https://images.unsplash.com/photo-1530062845289-9109b2c9c868?q=80&w=2072&auto=format&fit=crop"
-  },
-  {
-    key: "weddings",
-    route: "wedding" as ServiceRoute,
-    icon: Heart,
-    image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop"
-  },
-  {
-    key: "vip",
-    route: "vip" as ServiceRoute,
-    icon: Trophy,
-    image: "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=2074&auto=format&fit=crop"
-  }
-];
-
-type ServiceTierType = {
-  id: string;
-  name: string;
-  description: string | null;
-  isVIP: boolean;
-  pricePerGuest: number;
+const iconByRoute: Record<ServiceRoute, typeof Utensils> = {
+  corporate: Utensils,
+  private: Star,
+  wedding: Heart,
+  vip: Trophy,
 };
 
-function resolveServiceRoute(
-  name: string,
-  isVIP: boolean,
-  fallbackRoute: ServiceRoute,
-): ServiceRoute {
-  if (isVIP) return "vip";
-
-  const normalized = name.toLowerCase();
-  if (normalized.includes("wed")) return "wedding";
-  if (normalized.includes("priv")) return "private";
-  if (normalized.includes("corp") || normalized.includes("business")) return "corporate";
-  if (normalized.includes("vip")) return "vip";
-
-  return fallbackRoute;
-}
-
-export default function Services({ services }: { services?: ServiceTierType[] }) {
+export default function Services() {
   const t = useTranslations("Services");
-
-  const serviceCards = services && services.length > 0
-    ? services.map((service, index) => {
-      const visual = serviceData[index % serviceData.length];
-      const route = resolveServiceRoute(service.name, service.isVIP, visual.route);
-
-      return {
-        id: service.id,
-        title: service.name,
-        description: service.description ?? "",
-        image: visual.image,
-        icon: visual.icon,
-        href: `/services/${route}`,
-      };
-    })
-    : serviceData.map((service) => ({
-      id: service.key,
-      title: t(`${service.key}.title`),
-      description: t(`${service.key}.description`),
-      image: service.image,
-      icon: service.icon,
-      href: `/services/${service.route}`,
-    }));
+  const serviceCards = staticServiceData.map((service) => ({
+    id: service.key,
+    title: t(`${service.key}.title`),
+    description: t(`${service.key}.description`),
+    image: service.image,
+    icon: iconByRoute[service.route],
+    href: `/services/${service.route}`,
+  }));
 
   return (
     <section id="services" className="py-24 relative overflow-hidden">

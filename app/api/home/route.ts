@@ -7,7 +7,6 @@ export async function GET() {
       banners,
       partners,
       socialLinks,
-      serviceTiers,
       menus,
       chefs,
       featuredEvents,
@@ -23,10 +22,6 @@ export async function GET() {
       prisma.siteContent.findMany({
         where: { type: "SOCIAL_LINK", isActive: true },
         orderBy: { sortOrder: "asc" },
-      }),
-      prisma.serviceTier.findMany({
-        orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
-        take: 4,
       }),
       prisma.menu.findMany({
         where: { isActive: true },
@@ -97,13 +92,6 @@ export async function GET() {
           title: s.title,
           link: s.link,
           icon: s.icon,
-        })),
-        serviceTiers: serviceTiers.map((tier) => ({
-          id: tier.id,
-          name: tier.name,
-          description: tier.description,
-          isVIP: tier.isVIP,
-          pricePerGuest: Number(tier.pricePerGuest),
         })),
         menus: menus.map((menu) => ({
           id: menu.id,

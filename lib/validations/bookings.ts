@@ -25,6 +25,18 @@ export const createBookingApiSchema = z.object({
   contactEmail: z.string().email().max(320),
 });
 
+export const dashboardBookingsQuerySchema = z.object({
+  limit: z.coerce.number().min(1).max(500).default(200),
+  status: z
+    .enum(["PENDING", "CONFIRMED", "DEPOSIT_PAID", "IN_PROGRESS", "COMPLETED", "CANCELLED"])
+    .optional(),
+  sortOrder: z.enum(["asc", "desc"]).default("desc"),
+});
+
+export const updateBookingStatusSchema = z.object({
+  status: z.enum(["PENDING", "CONFIRMED", "DEPOSIT_PAID", "IN_PROGRESS", "COMPLETED", "CANCELLED"]),
+});
+
 export function getCreateBookingSchema(t: BookingValidationTranslator) {
   return z.object({
     serviceTierId: z.string().optional(),

@@ -565,7 +565,8 @@
             "contactNameMax": "Contact name must be less than 100 characters",
             "contactPhoneInvalid": "Please enter a valid phone number",
             "contactEmailInvalid": "Please enter a valid email address",
-            "contactEmailMax": "Email must be less than 320 characters"
+            "contactEmailMax": "Email must be less than 320 characters",
+            "menuSelectionMax": "You can select up to 10 menus"
         }
     },
     "ServiceDetails": {

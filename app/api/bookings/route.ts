@@ -146,29 +146,43 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (data.menuId) {
-      const menu = await prisma.menu.findUnique({
-        where: { id: data.menuId },
+    const requestedMenuIds = Array.from(
+      new Set(
+        [...(data.menuIds ?? []), ...(data.menuId ? [data.menuId] : [])]
+          .map((menuId) => menuId.trim())
+          .filter((menuId) => menuId.length > 0),
+      ),
+    );
+
+    const selectedMenus = requestedMenuIds.length > 0
+      ? await prisma.menu.findMany({
+        where: {
+          id: { in: requestedMenuIds },
+          isActive: true,
+        },
         select: {
           id: true,
-          isActive: true,
+          name: true,
           serviceTierId: true,
         },
-      });
+      })
+      : [];
 
-      if (!menu || !menu.isActive) {
-        return NextResponse.json(
-          { success: false, error: "Selected menu is not available" },
-          { status: 400 },
-        );
-      }
+    if (requestedMenuIds.length > 0 && selectedMenus.length !== requestedMenuIds.length) {
+      return NextResponse.json(
+        { success: false, error: "One or more selected menus are not available" },
+        { status: 400 },
+      );
+    }
 
-      if (menu.serviceTierId && menu.serviceTierId !== serviceTier.id) {
-        return NextResponse.json(
-          { success: false, error: "Menu does not match selected service type package" },
-          { status: 400 },
-        );
-      }
+    const invalidTierMenu = selectedMenus.find(
+      (menu) => menu.serviceTierId && menu.serviceTierId !== serviceTier.id,
+    );
+    if (invalidTierMenu) {
+      return NextResponse.json(
+        { success: false, error: "One or more menus do not match selected service type package" },
+        { status: 400 },
+      );
     }
 
     if (data.chefProfileId) {
@@ -225,15 +239,25 @@ export async function POST(request: NextRequest) {
     if (data.specialRequests?.trim()) {
       requestDetails.push(data.specialRequests.trim());
     }
-    if (data.contactEmail !== user.email) {
-      requestDetails.push(`Contact email for this booking: ${data.contactEmail}`);
+    if (selectedMenus.length > 1) {
+      const namesById = new Map(selectedMenus.map((menu) => [menu.id, menu.name]));
+      const orderedNames = requestedMenuIds
+        .map((menuId) => namesById.get(menuId))
+        .filter((menuName): menuName is string => Boolean(menuName));
+      requestDetails.push(`Selected menus: ${orderedNames.join(", ")}`);
     }
+    const normalizedContactEmail = data.contactEmail.trim();
+    if (normalizedContactEmail !== user.email) {
+      requestDetails.push(`Contact email for this booking: ${normalizedContactEmail}`);
+    }
+
+    const primaryMenuId = requestedMenuIds[0] ?? null;
 
     const booking = await prisma.booking.create({
       data: {
         customerId: session.userId,
         serviceTierId: serviceTier.id,
-        menuId: data.menuId || null,
+        menuId: primaryMenuId,
         chefProfileId: data.chefProfileId || null,
         serviceType: data.serviceType,
         eventDate,

@@ -28,7 +28,7 @@ export default async function WeddingServicePage() {
           <Button asChild variant="ghost" className="text-stone-700 hover:bg-stone-900/5">
             <Link href="/#services">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back
+              {t("backToServices")}
             </Link>
           </Button>
           <div className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.16em] text-[#8a5b35]/85">

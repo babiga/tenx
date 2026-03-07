@@ -40,7 +40,7 @@ export default async function CorporateServicePage() {
           <Button asChild variant="ghost" className="text-slate-200 hover:bg-white/10">
             <Link href="/#services">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back
+              {t("backToServices")}
             </Link>
           </Button>
           <div className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.16em] text-blue-100/80">

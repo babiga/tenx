@@ -8,6 +8,7 @@ const bookingRequestServiceTypeValues = [...serviceTypeValues, "OTHER"] as const
 export const createBookingApiSchema = z.object({
   serviceTierId: z.string().min(1).optional(),
   menuId: z.string().nullable().optional(),
+  menuIds: z.array(z.string().min(1)).max(10).optional(),
   chefProfileId: z.string().nullable().optional(),
   serviceType: z.enum(bookingRequestServiceTypeValues),
   eventDate: z
@@ -41,6 +42,7 @@ export function getCreateBookingSchema(t: BookingValidationTranslator) {
   return z.object({
     serviceTierId: z.string().optional(),
     menuId: z.string().optional(),
+    menuIds: z.array(z.string()).max(10, t("menuSelectionMax")).optional(),
     chefProfileId: z.string().optional(),
     serviceType: z.enum(bookingRequestServiceTypeValues, {
       required_error: t("serviceTypeRequired"),

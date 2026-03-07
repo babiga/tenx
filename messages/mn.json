@@ -565,7 +565,8 @@
             "contactNameMax": "Холбоо барих нэр 100-аас бага тэмдэгттэй байна",
             "contactPhoneInvalid": "Зөв утасны дугаар оруулна уу",
             "contactEmailInvalid": "Зөв и-мэйл хаяг оруулна уу",
-            "contactEmailMax": "И-мэйл 320-аас бага тэмдэгттэй байна"
+            "contactEmailMax": "И-мэйл 320-аас бага тэмдэгттэй байна",
+            "menuSelectionMax": "Та хамгийн ихдээ 10 цэс сонгох боломжтой"
         }
     },
     "ServiceDetails": {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useForm, type Path } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import {
   getCreateBookingSchema,
@@ -96,6 +97,7 @@ export function UserBookingForm({
     resolver: zodResolver(getCreateBookingSchema((key) => vt(key))),
     defaultValues: {
       menuId: "",
+      menuIds: [],
       chefProfileId: "",
       serviceType: "CORPORATE",
       eventDate: "",
@@ -130,6 +132,16 @@ export function UserBookingForm({
     () => menus.filter((menu) => !menu.serviceTierId || menu.serviceTierId === selectedTier?.id),
     [menus, selectedTier?.id],
   );
+  const selectedMenuIds = form.watch("menuIds") ?? [];
+
+  useEffect(() => {
+    const allowedMenuIds = new Set(filteredMenus.map((menu) => menu.id));
+    const nextSelectedMenuIds = selectedMenuIds.filter((menuId) => allowedMenuIds.has(menuId));
+
+    if (nextSelectedMenuIds.length !== selectedMenuIds.length) {
+      form.setValue("menuIds", nextSelectedMenuIds);
+    }
+  }, [filteredMenus, form, selectedMenuIds]);
 
   const estimatedTotal = selectedTier ? selectedTier.pricePerGuest * guestCount : 0;
 
@@ -138,10 +150,21 @@ export function UserBookingForm({
     setStatusMessage(null);
     setErrorMessage(null);
 
+    const normalizedMenuIds = Array.from(
+      new Set(
+        (values.menuIds ?? [])
+          .map((menuId) => menuId.trim())
+          .filter((menuId) => menuId.length > 0),
+      ),
+    );
+    const primaryMenuId = normalizedMenuIds[0]
+      ?? (values.menuId?.trim() ? values.menuId : null);
+
     const payload = {
       ...values,
       serviceTierId: selectedTier?.id,
-      menuId: values.menuId?.trim() ? values.menuId : null,
+      menuId: primaryMenuId,
+      menuIds: normalizedMenuIds,
       chefProfileId: values.chefProfileId?.trim() ? values.chefProfileId : null,
       venueAddress: values.venueAddress?.trim() || null,
       specialRequests: values.specialRequests?.trim() || null,
@@ -170,6 +193,7 @@ export function UserBookingForm({
         ...values,
         serviceTierId: "",
         menuId: "",
+        menuIds: [],
         chefProfileId: "",
         specialRequests: "",
       });
@@ -260,7 +284,9 @@ export function UserBookingForm({
     }
   }
 
-  const selectedMenu = menus.find((menu) => menu.id === form.watch("menuId"));
+  const selectedMenus = selectedMenuIds
+    .map((menuId) => menus.find((menu) => menu.id === menuId))
+    .filter((menu): menu is MenuOption => Boolean(menu));
   const selectedChef = chefs.find((chef) => chef.id === form.watch("chefProfileId"));
 
   return (
@@ -323,6 +349,7 @@ export function UserBookingForm({
                       <Select value={field.value} onValueChange={(value: BookingServiceType) => {
                         field.onChange(value);
                         form.setValue("menuId", "");
+                        form.setValue("menuIds", []);
                       }}>
                         <FormControl>
                           <SelectTrigger>
@@ -344,28 +371,47 @@ export function UserBookingForm({
 
                 <FormField
                   control={form.control}
-                  name="menuId"
+                  name="menuIds"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{t("form.fields.menuOptional")}</FormLabel>
-                      <Select
-                        value={field.value || "none"}
-                        onValueChange={(value) => field.onChange(value === "none" ? "" : value)}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder={t("form.placeholders.menu")} />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="none">{t("form.none.menu")}</SelectItem>
-                          {filteredMenus.map((menu) => (
-                            <SelectItem key={menu.id} value={menu.id}>
-                              {menu.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <FormControl>
+                        <div className="space-y-2 rounded-md border p-3">
+                          {filteredMenus.length === 0 ? (
+                            <p className="text-sm text-muted-foreground">{t("form.none.menu")}</p>
+                          ) : (
+                            filteredMenus.map((menu) => {
+                              const isChecked = (field.value ?? []).includes(menu.id);
+                              return (
+                                <label
+                                  key={menu.id}
+                                  className="flex cursor-pointer items-start gap-3 rounded-md border px-3 py-2 transition-colors hover:bg-muted/50"
+                                >
+                                  <Checkbox
+                                    checked={isChecked}
+                                    onCheckedChange={(checked) => {
+                                      const currentValues = field.value ?? [];
+                                      if (checked) {
+                                        if (!currentValues.includes(menu.id)) {
+                                          field.onChange([...currentValues, menu.id]);
+                                        }
+                                        return;
+                                      }
+                                      field.onChange(currentValues.filter((menuId) => menuId !== menu.id));
+                                    }}
+                                  />
+                                  <div className="space-y-1">
+                                    <p className="text-sm font-medium">{menu.name}</p>
+                                    {menu.description && (
+                                      <p className="text-xs text-muted-foreground">{menu.description}</p>
+                                    )}
+                                  </div>
+                                </label>
+                              );
+                            })
+                          )}
+                        </div>
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -564,7 +610,11 @@ export function UserBookingForm({
                   </div>
                   <div>
                     <p className="text-muted-foreground">{t("list.menu")}</p>
-                    <p className="font-medium">{selectedMenu?.name ?? t("form.none.menu")}</p>
+                    <p className="font-medium">
+                      {selectedMenus.length > 0
+                        ? selectedMenus.map((menu) => menu.name).join(", ")
+                        : t("form.none.menu")}
+                    </p>
                   </div>
                   <div>
                     <p className="text-muted-foreground">{t("list.chef")}</p>

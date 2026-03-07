@@ -36,7 +36,7 @@ export default async function VipServicePage() {
           <Button asChild variant="ghost" className="text-amber-100 hover:bg-amber-100/10">
             <Link href="/#services">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back
+              {t("backToServices")}
             </Link>
           </Button>
           <div className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.16em] text-amber-100/80">

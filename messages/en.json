@@ -255,9 +255,13 @@
         "reviewUpdateError": "Failed to update review.",
         "reviewDeleteSuccess": "Review deleted successfully.",
         "reviewDeleteError": "Failed to delete review.",
-        "role": "Chef",
-        "defaultSpecialty": "Culinary Arts",
-        "detailDescription": "{name} crafts elevated experiences with precise execution and premium ingredients."
+        "bio": "Biography",
+        "experience": "Experience",
+        "years": "{count} years",
+        "certifications": "Certifications",
+        "portfolio": "Event Portfolio",
+        "detailDescription": "{name} crafts elevated experiences with precise execution and premium ingredients.",
+        "bookConsultation": "Book Private Consultation"
     },
     "Events": {
         "title": "Unforgettable Occasions",

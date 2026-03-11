@@ -140,10 +140,11 @@ export default function Hero({ banners }: { banners?: BannerType[] }) {
           className="flex flex-col md:flex-row gap-4 justify-center mt-10"
         >
           <Button
+            asChild
             size="lg"
             className="bg-primary text-black hover:bg-white hover:text-black text-lg px-8 py-6 rounded-none transition-all duration-300 btn-glow"
           >
-            {t("bookCatering")}
+            <Link href={"/booking"}>{t("bookCatering")}</Link>
           </Button>
           <Button
             asChild

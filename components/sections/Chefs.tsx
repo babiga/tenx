@@ -42,7 +42,7 @@ export default function Chefs({ chefs: apiChefs }: { chefs?: ChefType[] }) {
           id: chef.id,
           name: chef.name,
           role: t("role"),
-          image: chef.coverImage || chef.avatar || "/chef-1.png",
+          image: chef.avatar || chef.coverImage || "/chef-1.png",
           rating: chef.rating,
           reviews: chef.reviewCount,
           specialty: chef.specialty || t("defaultSpecialty"),

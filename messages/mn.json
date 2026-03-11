@@ -255,9 +255,13 @@
         "reviewUpdateError": "Сэтгэгдэл шинэчилж чадсангүй.",
         "reviewDeleteSuccess": "Сэтгэгдэл амжилттай устгагдлаа.",
         "reviewDeleteError": "Сэтгэгдэл устгаж чадсангүй.",
-        "role": "Тогооч",
-        "defaultSpecialty": "Хоолны урлаг",
-        "detailDescription": "{name} нь өндөр зэрэглэлийн орц, нарийн гүйцэтгэлээр онцгой туршлагыг бүтээдэг."
+        "bio": "Намтар",
+        "experience": "Туршлага",
+        "years": "{count} жил",
+        "certifications": "Сертификатууд",
+        "portfolio": "Эвент багц",
+        "detailDescription": "{name} нь өндөр зэрэглэлийн орц, нарийн гүйцэтгэлээр онцгой туршлагыг бүтээдэг.",
+        "bookConsultation": "Зөвлөгөө захиалах"
     },
     "Events": {
         "title": "Мартагдашгүй Мөчүүд",

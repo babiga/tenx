@@ -30,7 +30,6 @@ export default async function ChefProfilePage() {
         specialty: chefProfile.specialty,
         bio: chefProfile.bio || "",
         yearsExperience: chefProfile.yearsExperience,
-        hourlyRate: Number(chefProfile.hourlyRate),
         certifications: chefProfile.certifications || [],
     };
 

@@ -183,26 +183,13 @@ export function ChefProfileForm({ initialData }: ChefProfileFormProps) {
                                         </FormItem>
                                     )}
                                 />
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 gap-4">
                                     <FormField
                                         control={form.control as any}
                                         name="yearsExperience"
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Years of Experience</FormLabel>
-                                                <FormControl>
-                                                    <Input type="number" {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control as any}
-                                        name="hourlyRate"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Hourly Rate ($)</FormLabel>
                                                 <FormControl>
                                                     <Input type="number" {...field} />
                                                 </FormControl>

@@ -59,7 +59,7 @@ export function ChefFormSheet({
     const isEdit = mode === "edit";
     const isView = mode === "view";
 
-    const createForm = useForm<CreateDashboardUserData & { specialty?: string; hourlyRate?: number }>({
+    const createForm = useForm<CreateDashboardUserData & { specialty?: string }>({
         resolver: zodResolver(createDashboardUserSchema),
         defaultValues: {
             name: "",
@@ -72,14 +72,13 @@ export function ChefFormSheet({
         },
     });
 
-    const editForm = useForm<UpdateDashboardUserData & { specialty?: string; hourlyRate?: number }>({
+    const editForm = useForm<UpdateDashboardUserData & { specialty?: string }>({
         resolver: zodResolver(updateDashboardUserSchema),
         defaultValues: {
             name: "",
             phone: "",
             avatar: "",
             specialty: "",
-            hourlyRate: 0,
         },
     });
 
@@ -90,7 +89,6 @@ export function ChefFormSheet({
                 phone: user.phone || "",
                 avatar: user.avatar || "",
                 specialty: user.chefProfile?.specialty || "",
-                hourlyRate: user.chefProfile?.hourlyRate || 0,
             });
         }
         if (isCreate) {
@@ -235,7 +233,7 @@ export function ChefFormSheet({
                                     </FormItem>
                                 )}
                             />
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 gap-4">
                                 <FormField
                                     control={createForm.control}
                                     name="password"
@@ -289,7 +287,7 @@ export function ChefFormSheet({
                                 )}
                             />
                             <Separator />
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 gap-4">
                                 <FormField
                                     control={createForm.control}
                                     name="specialty"
@@ -297,17 +295,6 @@ export function ChefFormSheet({
                                         <FormItem>
                                             <FormLabel>Specialty (Optional)</FormLabel>
                                             <FormControl><Input placeholder="e.g. Italian" {...field} value={field.value ?? ""} /></FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={createForm.control}
-                                    name="hourlyRate"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Hourly Rate ($)</FormLabel>
-                                            <FormControl><Input type="number" {...field} value={field.value ?? ""} /></FormControl>
                                             <FormMessage />
                                         </FormItem>
                                     )}
@@ -365,7 +352,7 @@ export function ChefFormSheet({
                                 )}
                             />
                             <Separator />
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 gap-4">
                                 <FormField
                                     control={editForm.control}
                                     name="specialty"
@@ -373,17 +360,6 @@ export function ChefFormSheet({
                                         <FormItem>
                                             <FormLabel>Specialty</FormLabel>
                                             <FormControl><Input placeholder="e.g. Italian" {...field} value={field.value ?? ""} /></FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={editForm.control}
-                                    name="hourlyRate"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Hourly Rate ($)</FormLabel>
-                                            <FormControl><Input type="number" {...field} value={field.value ?? ""} /></FormControl>
                                             <FormMessage />
                                         </FormItem>
                                     )}
@@ -399,11 +375,10 @@ export function ChefFormSheet({
 
                 {isView && user && (
                     <div className="flex flex-1 flex-col gap-4 py-4 text-sm">
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-4">
                             <div><label className="text-muted-foreground">Email</label><p className="font-medium">{user.email}</p></div>
                             <div><label className="text-muted-foreground">Phone</label><p className="font-medium">{user.phone || "-"}</p></div>
                             <div><label className="text-muted-foreground">Specialty</label><p className="font-medium">{user.chefProfile?.specialty || "Not set"}</p></div>
-                            <div><label className="text-muted-foreground">Hourly Rate</label><p className="font-medium">${Number(user.chefProfile?.hourlyRate || 0).toFixed(2)}</p></div>
                         </div>
                         <Separator />
                         <div className="space-y-4">

@@ -101,7 +101,6 @@ export async function GET(request: NextRequest) {
           select: {
             specialty: true,
             rating: true,
-            hourlyRate: true,
           },
         },
       },
@@ -220,7 +219,6 @@ export async function POST(request: NextRequest) {
           data: {
             dashboardUserId: newUser.id,
             specialty: (data as any).specialty || "General",
-            hourlyRate: (data as any).hourlyRate || 0,
           },
         });
       }

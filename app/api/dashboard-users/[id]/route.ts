@@ -132,8 +132,9 @@ export async function PATCH(
       );
     }
 
+    const { specialty, ...userData } = result.data;
+
     // Clean up phone field
-    const { specialty, hourlyRate, ...userData } = result.data;
     if (userData.phone === "") {
       userData.phone = null;
     }
@@ -163,14 +164,12 @@ export async function PATCH(
 
       if (
         updatedUser.role === "CHEF" &&
-        (specialty !== undefined || hourlyRate !== undefined)
+        specialty !== undefined
       ) {
         await tx.chefProfile.update({
           where: { dashboardUserId: id },
           data: {
             specialty: specialty || undefined,
-            hourlyRate:
-              hourlyRate !== undefined ? Number(hourlyRate) : undefined,
           },
         });
       }

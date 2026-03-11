@@ -213,7 +213,6 @@ async function main() {
       certifications: ["HACCP", "Food Safety Level 3"],
       rating: 4.9,
       reviewCount: 34,
-      hourlyRate: 180000,
       coverImage:
         "https://images.unsplash.com/photo-1607631568010-a87245c0daf8",
     },
@@ -225,7 +224,6 @@ async function main() {
       certifications: ["HACCP", "Food Safety Level 3"],
       rating: 4.9,
       reviewCount: 34,
-      hourlyRate: 180000,
       coverImage:
         "https://images.unsplash.com/photo-1607631568010-a87245c0daf8",
     },

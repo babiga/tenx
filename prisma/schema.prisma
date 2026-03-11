@@ -200,7 +200,6 @@ model ChefProfile {
   certifications  String[]
   rating          Float    @default(0)
   reviewCount     Int      @default(0)
-  hourlyRate      Decimal  @db.Decimal(10, 2)
   coverImage      String?
 
   bookings        Booking[]

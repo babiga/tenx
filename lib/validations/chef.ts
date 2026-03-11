@@ -8,7 +8,6 @@ export const chefProfileSchema = z.object({
   specialty: z.string().min(2, "Specialty is required"),
   bio: z.string().max(1000, "Bio is too long"),
   yearsExperience: z.coerce.number().min(0).max(50),
-  hourlyRate: z.coerce.number().min(0),
   certifications: z.array(z.string()),
 });
 

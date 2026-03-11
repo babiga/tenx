@@ -31,7 +31,6 @@ export type ChefUser = {
     chefProfile: {
         specialty: string;
         rating: number;
-        hourlyRate: number;
     } | null;
 };
 
@@ -131,14 +130,6 @@ export function getChefsColumns({
                         <span>{rating.toFixed(1)}</span>
                     </div>
                 );
-            },
-        },
-        {
-            accessorKey: "hourlyRate",
-            header: "Rate",
-            cell: ({ row }) => {
-                const rate = row.original.chefProfile?.hourlyRate || 0;
-                return <span>${Number(rate).toFixed(2)}/hr</span>;
             },
         },
         {

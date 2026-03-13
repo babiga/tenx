@@ -40,6 +40,7 @@ interface ChefsColumnsProps {
     onDelete: (user: ChefUser) => void;
     onToggleActive: (user: ChefUser) => void;
     onToggleVerify: (user: ChefUser) => void;
+    role?: string;
 }
 
 export function getChefsColumns({
@@ -48,7 +49,9 @@ export function getChefsColumns({
     onDelete,
     onToggleActive,
     onToggleVerify,
+    role,
 }: ChefsColumnsProps): ColumnDef<ChefUser>[] {
+    const isAdmin = role === "ADMIN";
     return [
         {
             id: "select",
@@ -170,23 +173,27 @@ export function getChefsColumns({
                             <DropdownMenuItem onClick={() => onView(user)}>
                                 View Details
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => onEdit(user)}>
-                                Edit Profile
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => onToggleActive(user)}>
-                                {user.isActive ? "Deactivate" : "Activate"}
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => onToggleVerify(user)}>
-                                {user.isVerified ? "Unverify" : "Verify"}
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                                onClick={() => onDelete(user)}
-                                className="text-destructive focus:text-destructive"
-                            >
-                                Delete Chef
-                            </DropdownMenuItem>
+                            {isAdmin && (
+                                <>
+                                    <DropdownMenuItem onClick={() => onEdit(user)}>
+                                        Edit Profile
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem onClick={() => onToggleActive(user)}>
+                                        {user.isActive ? "Deactivate" : "Activate"}
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => onToggleVerify(user)}>
+                                        {user.isVerified ? "Unverify" : "Verify"}
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem
+                                        onClick={() => onDelete(user)}
+                                        className="text-destructive focus:text-destructive"
+                                    >
+                                        Delete Chef
+                                    </DropdownMenuItem>
+                                </>
+                            )}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );

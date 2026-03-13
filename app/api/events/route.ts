@@ -6,13 +6,9 @@ import { eventsQuerySchema, createEventSchema } from "@/lib/validations/events";
 // GET /api/events - List all events with pagination, search, and filters
 export async function GET(request: NextRequest) {
   try {
-    // Verify admin session
+    // Verify session
     const session = await getSession();
-    if (
-      !session ||
-      session.userType !== "dashboard" ||
-      session.role !== "ADMIN"
-    ) {
+    if (!session || session.userType !== "dashboard") {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
         { status: 401 },

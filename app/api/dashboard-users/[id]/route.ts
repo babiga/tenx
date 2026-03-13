@@ -9,13 +9,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    // Verify admin session
+    // Verify dashboard session
     const session = await getSession();
-    if (
-      !session ||
-      session.userType !== "dashboard" ||
-      session.role !== "ADMIN"
-    ) {
+    if (!session || session.userType !== "dashboard") {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
         { status: 401 },
@@ -91,20 +87,20 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    // Verify admin session
+    // Verify session
     const session = await getSession();
+    const { id } = await params;
+
     if (
       !session ||
       session.userType !== "dashboard" ||
-      session.role !== "ADMIN"
+      (session.role !== "ADMIN" && session.userId !== id)
     ) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
         { status: 401 },
       );
     }
-
-    const { id } = await params;
     const body = await request.json();
 
     // Validate request body

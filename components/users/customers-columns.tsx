@@ -36,13 +36,16 @@ interface CustomersColumnsProps {
   onView: (customer: Customer) => void;
   onEdit: (customer: Customer) => void;
   onDelete: (customer: Customer) => void;
+  role?: string;
 }
 
 export function getCustomersColumns({
   onView,
   onEdit,
   onDelete,
+  role,
 }: CustomersColumnsProps): ColumnDef<Customer>[] {
+  const isAdmin = role === "ADMIN";
   return [
     {
       id: "select",
@@ -166,16 +169,20 @@ export function getCustomersColumns({
               <DropdownMenuItem onClick={() => onView(customer)}>
                 View
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onEdit(customer)}>
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => onDelete(customer)}
-                className="text-destructive focus:text-destructive"
-              >
-                Delete
-              </DropdownMenuItem>
+              {isAdmin && (
+                <>
+                  <DropdownMenuItem onClick={() => onEdit(customer)}>
+                    Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => onDelete(customer)}
+                    className="text-destructive focus:text-destructive"
+                  >
+                    Delete
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         );

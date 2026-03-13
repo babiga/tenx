@@ -26,9 +26,10 @@ import { Separator } from "@/components/ui/separator";
 
 interface CompanyProfileFormProps {
     initialData: CompanyProfileData;
+    readonly?: boolean;
 }
 
-export function CompanyProfileForm({ initialData }: CompanyProfileFormProps) {
+export function CompanyProfileForm({ initialData, readonly = false }: CompanyProfileFormProps) {
     const [isPending, setIsPending] = useState(false);
 
     const form: UseFormReturn<CompanyProfileData> = useForm<CompanyProfileData>({
@@ -37,6 +38,7 @@ export function CompanyProfileForm({ initialData }: CompanyProfileFormProps) {
     });
 
     async function onSubmit(data: CompanyProfileData) {
+        if (readonly) return;
         setIsPending(true);
         try {
             const result = await updateCompanyProfile(data);
@@ -57,10 +59,12 @@ export function CompanyProfileForm({ initialData }: CompanyProfileFormProps) {
     const portfolioImages = form.watch("portfolioImages") || [];
 
     const addService = () => {
+        if (readonly) return;
         form.setValue("services", [...services, ""]);
     };
 
     const removeService = (index: number) => {
+        if (readonly) return;
         form.setValue(
             "services",
             services.filter((_, i) => i !== index)
@@ -77,7 +81,7 @@ export function CompanyProfileForm({ initialData }: CompanyProfileFormProps) {
                             <CardHeader>
                                 <CardTitle>Profile Visuals</CardTitle>
                                 <CardDescription>
-                                    Update your company avatar/logo.
+                                    {readonly ? "Company avatar/logo." : "Update your company avatar/logo."}
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-6">
@@ -92,7 +96,7 @@ export function CompanyProfileForm({ initialData }: CompanyProfileFormProps) {
                                                         <ImageUpload
                                                             className="w-32 h-32 rounded-full"
                                                             value={field.value || ""}
-                                                            disabled={isPending}
+                                                            disabled={isPending || readonly}
                                                             onChange={field.onChange}
                                                             onRemove={() => field.onChange("")}
                                                         />
@@ -118,7 +122,7 @@ export function CompanyProfileForm({ initialData }: CompanyProfileFormProps) {
                                         <FormItem>
                                             <FormLabel>Contact Name</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="John Doe" {...field} />
+                                                <Input placeholder="John Doe" {...field} disabled={readonly} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -131,7 +135,7 @@ export function CompanyProfileForm({ initialData }: CompanyProfileFormProps) {
                                         <FormItem>
                                             <FormLabel>Phone Number</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="+976 99999999" {...field} value={field.value || ""} />
+                                                <Input placeholder="+976 99999999" {...field} value={field.value || ""} disabled={readonly} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -155,7 +159,7 @@ export function CompanyProfileForm({ initialData }: CompanyProfileFormProps) {
                                         <FormItem>
                                             <FormLabel>Company Name</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="Catering Co." {...field} />
+                                                <Input placeholder="Catering Co." {...field} disabled={readonly} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -173,6 +177,7 @@ export function CompanyProfileForm({ initialData }: CompanyProfileFormProps) {
                                                     className="min-h-32"
                                                     {...field}
                                                     value={field.value || ""}
+                                                    disabled={readonly}
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -186,17 +191,19 @@ export function CompanyProfileForm({ initialData }: CompanyProfileFormProps) {
                             <CardHeader className="flex flex-row items-center justify-between">
                                 <div>
                                     <CardTitle>Services</CardTitle>
-                                    <CardDescription>Add the services your company provides.</CardDescription>
+                                    <CardDescription>Company provided services.</CardDescription>
                                 </div>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={addService}
-                                >
-                                    <Plus className="h-4 w-4 mr-2" />
-                                    Add
-                                </Button>
+                                {!readonly && (
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={addService}
+                                    >
+                                        <Plus className="h-4 w-4 mr-2" />
+                                        Add
+                                    </Button>
+                                )}
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 {services.map((_, index) => (
@@ -207,21 +214,23 @@ export function CompanyProfileForm({ initialData }: CompanyProfileFormProps) {
                                             render={({ field }) => (
                                                 <FormItem className="flex-1">
                                                     <FormControl>
-                                                        <Input placeholder="Service name" {...field} />
+                                                        <Input placeholder="Service name" {...field} disabled={readonly} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
                                         />
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="icon"
-                                            className="text-destructive"
-                                            onClick={() => removeService(index)}
-                                        >
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
+                                        {!readonly && (
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="icon"
+                                                className="text-destructive"
+                                                onClick={() => removeService(index)}
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        )}
                                     </div>
                                 ))}
                                 {services.length === 0 && (
@@ -234,18 +243,20 @@ export function CompanyProfileForm({ initialData }: CompanyProfileFormProps) {
                     </div>
                 </div>
 
-                <div className="flex justify-end">
-                    <Button type="submit" size="lg" disabled={isPending}>
-                        {isPending ? (
-                            <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Saving Changes...
-                            </>
-                        ) : (
-                            "Save Profile"
-                        )}
-                    </Button>
-                </div>
+                {!readonly && (
+                    <div className="flex justify-end">
+                        <Button type="submit" size="lg" disabled={isPending}>
+                            {isPending ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Saving Changes...
+                                </>
+                            ) : (
+                                "Save Profile"
+                            )}
+                        </Button>
+                    </div>
+                )}
             </form>
         </Form>
     );

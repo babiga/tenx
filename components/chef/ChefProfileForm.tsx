@@ -26,9 +26,10 @@ import { Separator } from "@/components/ui/separator";
 
 interface ChefProfileFormProps {
     initialData: ChefProfileData;
+    readonly?: boolean;
 }
 
-export function ChefProfileForm({ initialData }: ChefProfileFormProps) {
+export function ChefProfileForm({ initialData, readonly = false }: ChefProfileFormProps) {
     const [isPending, setIsPending] = useState(false);
 
     const form: UseFormReturn<ChefProfileData> = useForm<ChefProfileData>({
@@ -37,6 +38,7 @@ export function ChefProfileForm({ initialData }: ChefProfileFormProps) {
     });
 
     async function onSubmit(data: ChefProfileData) {
+        if (readonly) return;
         setIsPending(true);
         try {
             const result = await updateChefProfile(data);
@@ -56,10 +58,12 @@ export function ChefProfileForm({ initialData }: ChefProfileFormProps) {
     const certifications = form.watch("certifications") || [];
 
     const addCertification = () => {
+        if (readonly) return;
         form.setValue("certifications", [...certifications, ""]);
     };
 
     const removeCertification = (index: number) => {
+        if (readonly) return;
         form.setValue(
             "certifications",
             certifications.filter((_, i) => i !== index)
@@ -76,33 +80,10 @@ export function ChefProfileForm({ initialData }: ChefProfileFormProps) {
                             <CardHeader>
                                 <CardTitle>Profile Visuals</CardTitle>
                                 <CardDescription>
-                                    Update your profile photo and cover image to make a great first impression.
+                                    {readonly ? "Chef profile photo." : "Update your profile photo and cover image to make a great first impression."}
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-6">
-                                {/* <FormField
-                                    control={form.control as any}
-                                    name="coverImage"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Cover Image</FormLabel>
-                                            <FormControl>
-                                                <ImageUpload
-                                                    aspectRatio="video"
-                                                    value={field.value}
-                                                    disabled={isPending}
-                                                    onChange={field.onChange}
-                                                    onRemove={() => field.onChange("")}
-                                                />
-                                            </FormControl>
-                                            <FormDescription>
-                                                A widescreen image displayed at the top of your profile.
-                                            </FormDescription>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                /> */}
-
                                 <div className="flex justify-center relative z-10">
                                     <FormField
                                         control={form.control as any}
@@ -114,7 +95,7 @@ export function ChefProfileForm({ initialData }: ChefProfileFormProps) {
                                                         <ImageUpload
                                                             className="w-32 h-32 rounded-full"
                                                             value={field.value}
-                                                            disabled={isPending}
+                                                            disabled={isPending || readonly}
                                                             onChange={field.onChange}
                                                             onRemove={() => field.onChange("")}
                                                         />
@@ -140,7 +121,7 @@ export function ChefProfileForm({ initialData }: ChefProfileFormProps) {
                                         <FormItem>
                                             <FormLabel>Full Name</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="Chef Name" {...field} />
+                                                <Input placeholder="Chef Name" {...field} disabled={readonly} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -153,7 +134,7 @@ export function ChefProfileForm({ initialData }: ChefProfileFormProps) {
                                         <FormItem>
                                             <FormLabel>Phone Number</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="+976 99999999" {...field} value={field.value || ""} />
+                                                <Input placeholder="+976 99999999" {...field} value={field.value || ""} disabled={readonly} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -177,7 +158,7 @@ export function ChefProfileForm({ initialData }: ChefProfileFormProps) {
                                         <FormItem>
                                             <FormLabel>Specialty</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="e.g. Italian Cuisine, Pastry" {...field} />
+                                                <Input placeholder="e.g. Italian Cuisine, Pastry" {...field} disabled={readonly} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -191,7 +172,7 @@ export function ChefProfileForm({ initialData }: ChefProfileFormProps) {
                                             <FormItem>
                                                 <FormLabel>Years of Experience</FormLabel>
                                                 <FormControl>
-                                                    <Input type="number" {...field} />
+                                                    <Input type="number" {...field} disabled={readonly} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -210,6 +191,7 @@ export function ChefProfileForm({ initialData }: ChefProfileFormProps) {
                                                     className="min-h-32"
                                                     {...field}
                                                     value={field.value || ""}
+                                                    disabled={readonly}
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -223,17 +205,19 @@ export function ChefProfileForm({ initialData }: ChefProfileFormProps) {
                             <CardHeader className="flex flex-row items-center justify-between">
                                 <div>
                                     <CardTitle>Certifications</CardTitle>
-                                    <CardDescription>Add your relevant culinary certifications.</CardDescription>
+                                    <CardDescription>Relevant culinary certifications.</CardDescription>
                                 </div>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={addCertification}
-                                >
-                                    <Plus className="h-4 w-4 mr-2" />
-                                    Add
-                                </Button>
+                                {!readonly && (
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={addCertification}
+                                    >
+                                        <Plus className="h-4 w-4 mr-2" />
+                                        Add
+                                    </Button>
+                                )}
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 {certifications.map((_, index) => (
@@ -244,21 +228,23 @@ export function ChefProfileForm({ initialData }: ChefProfileFormProps) {
                                             render={({ field }) => (
                                                 <FormItem className="flex-1">
                                                     <FormControl>
-                                                        <Input placeholder="Certification name" {...field} />
+                                                        <Input placeholder="Certification name" {...field} disabled={readonly} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
                                         />
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="icon"
-                                            className="text-destructive"
-                                            onClick={() => removeCertification(index)}
-                                        >
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
+                                        {!readonly && (
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="icon"
+                                                className="text-destructive"
+                                                onClick={() => removeCertification(index)}
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        )}
                                     </div>
                                 ))}
                                 {certifications.length === 0 && (
@@ -271,18 +257,20 @@ export function ChefProfileForm({ initialData }: ChefProfileFormProps) {
                     </div>
                 </div>
 
-                <div className="flex justify-end">
-                    <Button type="submit" size="lg" disabled={isPending}>
-                        {isPending ? (
-                            <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Saving Changes...
-                            </>
-                        ) : (
-                            "Save Profile"
-                        )}
-                    </Button>
-                </div>
+                {!readonly && (
+                    <div className="flex justify-end">
+                        <Button type="submit" size="lg" disabled={isPending}>
+                            {isPending ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Saving Changes...
+                                </>
+                            ) : (
+                                "Save Profile"
+                            )}
+                        </Button>
+                    </div>
+                )}
             </form>
         </Form>
     );

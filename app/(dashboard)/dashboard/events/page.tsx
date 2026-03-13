@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export default function EventsManagementPage() {
+    const [user, setUser] = useState<any>(null);
     const [events, setEvents] = useState<EventItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -33,6 +34,20 @@ export default function EventsManagementPage() {
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [eventToDelete, setEventToDelete] = useState<EventItem | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
+
+    const isAdmin = user?.role === "ADMIN";
+
+    const fetchSession = useCallback(async () => {
+        try {
+            const response = await fetch("/api/auth/me");
+            const result = await response.json();
+            if (result.success) {
+                setUser(result.data);
+            }
+        } catch (error) {
+            console.error("Failed to fetch session:", error);
+        }
+    }, []);
 
     const fetchEvents = useCallback(async () => {
         setIsLoading(true);
@@ -50,8 +65,9 @@ export default function EventsManagementPage() {
     }, []);
 
     useEffect(() => {
+        fetchSession();
         fetchEvents();
-    }, [fetchEvents]);
+    }, [fetchSession, fetchEvents]);
 
     const handleCreate = () => {
         setSelectedEvent(null);
@@ -134,8 +150,9 @@ export default function EventsManagementPage() {
                 onEdit: handleEdit,
                 onDelete: handleDelete,
                 onToggleFeatured: handleToggleFeatured,
+                role: user?.role,
             }),
-        []
+        [handleDelete, handleEdit, handleToggleFeatured, handleView, user?.role]
     );
 
     if (isLoading) {
@@ -156,10 +173,12 @@ export default function EventsManagementPage() {
                         Manage portfolio events showcased on your platform
                     </p>
                 </div>
-                <Button onClick={handleCreate}>
-                    <PlusIcon className="mr-2 h-4 w-4" />
-                    Add Event
-                </Button>
+                {isAdmin && (
+                    <Button onClick={handleCreate}>
+                        <PlusIcon className="mr-2 h-4 w-4" />
+                        Add Event
+                    </Button>
+                )}
             </div>
 
             <div className="px-4 lg:px-6">

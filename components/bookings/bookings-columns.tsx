@@ -79,9 +79,11 @@ function formatAmount(amount: number) {
 
 type BookingsColumnsProps = {
   onUpdateStatus: (booking: BookingRecord, status: BookingRecord["status"]) => void;
+  role?: string;
 };
 
-export function getBookingsColumns({ onUpdateStatus }: BookingsColumnsProps): ColumnDef<BookingRecord>[] {
+export function getBookingsColumns({ onUpdateStatus, role }: BookingsColumnsProps): ColumnDef<BookingRecord>[] {
+  const isAdmin = role === "ADMIN";
   return [
     {
       id: "select",
@@ -193,24 +195,28 @@ export function getBookingsColumns({ onUpdateStatus }: BookingsColumnsProps): Co
               <DropdownMenuItem asChild>
                 <a href={`/dashboard/bookings/${booking.id}`}>View Details</a>
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuLabel>Set Status</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => onUpdateStatus(booking, "PENDING")}>Mark as Pending</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onUpdateStatus(booking, "CONFIRMED")}>Mark as Confirmed</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onUpdateStatus(booking, "DEPOSIT_PAID")}>
-                Mark as Deposit Paid
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onUpdateStatus(booking, "IN_PROGRESS")}>
-                Mark as In Progress
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onUpdateStatus(booking, "COMPLETED")}>Mark as Completed</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                className="text-destructive focus:text-destructive"
-                onClick={() => onUpdateStatus(booking, "CANCELLED")}
-              >
-                Mark as Cancelled
-              </DropdownMenuItem>
+              {isAdmin && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuLabel>Set Status</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={() => onUpdateStatus(booking, "PENDING")}>Mark as Pending</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => onUpdateStatus(booking, "CONFIRMED")}>Mark as Confirmed</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => onUpdateStatus(booking, "DEPOSIT_PAID")}>
+                    Mark as Deposit Paid
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => onUpdateStatus(booking, "IN_PROGRESS")}>
+                    Mark as In Progress
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => onUpdateStatus(booking, "COMPLETED")}>Mark as Completed</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="text-destructive focus:text-destructive"
+                    onClick={() => onUpdateStatus(booking, "CANCELLED")}
+                  >
+                    Mark as Cancelled
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         );

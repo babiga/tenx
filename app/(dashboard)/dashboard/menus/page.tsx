@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function MenusPage() {
+  const [user, setUser] = useState<any>(null);
   const [menus, setMenus] = useState<MenuRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -31,6 +32,20 @@ export default function MenusPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [menuToDelete, setMenuToDelete] = useState<MenuRecord | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const isAdmin = user?.role === "ADMIN";
+
+  const fetchSession = useCallback(async () => {
+    try {
+      const response = await fetch("/api/auth/me");
+      const result = await response.json();
+      if (result.success) {
+        setUser(result.data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch session:", error);
+    }
+  }, []);
 
   const fetchMenus = useCallback(async () => {
     setIsLoading(true);
@@ -55,8 +70,9 @@ export default function MenusPage() {
   }, []);
 
   useEffect(() => {
+    fetchSession();
     fetchMenus();
-  }, [fetchMenus]);
+  }, [fetchSession, fetchMenus]);
 
   const handleCreate = useCallback(() => {
     setSelectedMenu(null);
@@ -136,8 +152,9 @@ export default function MenusPage() {
         onEdit: handleEdit,
         onDelete: handleDelete,
         onToggleActive: handleToggleActive,
+        role: user?.role,
       }),
-    [handleDelete, handleEdit, handleToggleActive, handleView],
+    [handleDelete, handleEdit, handleToggleActive, handleView, user?.role],
   );
 
   if (isLoading) {
@@ -156,10 +173,12 @@ export default function MenusPage() {
           <h1 className="text-2xl font-bold">Menus Management</h1>
           <p className="text-muted-foreground">Create and manage your service menus</p>
         </div>
-        <Button onClick={handleCreate}>
-          <PlusIcon className="mr-2 h-4 w-4" />
-          Add Menu
-        </Button>
+        {isAdmin && (
+          <Button onClick={handleCreate}>
+            <PlusIcon className="mr-2 h-4 w-4" />
+            Add Menu
+          </Button>
+        )}
       </div>
 
       <div className="px-4 lg:px-6">

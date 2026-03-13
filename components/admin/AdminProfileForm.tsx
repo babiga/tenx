@@ -24,9 +24,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 
 interface AdminProfileFormProps {
     initialData: AdminProfileData;
+    readonly?: boolean;
 }
 
-export function AdminProfileForm({ initialData }: AdminProfileFormProps) {
+export function AdminProfileForm({ initialData, readonly = false }: AdminProfileFormProps) {
     const [isPending, setIsPending] = useState(false);
 
     const form: UseFormReturn<AdminProfileData> = useForm<AdminProfileData>({
@@ -35,6 +36,7 @@ export function AdminProfileForm({ initialData }: AdminProfileFormProps) {
     });
 
     async function onSubmit(data: AdminProfileData) {
+        if (readonly) return;
         setIsPending(true);
         try {
             const result = await updateAdminProfile(data);
@@ -58,7 +60,7 @@ export function AdminProfileForm({ initialData }: AdminProfileFormProps) {
                     <CardHeader>
                         <CardTitle>Admin Profile</CardTitle>
                         <CardDescription>
-                            Update your admin details and avatar.
+                            {readonly ? "Admin details." : "Update your admin details and avatar."}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
@@ -73,7 +75,7 @@ export function AdminProfileForm({ initialData }: AdminProfileFormProps) {
                                                 <ImageUpload
                                                     className="w-32 h-32 rounded-full"
                                                     value={field.value || ""}
-                                                    disabled={isPending}
+                                                    disabled={isPending || readonly}
                                                     onChange={field.onChange}
                                                     onRemove={() => field.onChange("")}
                                                 />
@@ -92,7 +94,7 @@ export function AdminProfileForm({ initialData }: AdminProfileFormProps) {
                                 <FormItem>
                                     <FormLabel>Full Name</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Admin Name" {...field} />
+                                        <Input placeholder="Admin Name" {...field} disabled={readonly} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -105,7 +107,7 @@ export function AdminProfileForm({ initialData }: AdminProfileFormProps) {
                                 <FormItem>
                                     <FormLabel>Phone Number</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="+976 99999999" {...field} value={field.value || ""} />
+                                        <Input placeholder="+976 99999999" {...field} value={field.value || ""} disabled={readonly} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -114,18 +116,20 @@ export function AdminProfileForm({ initialData }: AdminProfileFormProps) {
                     </CardContent>
                 </Card>
 
-                <div className="flex justify-end">
-                    <Button type="submit" size="lg" disabled={isPending}>
-                        {isPending ? (
-                            <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Saving Changes...
-                            </>
-                        ) : (
-                            "Save Profile"
-                        )}
-                    </Button>
-                </div>
+                {!readonly && (
+                    <div className="flex justify-end">
+                        <Button type="submit" size="lg" disabled={isPending}>
+                            {isPending ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Saving Changes...
+                                </>
+                            ) : (
+                                "Save Profile"
+                            )}
+                        </Button>
+                    </div>
+                )}
             </form>
         </Form>
     );

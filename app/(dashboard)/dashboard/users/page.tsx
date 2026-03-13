@@ -21,6 +21,7 @@ import { DashboardUserFormSheet } from "@/components/users/dashboard-user-form-s
 import { DeleteUserDialog } from "@/components/users/delete-user-dialog";
 
 export default function UsersPage() {
+  const [user, setUser] = useState<any>(null);
   // State for data
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [dashboardUsers, setDashboardUsers] = useState<DashboardUser[]>([]);
@@ -52,18 +53,25 @@ export default function UsersPage() {
     type: "customer" | "dashboard";
   } | null>(null);
 
+  const isAdmin = user?.role === "ADMIN";
+
   // Fetch data
   useEffect(() => {
     async function fetchData() {
       try {
-        const [customersRes, dashboardUsersRes] = await Promise.all([
+        const [sessionRes, customersRes, dashboardUsersRes] = await Promise.all([
+          fetch("/api/auth/me"),
           fetch("/api/users?limit=100"),
           fetch("/api/dashboard-users?limit=100"),
         ]);
 
+        const sessionData = await sessionRes.json();
         const customersData = await customersRes.json();
         const dashboardUsersData = await dashboardUsersRes.json();
 
+        if (sessionData.success) {
+          setUser(sessionData.data);
+        }
         if (customersData.success) {
           setCustomers(customersData.data);
         }
@@ -223,8 +231,9 @@ export default function UsersPage() {
         onView: handleViewCustomer,
         onEdit: handleEditCustomer,
         onDelete: handleDeleteCustomer,
+        role: user?.role,
       }),
-    [handleViewCustomer, handleEditCustomer, handleDeleteCustomer]
+    [handleViewCustomer, handleEditCustomer, handleDeleteCustomer, user?.role]
   );
 
   const dashboardUsersColumns = useMemo(
@@ -235,6 +244,7 @@ export default function UsersPage() {
         onDelete: handleDeleteDashboardUser,
         onToggleActive: handleToggleActive,
         onToggleVerify: handleToggleVerify,
+        role: user?.role,
       }),
     [
       handleViewDashboardUser,
@@ -242,6 +252,7 @@ export default function UsersPage() {
       handleDeleteDashboardUser,
       handleToggleActive,
       handleToggleVerify,
+      user?.role,
     ]
   );
 
@@ -317,9 +328,9 @@ export default function UsersPage() {
               { label: "Chef", value: "CHEF" },
               { label: "Company", value: "COMPANY" },
             ]}
-            showAddButton
-            addButtonLabel="Add User"
-            onAddUser={handleAddDashboardUser}
+            showAddButton={isAdmin}
+            addButtonLabel={isAdmin ? "Add User" : undefined}
+            onAddUser={isAdmin ? handleAddDashboardUser : undefined}
           />
         </TabsContent>
       </Tabs>

@@ -52,6 +52,7 @@ interface MenusColumnsProps {
   onEdit: (menu: MenuRecord) => void;
   onDelete: (menu: MenuRecord) => void;
   onToggleActive: (menu: MenuRecord) => void;
+  role?: string;
 }
 
 export function getMenusColumns({
@@ -59,7 +60,9 @@ export function getMenusColumns({
   onEdit,
   onDelete,
   onToggleActive,
+  role,
 }: MenusColumnsProps): ColumnDef<MenuRecord>[] {
+  const isAdmin = role === "ADMIN";
   return [
     {
       id: "select",
@@ -188,18 +191,22 @@ export function getMenusColumns({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-40">
               <DropdownMenuItem onClick={() => onView(menu)}>View Details</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onEdit(menu)}>Edit Menu</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => onToggleActive(menu)}>
-                {menu.isActive ? "Deactivate" : "Activate"}
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => onDelete(menu)}
-                className="text-destructive focus:text-destructive"
-              >
-                Delete Menu
-              </DropdownMenuItem>
+              {isAdmin && (
+                <>
+                  <DropdownMenuItem onClick={() => onEdit(menu)}>Edit Menu</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => onToggleActive(menu)}>
+                    {menu.isActive ? "Deactivate" : "Activate"}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => onDelete(menu)}
+                    className="text-destructive focus:text-destructive"
+                  >
+                    Delete Menu
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         );

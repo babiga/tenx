@@ -49,6 +49,7 @@ interface EventsColumnsProps {
     onEdit: (event: EventItem) => void;
     onDelete: (event: EventItem) => void;
     onToggleFeatured: (event: EventItem) => void;
+    role?: string;
 }
 
 export function getEventsColumns({
@@ -56,7 +57,9 @@ export function getEventsColumns({
     onEdit,
     onDelete,
     onToggleFeatured,
+    role,
 }: EventsColumnsProps): ColumnDef<EventItem>[] {
+    const isAdmin = role === "ADMIN";
     return [
         {
             id: "select",
@@ -198,20 +201,24 @@ export function getEventsColumns({
                             <DropdownMenuItem onClick={() => onView(event)}>
                                 View Details
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => onEdit(event)}>
-                                Edit Event
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => onToggleFeatured(event)}>
-                                {event.isFeatured ? "Unfeature" : "Feature"}
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                                onClick={() => onDelete(event)}
-                                className="text-destructive focus:text-destructive"
-                            >
-                                Delete Event
-                            </DropdownMenuItem>
+                            {isAdmin && (
+                                <>
+                                    <DropdownMenuItem onClick={() => onEdit(event)}>
+                                        Edit Event
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem onClick={() => onToggleFeatured(event)}>
+                                        {event.isFeatured ? "Unfeature" : "Feature"}
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem
+                                        onClick={() => onDelete(event)}
+                                        className="text-destructive focus:text-destructive"
+                                    >
+                                        Delete Event
+                                    </DropdownMenuItem>
+                                </>
+                            )}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );

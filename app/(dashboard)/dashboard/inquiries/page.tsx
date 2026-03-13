@@ -18,12 +18,25 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export default function InquiriesPage() {
+  const [user, setUser] = useState<any>(null);
   const [inquiries, setInquiries] = useState<InquiryRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [inquiryToDelete, setInquiryToDelete] = useState<InquiryRecord | null>(null);
+
+  const fetchSession = useCallback(async () => {
+    try {
+      const response = await fetch("/api/auth/me");
+      const result = await response.json();
+      if (result.success) {
+        setUser(result.data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch session:", error);
+    }
+  }, []);
 
   const fetchInquiries = useCallback(async () => {
     setIsLoading(true);
@@ -43,8 +56,9 @@ export default function InquiriesPage() {
   }, []);
 
   useEffect(() => {
+    fetchSession();
     fetchInquiries();
-  }, [fetchInquiries]);
+  }, [fetchSession, fetchInquiries]);
 
   const handleUpdateStatus = useCallback(async (inquiry: InquiryRecord, status: InquiryRecord["status"]) => {
     try {
@@ -100,8 +114,9 @@ export default function InquiriesPage() {
       getInquiriesColumns({
         onUpdateStatus: handleUpdateStatus,
         onDelete: handleDeleteOpen,
+        role: user?.role,
       }),
-    [handleDeleteOpen, handleUpdateStatus],
+    [handleDeleteOpen, handleUpdateStatus, user?.role],
   );
 
   if (isLoading) {

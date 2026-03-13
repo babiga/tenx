@@ -10,11 +10,7 @@ export async function GET(
 ) {
   try {
     const session = await getSession();
-    if (
-      !session ||
-      session.userType !== "dashboard" ||
-      session.role !== "ADMIN"
-    ) {
+    if (!session || session.userType !== "dashboard") {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
         { status: 401 },

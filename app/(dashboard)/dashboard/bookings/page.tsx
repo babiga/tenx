@@ -11,8 +11,21 @@ import {
 } from "@/components/bookings/bookings-columns";
 
 export default function BookingsPage() {
+  const [user, setUser] = useState<any>(null);
   const [bookings, setBookings] = useState<BookingRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const fetchSession = useCallback(async () => {
+    try {
+      const response = await fetch("/api/auth/me");
+      const result = await response.json();
+      if (result.success) {
+        setUser(result.data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch session:", error);
+    }
+  }, []);
 
   const fetchBookings = useCallback(async () => {
     setIsLoading(true);
@@ -33,8 +46,9 @@ export default function BookingsPage() {
   }, []);
 
   useEffect(() => {
+    fetchSession();
     fetchBookings();
-  }, [fetchBookings]);
+  }, [fetchSession, fetchBookings]);
 
   const handleUpdateStatus = useCallback(
     async (booking: BookingRecord, status: BookingRecord["status"]) => {
@@ -61,8 +75,8 @@ export default function BookingsPage() {
   );
 
   const columns = useMemo(
-    () => getBookingsColumns({ onUpdateStatus: handleUpdateStatus }),
-    [handleUpdateStatus],
+    () => getBookingsColumns({ onUpdateStatus: handleUpdateStatus, role: user?.role }),
+    [handleUpdateStatus, user?.role],
   );
 
   if (isLoading) {

@@ -57,12 +57,15 @@ const serviceLabel: Record<InquiryRecord["serviceType"], string> = {
 interface InquiriesColumnsProps {
   onUpdateStatus: (inquiry: InquiryRecord, status: InquiryRecord["status"]) => void;
   onDelete: (inquiry: InquiryRecord) => void;
+  role?: string;
 }
 
 export function getInquiriesColumns({
   onUpdateStatus,
   onDelete,
+  role,
 }: InquiriesColumnsProps): ColumnDef<InquiryRecord>[] {
+  const isAdmin = role === "ADMIN";
   return [
     {
       id: "select",
@@ -150,6 +153,8 @@ export function getInquiriesColumns({
       id: "actions",
       cell: ({ row }) => {
         const inquiry = row.original;
+        if (!isAdmin) return null;
+
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

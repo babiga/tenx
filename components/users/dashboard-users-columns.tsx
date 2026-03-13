@@ -36,6 +36,7 @@ interface DashboardUsersColumnsProps {
   onDelete: (user: DashboardUser) => void;
   onToggleActive: (user: DashboardUser) => void;
   onToggleVerify: (user: DashboardUser) => void;
+  role?: string;
 }
 
 export function getDashboardUsersColumns({
@@ -44,7 +45,9 @@ export function getDashboardUsersColumns({
   onDelete,
   onToggleActive,
   onToggleVerify,
+  role,
 }: DashboardUsersColumnsProps): ColumnDef<DashboardUser>[] {
+  const isAdmin = role === "ADMIN";
   return [
     {
       id: "select",
@@ -175,23 +178,27 @@ export function getDashboardUsersColumns({
               <DropdownMenuItem onClick={() => onView(user)}>
                 View Details
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onEdit(user)}>
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => onToggleActive(user)}>
-                {user.isActive ? "Deactivate" : "Activate"}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onToggleVerify(user)}>
-                {user.isVerified ? "Unverify" : "Verify"}
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => onDelete(user)}
-                className="text-destructive focus:text-destructive"
-              >
-                Delete
-              </DropdownMenuItem>
+              {isAdmin && (
+                <>
+                  <DropdownMenuItem onClick={() => onEdit(user)}>
+                    Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => onToggleActive(user)}>
+                    {user.isActive ? "Deactivate" : "Activate"}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => onToggleVerify(user)}>
+                    {user.isVerified ? "Unverify" : "Verify"}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => onDelete(user)}
+                    className="text-destructive focus:text-destructive"
+                  >
+                    Delete
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         );

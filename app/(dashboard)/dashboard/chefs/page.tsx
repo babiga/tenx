@@ -13,6 +13,7 @@ import { getChefsColumns, type ChefUser } from "@/components/chefs/chefs-columns
 import { ChefFormSheet } from "@/components/chefs/chef-form-sheet";
 
 export default function ChefsManagementPage() {
+    const [user, setUser] = useState<any>(null);
     const [chefs, setChefs] = useState<ChefUser[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -24,6 +25,20 @@ export default function ChefsManagementPage() {
     // Delete dialog state
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [userToDelete, setUserToDelete] = useState<ChefUser | null>(null);
+
+    const isAdmin = user?.role === "ADMIN";
+
+    const fetchSession = useCallback(async () => {
+        try {
+            const response = await fetch("/api/auth/me");
+            const result = await response.json();
+            if (result.success) {
+                setUser(result.data);
+            }
+        } catch (error) {
+            console.error("Failed to fetch session:", error);
+        }
+    }, []);
 
     const fetchChefs = useCallback(async () => {
         setIsLoading(true);
@@ -41,8 +56,9 @@ export default function ChefsManagementPage() {
     }, []);
 
     useEffect(() => {
+        fetchSession();
         fetchChefs();
-    }, [fetchChefs]);
+    }, [fetchSession, fetchChefs]);
 
     const handleCreate = () => {
         setSelectedChef(null);
@@ -119,8 +135,9 @@ export default function ChefsManagementPage() {
                 onDelete: handleDelete,
                 onToggleActive: handleToggleActive,
                 onToggleVerify: handleToggleVerify,
+                role: user?.role,
             }),
-        []
+        [handleDelete, handleEdit, handleToggleActive, handleToggleVerify, handleView, user?.role]
     );
 
     if (isLoading) {
@@ -139,10 +156,12 @@ export default function ChefsManagementPage() {
                     <h1 className="text-2xl font-bold">Chefs Management</h1>
                     <p className="text-muted-foreground">List and manage your platform's culinary talent</p>
                 </div>
-                <Button onClick={handleCreate}>
-                    <PlusIcon className="mr-2 h-4 w-4" />
-                    Add Chef
-                </Button>
+                {isAdmin && (
+                    <Button onClick={handleCreate}>
+                        <PlusIcon className="mr-2 h-4 w-4" />
+                        Add Chef
+                    </Button>
+                )}
             </div>
 
             <div className="px-4 lg:px-6">
